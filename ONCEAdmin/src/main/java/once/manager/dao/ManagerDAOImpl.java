@@ -15,6 +15,19 @@ public class ManagerDAOImpl implements ManagerDAO {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 
+	/**
+	 * manger 로그인
+	 * @param manager
+	 * @return managerVO
+	 */
+	@Override
+	public ManagerVO login(ManagerVO manager) {
+		ManagerVO managerVO = sqlSession.selectOne("once.manager.dao.ManagerDAO.login", manager);
+		System.out.println("loginDao 성공");
+		System.out.println(managerVO);
+		return managerVO;
+	}
+	
 	@Override
 	public boolean checkPassword(String managerId, String password) {
 		boolean result = false;
@@ -35,4 +48,5 @@ public class ManagerDAOImpl implements ManagerDAO {
 	public ManagerVO selectById(String managerId) {
 		return sqlSession.selectOne("once.manager.dao.ManagerDAO.selectOneManager", managerId);
 	}
+	
 }

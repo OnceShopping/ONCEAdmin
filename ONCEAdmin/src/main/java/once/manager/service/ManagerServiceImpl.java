@@ -13,6 +13,12 @@ public class ManagerServiceImpl implements ManagerService{
 	private ManagerDAO dao;
 
 	@Override
+	public ManagerVO login(ManagerVO manager) {
+			System.out.println("service 실행");
+			return dao.login(manager);
+	}
+	
+	@Override
 	public boolean checkPassword(String managerId, String password) {
 		return dao.checkPassword(managerId, password);
 	}
