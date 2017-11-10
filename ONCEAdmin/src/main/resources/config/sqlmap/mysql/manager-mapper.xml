@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="once.manager.dao.ManagerDAO">
+  
+ 	<sql id="selectAll">
+ 		select no, title, writer, content, view_cnt,
+ 		       to_char(reg_date, 'yyyy-mm-dd') as reg_date
+ 		  from t_board
+ 	</sql>
+ 	
+ 	<!-- 패스워드 체크 -->
+ 	<select id="checkPassword" resultType="int">
+ 		select count(*)
+ 		from StoreMember
+ 		where managerId = #{managerId} and password = #{password}
+ 	</select>
+ 	
+ 	<!-- 회원 정보 상세 -->
+ 	<select id="selectOneManager" resultType="ManagerVO" parameterType="String">
+ 		select M.managerId, M.password, M.type, S.storeName, M.name, M.telephone, date_fomat(M.date, '%y-%m-%d')
+ 		from Store as S, StoreMember as M
+ 		where S.storeNo = M.storeNo and M.managerId = #{managerId}
+ 	</select>
+ 	
+ 	<!-- 회원 정보 수정 -->
+ 	<update id="modifyManager" parameterType="ManagerVO">
+ 		update StoreMember
+ 		set password = #{password}, telephone = #{telephone}
+ 		where managerId = #{managerId}
+ 	</update>
+ 	
+</mapper>
+
+
+
+
+
+
+
