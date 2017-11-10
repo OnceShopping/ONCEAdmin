@@ -7,7 +7,7 @@ public class ManagerVO {
 
 	private int staffNo;
 	
-	private String managerId;	// primary key
+	private String managerId;
 	private String password;
 	private String type;
 	
