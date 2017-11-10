@@ -6,7 +6,7 @@ import lombok.Data;
 public class ItemDetailVO {
 
 	private int detailNo;
-	private int itemNo;
+	private String itemNo;
 	
 	private String size;
 	private String color;

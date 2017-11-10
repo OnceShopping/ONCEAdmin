@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="once.customer.dao.CustomerDAO">
+
+<!-- 고객 관리 -->
+	<select id="selectAll" resultType="CustomerVO">
+ 		  <!-- select memNo, id, name, telephone, rank, --> <!-- rank가 현재 VO 객체에서 주석 처리됨 --> 
+ 		  select memNo, id, name, telephone,
+ 		       DATE_FORMAT(date, '%Y-%m-%d') as date
+ 		  from customer
+ 		  order by memNo ASC
+ 	
+ 	</select>
+
+</mapper>
