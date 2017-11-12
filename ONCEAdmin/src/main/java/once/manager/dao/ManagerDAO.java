@@ -10,4 +10,6 @@ public interface ManagerDAO {
 	
 	ManagerVO login(ManagerVO manager);
 
+	void modifyManager(String managerId);
+
 }

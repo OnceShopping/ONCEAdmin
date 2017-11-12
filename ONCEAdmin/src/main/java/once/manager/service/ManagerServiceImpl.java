@@ -27,6 +27,12 @@ public class ManagerServiceImpl implements ManagerService{
 	public ManagerVO selectById(String managerId) {
 		return dao.selectById(managerId);
 	}
+
+	@Override
+	public void modifyManager(String managerId) {
+		dao.modifyManager(managerId);
+		
+	}
 	
 }
  

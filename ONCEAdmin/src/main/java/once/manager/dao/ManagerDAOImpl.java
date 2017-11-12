@@ -48,5 +48,11 @@ public class ManagerDAOImpl implements ManagerDAO {
 	public ManagerVO selectById(String managerId) {
 		return sqlSession.selectOne("once.manager.dao.ManagerDAO.selectOneManager", managerId);
 	}
+
+	@Override
+	public void modifyManager(String managerId) {
+		sqlSession.update("once.manager.dao.ManagerDAO.modifyManager", managerId);
+		
+	}
 	
 }

@@ -10,4 +10,6 @@ public interface ManagerService {
 
 	ManagerVO selectById(String managerId);
 
+	void modifyManager(String managerId);
+
 }

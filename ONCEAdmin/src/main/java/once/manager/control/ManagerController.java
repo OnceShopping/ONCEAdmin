@@ -20,6 +20,7 @@ public class ManagerController {
 
 	@Autowired
 	private ManagerService service;
+	private String managerId;
 	
 	//패스워드 체크 페이지
 	@RequestMapping(value = "/check", method = RequestMethod.GET)
@@ -27,34 +28,37 @@ public class ManagerController {
 		return "manager/check";
 	}
 
-	//패스워드 체크 처리(틀린 것만 확인함)
+	//패스워드 체크 처리
 	@RequestMapping(value = "/check", method = RequestMethod.POST)
-	public String check(@ModelAttribute ManagerVO manager, Model model) {
-		boolean result = service.checkPassword(manager.getManagerId(), manager.getPassword());
-		
+	public String check(@ModelAttribute ManagerVO loginVO, Model model) {
+		managerId = loginVO.getManagerId();
+
+		boolean result = service.checkPassword(managerId, loginVO.getPassword());
+	
 		if(result == false) {
 			model.addAttribute("message", "비밀번호가 일치하지 않습니다.");
 			
 			return "manager/checkProcess";
 		}
 		
-		return "manager/detail";
+		return "manager/detail/" + managerId;
 	}
 	
-	//회원 정보 상세 페이지(미완)
+	//회원 정보 상세 페이지
 	@RequestMapping(value = "/detail/{managerId}", method = RequestMethod.GET)
 	public String detail(@PathVariable String managerId, Model model) {
 		ManagerVO manager = service.selectById(managerId);
 		
 		model.addAttribute("managerVO", manager);
 		
-		return "manager/detail";
+		return "manager/detail/" + managerId;
 	}
 	
 	//회원 정보 수정 처리(미완)
 	@RequestMapping(value = "/detail/{managerId}", method = RequestMethod.PUT)
 	public String modify(@PathVariable String managerId, @Valid ManagerVO manager) {
 		manager.setManagerId(managerId);
-		return "manager/detail";
+		service.modifyManager(managerId);
+		return "manager/detail/" + managerId;
 	}
 }
