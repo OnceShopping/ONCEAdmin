@@ -1,5 +1,6 @@
 package once.manager.control;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ public class ManagerController {
 
 	@Autowired
 	private ManagerService service;
-	private String managerId;
 	
 	//패스워드 체크 페이지
 	@RequestMapping(value = "/check", method = RequestMethod.GET)
@@ -30,10 +30,9 @@ public class ManagerController {
 
 	//패스워드 체크 처리
 	@RequestMapping(value = "/check", method = RequestMethod.POST)
-	public String check(@ModelAttribute ManagerVO loginVO, Model model) {
-		managerId = loginVO.getManagerId();
-
-		boolean result = service.checkPassword(managerId, loginVO.getPassword());
+	public String check(@ModelAttribute("loginVO") ManagerVO manager, Model model) {
+		String managerId = manager.getManagerId();
+		boolean result = service.checkPassword(managerId, manager.getPassword());
 	
 		if(result == false) {
 			model.addAttribute("message", "비밀번호가 일치하지 않습니다.");
