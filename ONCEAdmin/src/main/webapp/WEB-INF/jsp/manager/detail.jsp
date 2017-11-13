@@ -29,10 +29,10 @@
 	<div class="wrapper-lg bg-light">
 		<div class="hbox">
 			<aside>
-			<h3 class="font-bold m-b-none m-t-none">"${manager.name}"</h3>
+			<h3 class="font-bold m-b-none m-t-none">"${managerVO.name}"</h3>
 			<p>
-				<i class="fa fa-lg fa-circle-o text-primary m-r-sm"></i> <strong>NIKE
-					"${manager.type}"</strong>
+				<i class="fa fa-lg fa-circle-o text-primary m-r-sm"></i>
+				<strong>"${storeVO.storeName} ${managerVO.type}"</strong>
 			</p>
 			</aside>
 		</div>
@@ -65,7 +65,7 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">Phone:</label>
 				<div class="col-sm-5">
-					<input type="text" class="form-control" value="${manager.telephone}">
+					<input type="text" class="form-control" value="${managerVO.telephone}">
 				</div>
 			</div>
 			<div class="line line-dashed b-b line-lg pull-in"></div>
@@ -74,7 +74,7 @@
 					Date</label>
 				<div class="col-sm-5">
 					<input type="text" class="form-control" id="input-id-1"
-						disabled="disabled" value="${manager.date}">
+						disabled="disabled" value="${managerVO.date}">
 				</div>
 			</div>
 			<div class="line line-dashed b-b line-lg pull-in"></div>

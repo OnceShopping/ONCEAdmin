@@ -49,6 +49,7 @@ public class ManagerController {
 		StoreVO store = service.selectByNo(manager.getStoreNo());
 		
 		model.addAttribute("managerVO", manager);
+		model.addAttribute("storeVO", store);
 		
 		return "manager/detail/" + managerId;
 	}
