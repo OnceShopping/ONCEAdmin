@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import once.manager.service.ManagerService;
 import once.manager.vo.ManagerVO;
+import once.store.vo.StoreVO;
 
 @RequestMapping("/manager")
 @Controller
@@ -45,6 +46,7 @@ public class ManagerController {
 	@RequestMapping(value = "/detail/{managerId}", method = RequestMethod.GET)
 	public String detail(@PathVariable String managerId, Model model) {
 		ManagerVO manager = service.selectById(managerId);
+		StoreVO store = service.selectByNo(manager.getStoreNo());
 		
 		model.addAttribute("managerVO", manager);
 		
