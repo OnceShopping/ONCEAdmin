@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -28,10 +29,10 @@
 	<div class="wrapper-lg bg-light">
 		<div class="hbox">
 			<aside>
-			<h3 class="font-bold m-b-none m-t-none">장알바</h3>
+			<h3 class="font-bold m-b-none m-t-none">"${manager.name}"</h3>
 			<p>
 				<i class="fa fa-lg fa-circle-o text-primary m-r-sm"></i> <strong>NIKE
-					STAFF</strong>
+					"${manager.type}"</strong>
 			</p>
 			</aside>
 		</div>
@@ -43,7 +44,7 @@
 				<label class="col-sm-3 control-label" for="input-id-1">ID:</label>
 				<div class="col-sm-5">
 					<input type="text" class="form-control" id="input-id-1"
-						disabled="disabled" value="jangalba">
+						disabled="disabled" value="${manager.name}">
 				</div>
 			</div>
 			<div class="line line-dashed b-b line-lg pull-in"></div>
@@ -64,7 +65,7 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">Phone:</label>
 				<div class="col-sm-5">
-					<input type="text" class="form-control">
+					<input type="text" class="form-control" value="${manager.telephone}">
 				</div>
 			</div>
 			<div class="line line-dashed b-b line-lg pull-in"></div>
@@ -73,7 +74,7 @@
 					Date</label>
 				<div class="col-sm-5">
 					<input type="text" class="form-control" id="input-id-1"
-						disabled="disabled" value="2017-11-10">
+						disabled="disabled" value="${manager.date}">
 				</div>
 			</div>
 			<div class="line line-dashed b-b line-lg pull-in"></div>
