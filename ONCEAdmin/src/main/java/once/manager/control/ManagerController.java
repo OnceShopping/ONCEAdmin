@@ -1,6 +1,5 @@
 package once.manager.control;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import jdk.nashorn.internal.ir.RuntimeNode.Request;
 import once.manager.service.ManagerService;
 import once.manager.vo.ManagerVO;
 
@@ -53,7 +51,7 @@ public class ManagerController {
 		return "manager/detail/" + managerId;
 	}
 	
-	//회원 정보 수정 처리(미완)
+	//회원 정보 수정 처리
 	@RequestMapping(value = "/detail/{managerId}", method = RequestMethod.PUT)
 	public String modify(@PathVariable String managerId, @Valid ManagerVO manager) {
 		manager.setManagerId(managerId);
