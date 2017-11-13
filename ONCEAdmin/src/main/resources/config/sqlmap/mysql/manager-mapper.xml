@@ -20,7 +20,7 @@
  	
  	<!-- 회원 정보 상세 -->
  	<select id="selectOneManager" resultType="ManagerVO" parameterType="String">
- 		select M.managerId, M.password, M.type, S.storeName, M.name, M.telephone, date_fomat(M.date, '%y-%m-%d') as date
+ 		select M.managerId, M.password, M.type, S.storeName, M.name, M.telephone, date_format(M.date, '%y-%m-%d') as date
  		from Store as S, StoreMember as M
  		where S.storeNo = M.storeNo and M.managerId = #{managerId}
  	</select>
