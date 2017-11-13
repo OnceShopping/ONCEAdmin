@@ -54,11 +54,15 @@ public class ManagerController {
 		return "manager/detail/" + managerId;
 	}
 	
-	//회원 정보 수정 처리
+	//회원 정보 수정 처리(미완)
 	@RequestMapping(value = "/detail/{managerId}", method = RequestMethod.PUT)
-	public String modify(@PathVariable String managerId, @Valid ManagerVO manager) {
+	public String modify(@PathVariable String managerId, @Valid ManagerVO manager, Model model) {
 		manager.setManagerId(managerId);
 		service.modifyManager(managerId);
-		return "manager/detail/" + managerId;
+		
+		model.addAttribute("managerVO", manager);
+		model.addAttribute("message", "회원 정보 수정이 성공적으로 완료되었습니다.");
+		
+		return "manager/modifyProcess";
 	}
 }
