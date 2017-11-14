@@ -1,6 +1,5 @@
 package once.manager.control;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +40,7 @@ public class ManagerController {
 			return "manager/checkProcess";
 		}
 		
+		//회원 정보 상세 페이지
 		service.selectById(managerId);
 		StoreVO store = service.selectByNo(manager.getStoreNo());
 		
