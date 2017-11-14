@@ -16,6 +16,6 @@ public class NoticeVO {
 	private String imgSaveName;
 	private int imgSize;
 	
-	private int regDate;
+	private String regDate;
 	
 }

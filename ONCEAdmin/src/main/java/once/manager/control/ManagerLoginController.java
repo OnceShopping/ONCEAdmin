@@ -1,5 +1,7 @@
 package once.manager.control;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import once.manager.service.ManagerService;
 import once.manager.vo.ManagerVO;
+import once.notice.service.NoticeService;
+import once.notice.vo.NoticeVO;
 
 @SessionAttributes("loginVO")
 @Controller
@@ -17,6 +21,8 @@ public class ManagerLoginController {
 
 	@Autowired
 	private ManagerService service;
+	@Autowired
+	private NoticeService nService;
 	
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	public String login(@RequestParam("id")String id, @RequestParam("password")String password, Model model) {
@@ -35,7 +41,8 @@ public class ManagerLoginController {
 			model.addAttribute("loginVO", loginVO);
 			System.out.println(loginVO);
 			if(loginVO.getType().equals("admin")) {
-				
+				List<NoticeVO> list = nService.selectAllNotice();
+				model.addAttribute("list", list);
 				return "admin/notice/list";
 			}else if(loginVO.getType().equals("infoManger")) {
 				
