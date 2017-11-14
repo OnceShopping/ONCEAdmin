@@ -81,14 +81,14 @@ th {
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 											<span class="hidden-nav-xs clear"> <span
 												class="block m-t-xs"> <strong
-													class="font-bold text-lt">${loginVO.managerId }</strong> <b
+													class="font-bold text-lt">John.Smith</strong> <b
 													class="caret"></b>
-											</span> 
+											</span> <span class="text-muted text-xs block">Art Director</span>
 										</span>
 										</a>
 										<!-- 프로필 클릭시 나오는 메뉴 -->
 										<ul class="dropdown-menu animated fadeInRight m-t-xs">
-											<li><a href="${ pageContext.request.contextPath }/manager/check">Profile</a></li>
+											<li><a href="profile.html">Profile</a></li>
 											<li class="divider"></li>
 											<li><a href="modal.lockme.html" data-toggle="ajaxModal">Logout</a>
 											</li>

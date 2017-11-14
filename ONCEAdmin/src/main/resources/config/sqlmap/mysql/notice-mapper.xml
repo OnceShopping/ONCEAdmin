@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="once.notice.dao.NoticeDAO">
+  
+ 	<!-- t_board의 view_cnt, reg_date mapping -->
+ 	<resultMap type="NoticeVO" id="MapNoticeVO">
+ 		<result column="viewCnt" property="viewCnt"/>
+ 		<result column="regDate" property="regDate" />
+ 	</resultMap>
+ 	
+ 	<sql id="selectAll">
+ 		select noticeNo, title, content, viewcnt, date_format(regdate, '%Y-%m-%d') as regdate from notice
+ 	</sql>
+ 
+ 	<!-- 전체 게시글 조회  -->
+ 	<select id="selectAllNotice" resultMap="MapNoticeVO">
+ 		<include refid="selectAll" />
+ 		  order by noticeno desc
+ 	</select>
+ 	
+ 	<!-- 게시글 한개 조회 -->
+ 	<select id="selectOneNotice" resultMap="MapNoticeVO" parameterType="int">
+ 		<include refid="selectAll" />
+ 		  where noticeno=#{noticeNo}
+ 	</select>
+ 	
+ 	<!-- 글쓰기 -->
+ 	<insert id="insertNotice" parameterType="noticeVO">
+ 		insert into notice ( title, content )
+ 		values ( #{title}, #{content} );
+ 	</insert>
+ 	 	<!-- 	insert into notice(noticeNo,title,content)
+ 		values (seq_notice_noticeNo.nextval,#{title},#{content}) -->
+ 	<!-- 수정 -->
+ 	<update id="updateNotice" parameterType="noticeVO">
+ 		update notice
+ 		set title=#{title},content=#{content}
+ 		where noticeNo=#{noticeNo}
+ 	</update>
+ 	
+ 	<!-- 삭제 -->
+ 	<delete id="deleteNotice" parameterType="int">
+ 		delete from notice where noticeNo=#{noticeNo}
+ 	</delete>
+ 	
+</mapper>
+
+
+
+
+
+
+
