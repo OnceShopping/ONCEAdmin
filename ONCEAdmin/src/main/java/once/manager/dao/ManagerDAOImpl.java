@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import once.manager.vo.ManagerVO;
+import once.store.vo.StoreVO;
 
 @Repository
 public class ManagerDAOImpl implements ManagerDAO {
@@ -47,6 +48,17 @@ public class ManagerDAOImpl implements ManagerDAO {
 	@Override
 	public ManagerVO selectById(String managerId) {
 		return sqlSession.selectOne("once.manager.dao.ManagerDAO.selectOneManager", managerId);
+	}
+
+	@Override
+	public StoreVO selectByNo(String storeNo) {
+		return sqlSession.selectOne("once.manager.dao.ManagerDAO.selectByNo", storeNo);
+	}
+
+	@Override
+	public void modifyManager(String managerId) {
+		sqlSession.update("once.manager.dao.ManagerDAO.modifyManager", managerId);
+		
 	}
 	
 }

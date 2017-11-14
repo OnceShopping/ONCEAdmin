@@ -1,6 +1,7 @@
 package once.manager.dao;
 
 import once.manager.vo.ManagerVO;
+import once.store.vo.StoreVO;
 
 public interface ManagerDAO {
 
@@ -8,6 +9,10 @@ public interface ManagerDAO {
 
 	ManagerVO selectById(String managerId);
 	
+	StoreVO selectByNo(String storeNo);
+
+	void modifyManager(String managerId);
+
 	ManagerVO login(ManagerVO manager);
 
 }
