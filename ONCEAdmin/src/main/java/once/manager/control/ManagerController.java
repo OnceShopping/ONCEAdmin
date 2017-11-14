@@ -54,7 +54,7 @@ public class ManagerController {
 		return "manager/detail/" + managerId;
 	}
 	
-	//회원 정보 수정 처리(미완)
+	//회원 정보 수정 처리
 	@RequestMapping(value = "/detail/{managerId}", method = RequestMethod.PUT)
 	public String modify(@PathVariable String managerId, @Valid ManagerVO manager, Model model) {
 		manager.setManagerId(managerId);
