@@ -25,6 +25,7 @@
 		memNo = #{memNo}
 	</delete>
 
+	<!-- 고객 검색 -->
 	<select id="search" resultType="CustomerVO" parameterType="String">
 		<include refid="select"></include>
 		where id like concat('%',#{id},'%')
