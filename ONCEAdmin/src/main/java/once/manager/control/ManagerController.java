@@ -52,12 +52,9 @@ public class ManagerController {
 	
 	//회원 정보 수정 처리
 	@RequestMapping(value = "/detail/{managerId}", method = RequestMethod.GET)
-	public String modify(@PathVariable String managerId, @RequestParam String password, @RequestParam String telephone, @Valid ManagerVO manager, Model model) {
-		manager.setManagerId(managerId);
-		manager.setPassword(password);
-		manager.setTelephone(telephone);
+	public String modify(@PathVariable String managerId, @ModelAttribute @Valid ManagerVO manager, Model model) {
 		
-		service.modifyManager(manager);
+		service.modifyManager(manager.getManagerId(), manager.getPassword(), manager.getTelephone());
 		
 		model.addAttribute("managerVO", manager);
 		model.addAttribute("message", "회원 정보 수정이 성공적으로 완료되었습니다.");

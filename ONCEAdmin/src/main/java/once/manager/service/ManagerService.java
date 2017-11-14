@@ -15,6 +15,6 @@ public interface ManagerService {
 
 	StoreVO selectByNo(String storeNo);
 
-	void modifyManager(@Valid ManagerVO manager);
+	void modifyManager(String managerId, String password, String telephone);
 
 }
