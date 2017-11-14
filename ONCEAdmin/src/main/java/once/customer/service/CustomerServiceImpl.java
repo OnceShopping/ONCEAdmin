@@ -23,4 +23,9 @@ public class CustomerServiceImpl implements CustomerService {
 		return list;
 	}
 	
+	@Override
+	public void deleteBoard(int memNo) {
+		dao.delete(memNo);
+	}
+	
 }
