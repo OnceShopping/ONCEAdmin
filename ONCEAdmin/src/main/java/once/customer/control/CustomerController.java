@@ -47,4 +47,19 @@ public class CustomerController {
 	    }
 	    return "redirect:/customer/customerList";
 	}
+	
+	@RequestMapping(value="/customerList", method=RequestMethod.POST)
+	public ModelAndView searchList(HttpServletRequest request) {
+	   
+	    String customerId = request.getParameter("customerId");
+	      
+	   
+	    List<CustomerVO> customerList = service.searchBoard(customerId);
+		
+	    ModelAndView mav = new ModelAndView();
+	    mav.setViewName("admin/customer/customerList");
+		mav.addObject("customerList", customerList);
+	    
+		return mav;
+	}
 }

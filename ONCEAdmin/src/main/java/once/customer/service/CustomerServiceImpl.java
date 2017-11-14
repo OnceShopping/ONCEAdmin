@@ -28,4 +28,11 @@ public class CustomerServiceImpl implements CustomerService {
 		dao.delete(memNo);
 	}
 	
+	@Override
+	public List<CustomerVO> searchBoard(String customerId) {
+		
+		List<CustomerVO> list = dao.search(customerId);
+		
+		return list;
+	}
 }
