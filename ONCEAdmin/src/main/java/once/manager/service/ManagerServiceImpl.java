@@ -1,5 +1,7 @@
 package once.manager.service;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +37,8 @@ public class ManagerServiceImpl implements ManagerService{
 	}
 
 	@Override
-	public void modifyManager(String managerId) {
-		dao.modifyManager(managerId);
+	public void modifyManager(@Valid ManagerVO manager) {
+		dao.modifyManager(manager);
 		
 	}
 	
