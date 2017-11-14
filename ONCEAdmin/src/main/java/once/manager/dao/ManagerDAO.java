@@ -13,8 +13,8 @@ public interface ManagerDAO {
 	
 	StoreVO selectByNo(String storeNo);
 
-	void modifyManager(@Valid ManagerVO manager);
-
 	ManagerVO login(ManagerVO manager);
+
+	void modifyManager(String managerId, String password, String telephone);
 
 }

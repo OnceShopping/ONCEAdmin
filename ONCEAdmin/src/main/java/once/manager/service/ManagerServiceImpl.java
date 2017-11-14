@@ -37,9 +37,8 @@ public class ManagerServiceImpl implements ManagerService{
 	}
 
 	@Override
-	public void modifyManager(@Valid ManagerVO manager) {
-		dao.modifyManager(manager);
-		
+	public void modifyManager(String managerId, String password, String telephone) {
+		dao.modifyManager(managerId, password, telephone);
 	}
 	
 }

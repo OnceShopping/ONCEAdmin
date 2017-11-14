@@ -1,6 +1,7 @@
 package once.manager.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -58,9 +59,14 @@ public class ManagerDAOImpl implements ManagerDAO {
 	}
 
 	@Override
-	public void modifyManager(@Valid ManagerVO manager) {
-		sqlSession.update("once.manager.dao.ManagerDAO.modifyManager", manager);
+	public void modifyManager(String managerId, String password, String telephone) {
 		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("managerId", managerId);
+		map.put("password", password);
+		map.put("telephone", telephone);
+		
+		sqlSession.update("once.manager.dao.ManagerDAO.modifyManager", map);
 	}
 	
 }
