@@ -23,6 +23,34 @@
 <script src="${ pageContext.request.contextPath }/resources/js/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="${ pageContext.request.contextPath }/resources/js/charts/easypiechart/jquery.easy-pie-chart.js"></script>
 <script src="${ pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
+
+<script type="text/javascript">
+	var pwdCheck = 0;
+	
+	 function checkPwd() {
+	        var pass = $('#password').val();
+	        var nonpass = $('#pwChk').val();
+	        if(nonpass=="" && (pass != nonpass || pass == nonpass)){
+	            $("#udtBtn").prop("disabled", true);
+	            $("#udtBtn").css("background-color", "#aaaaaa");
+	            $("#pwChk").css("background-color", "#FFCECE");
+	        }
+	        else if (pass == nonpass) {
+	            $("#repwd").css("background-color", "#B0F6AC");
+	            pwdCheck = 1;
+	            if(pwdCheck == 1) {
+	                $("#udtBtn").prop("disabled", false);
+	                $("#pwChk").css("background-color", "#CEFBC9");
+	            }
+	        } else if (pass != nonpass) {
+	            pwdCheck = 0;
+	            $("#udtBtn").prop("disabled", true);
+	            $("#udtBtn").css("background-color", "#177bbb");
+	            $("#pwChk").css("background-color", "#FFCECE");
+	        }
+	    }
+	
+</script>
 </head>
 <body class="">
 	<section class="vbox"> <section class="scrollable bg-white">
@@ -51,14 +79,14 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">Password:</label>
 				<div class="col-sm-5">
-					<input type="password" class="form-control" name="password">
+					<input type="password" class="form-control" id="password" name="password" oninput="checkPwd()">
 				</div>
 			</div>
 			<div class="line line-dashed b-b line-lg pull-in"></div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">Password Again:</label>
 				<div class="col-sm-5">
-					<input type="password" class="form-control">
+					<input type="password" class="form-control" id="pwChk" oninput="checkPwd()">
 				</div>
 			</div>
 			<div class="line line-dashed b-b line-lg pull-in"></div>
@@ -80,13 +108,12 @@
 			<div class="line line-dashed b-b line-lg pull-in"></div>
 			<div class="form-group">
 				<div class="col-sm-offset-3 col-sm-5">
-					<button type="submit" class="btn btn-sm btn-primary">Update</button>
+					<button type="submit" class="btn btn-sm btn-primary" id="udtBtn">Update</button>
 				</div>
 			</div>
 		</form>
 	</div>
 	</section> </section>
-	<a href="#" class="hide nav-off-screen-block"
-		data-toggle="class:nav-off-screen,open" data-target="#nav,html"></a>
+	<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen,open" data-target="#nav,html"></a>
 </body>
 </html>
