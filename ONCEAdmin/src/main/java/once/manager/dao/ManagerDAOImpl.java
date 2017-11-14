@@ -3,6 +3,8 @@ package once.manager.dao;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -56,8 +58,8 @@ public class ManagerDAOImpl implements ManagerDAO {
 	}
 
 	@Override
-	public void modifyManager(String managerId) {
-		sqlSession.update("once.manager.dao.ManagerDAO.modifyManager", managerId);
+	public void modifyManager(@Valid ManagerVO manager) {
+		sqlSession.update("once.manager.dao.ManagerDAO.modifyManager", manager);
 		
 	}
 	

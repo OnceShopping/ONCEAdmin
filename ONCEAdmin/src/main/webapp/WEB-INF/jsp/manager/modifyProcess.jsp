@@ -2,5 +2,5 @@
     pageEncoding="UTF-8"%>
 <script>
 	alert("${ message }");
-	location.href = "${ pageContext.request.contextPath }/manager/detail/${managerVO.managerId}";
+	location.href = "${ pageContext.request.contextPath }/notice/list";
 </script>

@@ -38,20 +38,20 @@
 		</div>
 	</div>
 	<div class="tab-pane wrapper-lg" id="edit">
-		<form class="form-horizontal" method="get">
+		<form class="form-horizontal" action="${ pageContext.request.contextPath }/manager/detail/${managerVO.managerId}" method="get">
 			<div class="line line-dashed b-b line-lg pull-in"></div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label" for="input-id-1">ID:</label>
 				<div class="col-sm-5">
 					<input type="text" class="form-control" id="input-id-1"
-						disabled="disabled" value="${manager.name}">
+						disabled="disabled" value="${managerVO.managerId}">
 				</div>
 			</div>
 			<div class="line line-dashed b-b line-lg pull-in"></div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">Password:</label>
 				<div class="col-sm-5">
-					<input type="password" class="form-control">
+					<input type="password" class="form-control" name="password">
 				</div>
 			</div>
 			<div class="line line-dashed b-b line-lg pull-in"></div>
@@ -65,7 +65,7 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">Phone:</label>
 				<div class="col-sm-5">
-					<input type="text" class="form-control" value="${managerVO.telephone}">
+					<input type="text" class="form-control" value="${managerVO.telephone}" name="telephone">
 				</div>
 			</div>
 			<div class="line line-dashed b-b line-lg pull-in"></div>

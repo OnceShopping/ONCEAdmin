@@ -1,5 +1,7 @@
 package once.manager.dao;
 
+import javax.validation.Valid;
+
 import once.manager.vo.ManagerVO;
 import once.store.vo.StoreVO;
 
@@ -11,7 +13,7 @@ public interface ManagerDAO {
 	
 	StoreVO selectByNo(String storeNo);
 
-	void modifyManager(String managerId);
+	void modifyManager(@Valid ManagerVO manager);
 
 	ManagerVO login(ManagerVO manager);
 
