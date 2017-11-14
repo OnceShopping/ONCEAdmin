@@ -62,21 +62,20 @@
 	});
 </script>
 <style type="text/css">
-	th {
-		text-align: center;
-		font-size: 13pt;
-		font-weight: bold;
-	}
-	
-	td{
-		text-align: center;
-		font-size: 10pt;
-	}
-	
-	tr:hover{
-		background-color: #f5f5f5;
-	}
-	
+th {
+	text-align: center;
+	font-size: 13pt;
+	font-weight: bold;
+}
+
+td {
+	text-align: center;
+	font-size: 10pt;
+}
+
+tr:hover {
+	background-color: #f5f5f5;
+}
 </style>
 </head>
 <body class="">
@@ -134,14 +133,16 @@
 									<div
 										class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
 									<ul class="nav nav-main">
-										<li ><a href="${pageContext.request.contextPath}/notice/list" class="auto">
-												<i class="i i-statistics icon"> </i> <span class="font-bold">운영
+										<li><a
+											href="${pageContext.request.contextPath}/notice/list"
+											class="auto"> <i class="i i-circle-sm-o text"></i> <i
+												class="i i-circle-sm text-active"></i><i
+												class="i i-statistics icon"> </i> <span class="font-bold">운영
 													공지</span>
 										</a></li>
-										<li><a
-											href="#"
-											class="auto"> <span class="pull-right text-muted">
-													<i class="i i-circle-sm-o text"></i> <i
+										<li><a href="${pageContext.request.contextPath}/boardQA/list" class="auto"> <span
+												class="pull-right text-muted"> <i
+													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
 											</span> <i class="i i-stack icon"> </i> <span class="font-bold">QNA
 													답변</span>
@@ -163,6 +164,8 @@
 										<li class="active"><a
 											href="${pageContext.request.contextPath}/customer/customerList"
 											class="auto"> <span class="pull-right text-muted">
+													<i class="i i-circle-sm-o text"></i> <i
+													class="i i-circle-sm text-active"></i>
 											</span> <i class="i i-grid2 icon"> </i> <span class="font-bold">고객
 													관리</span>
 										</a></li>
@@ -191,10 +194,17 @@
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
 							<h3 class="font-bold m-b-none m-t-none">고객 관리</h3>
-							<br />
+							<div align="right">
+								<form
+									action="${pageContext.request.contextPath}/customer/customerList"
+									method="post">
+									<input type="text" placeholder="id 검색" name="customerId">
+									&nbsp; <input type="submit" value="검색">
+								</form>
+							</div>
+							현재 검색된 회원 총 ${fn:length(customerList)}명
 							<div>
-								현재 검색된 회원 총 ${fn:length(customerList)}명
-
+								<br />
 								<form
 									action="${pageContext.request.contextPath}/customer/delete"
 									method="post">
@@ -245,7 +255,8 @@
 									<div style="text-align: right;">
 										<c:if test="${ !empty customerList }">
 											<input type="hidden" name="_method" value="delete">
-											<input type="submit" value="삭제" class="btn btn-s-md btn-primary">
+											<input type="submit" value="삭제"
+												class="btn btn-s-md btn-primary">
 										</c:if>
 									</div>
 								</form>
