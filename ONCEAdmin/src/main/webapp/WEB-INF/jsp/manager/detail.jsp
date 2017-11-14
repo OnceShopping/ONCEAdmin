@@ -29,10 +29,10 @@
 	<div class="wrapper-lg bg-light">
 		<div class="hbox">
 			<aside>
-			<h3 class="font-bold m-b-none m-t-none">"${managerVO.name}"</h3>
+			<h3 class="font-bold m-b-none m-t-none">${managerVO.name}</h3>
 			<p>
 				<i class="fa fa-lg fa-circle-o text-primary m-r-sm"></i>
-				<strong>"${storeVO.storeName} ${managerVO.type}"</strong>
+				<strong>${storeVO.storeName} ${managerVO.type}</strong>
 			</p>
 			</aside>
 		</div>
