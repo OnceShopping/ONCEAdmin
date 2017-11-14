@@ -7,5 +7,6 @@ import once.customer.vo.CustomerVO;
 public interface CustomerDAO {
 	
 	List<CustomerVO> selectAll();
+	void delete(int memNo);
 
 }
