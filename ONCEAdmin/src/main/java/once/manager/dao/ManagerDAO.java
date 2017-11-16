@@ -1,5 +1,7 @@
 package once.manager.dao;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import once.manager.vo.ManagerVO;
@@ -16,5 +18,8 @@ public interface ManagerDAO {
 	ManagerVO login(ManagerVO manager);
 
 	void modifyManager(String managerId, String password, String telephone);
-
+	
+	List<ManagerVO> selectAll();
+	
+	void delete(int staffNo);
 }

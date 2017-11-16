@@ -22,19 +22,20 @@ public class CustomerController {
 	@Autowired
 	private CustomerService service;
 	
-
-	@RequestMapping("/customerList")
+	//고객 전체 리스트 조회
+	@RequestMapping("/list")
 	public ModelAndView list() {
 		List<CustomerVO> customerList = service.selectAllBoard();
 		
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("admin/customer/customerList");
+		mav.setViewName("admin/customer/list");
 		mav.addObject("customerList", customerList);
 		
 		return mav;
 	}
 	
-	@RequestMapping(value="/delete", method=RequestMethod.DELETE)
+	//고객 삭제
+	@RequestMapping(value="/list", method=RequestMethod.DELETE)
 	public String deleteList(HttpServletRequest request) {
 	   
 	    String [] mem = request.getParameterValues("memNo");
@@ -45,10 +46,11 @@ public class CustomerController {
 	       memNo[i] = Integer.parseInt(mem[i]);
 	       service.deleteBoard(memNo[i]);
 	    }
-	    return "redirect:/customer/customerList";
+	    return "redirect:/customer/list";
 	}
 	
-	@RequestMapping(value="/customerList", method=RequestMethod.POST)
+	//고객 조회
+	@RequestMapping(value="/list", method=RequestMethod.POST)
 	public ModelAndView searchList(HttpServletRequest request) {
 	   
 	    String customerId = request.getParameter("customerId");
@@ -57,7 +59,7 @@ public class CustomerController {
 	    List<CustomerVO> customerList = service.searchBoard(customerId);
 		
 	    ModelAndView mav = new ModelAndView();
-	    mav.setViewName("admin/customer/customerList");
+	    mav.setViewName("admin/customer/list");
 		mav.addObject("customerList", customerList);
 	    
 		return mav;

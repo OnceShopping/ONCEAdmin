@@ -69,4 +69,18 @@ public class ManagerDAOImpl implements ManagerDAO {
 		sqlSession.update("once.manager.dao.ManagerDAO.modifyManager", map);
 	}
 	
+	//매니저 관리 전체 조회
+	@Override
+	public List<ManagerVO> selectAll() {
+		
+		List<ManagerVO> list = sqlSession.selectList("once.manager.dao.ManagerDAO.selectAll");
+		
+		return list;
+	}
+	
+	//매니저 삭제
+	@Override
+	public void delete(int staffNo) {
+		sqlSession.delete("once.manager.dao.ManagerDAO.delete", staffNo);
+	}
 }

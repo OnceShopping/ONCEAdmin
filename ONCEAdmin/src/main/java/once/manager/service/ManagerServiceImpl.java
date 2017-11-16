@@ -1,5 +1,7 @@
 package once.manager.service;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,22 @@ public class ManagerServiceImpl implements ManagerService{
 	@Override
 	public void modifyManager(String managerId, String password, String telephone) {
 		dao.modifyManager(managerId, password, telephone);
+	}
+	
+	//매니저 전체 조회
+	@Override
+	public List<ManagerVO> selectAll() {
+		
+		List<ManagerVO> list = dao.selectAll();
+		
+		return list;
+	}
+	
+	//매니저 삭제
+	@Override
+	public void delete(int staffNo) {
+		
+		dao.delete(staffNo);
 	}
 	
 }

@@ -1,11 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html class="app">
 <head>
-
 <title>ONCE</title>
 <meta name="description"
 	content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
@@ -29,7 +27,6 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath }/resources/css/app.css"
 	type="text/css" />
-
 <script
 	src="${pageContext.request.contextPath }/resources/js/jquery.min.js"></script>
 <!-- Bootstrap -->
@@ -42,41 +39,42 @@
 <script
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
 
-
-<script type="text/javascript">
-	$(document).ready(function() {
-
-		//체크박스 전체 선택, 선택 해제
-		$('#checkAll').click(function() {
-
-			var checkVal = document.getElementsByClassName("check");
-
-			if (this.checked) {
-				for (var i = 0; i < checkVal.length; i++)
-					checkVal[i].checked = true;
-			} else {
-				for (var i = 0; i < checkVal.length; i++)
-					checkVal[i].checked = false;
-			}
-		});
-	});
-</script>
 <style type="text/css">
-th {
-	text-align: center;
-	font-size: 13pt;
-	font-weight: bold;
+.ModifyManger {
+	width: 500px;
+	background: #F2F2F2;
+	border: none;
+	margin-left: auto;
+	margin-bottom: 50px;
+	margin-right: auto;
+	border-radius: 20px;
+	padding: 40px;
 }
 
 td {
-	text-align: center;
-	font-size: 10pt;
+	text-align: left;
+	height: 50px;
+}
+th{
+	text-align: right;
+	height: 50px;
 }
 
-tr:hover {
-	background-color: #f5f5f5;
+input[type=text]{
+	width: 200%;
+	border: none;
+}
+.impossible{
+	background: #DADADA;
 }
 </style>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#goList').click(function(){
+			location.href="${pageContext.request.contextPath}/manager/list";
+		});	
+	});
+</script>
 </head>
 <body class="">
 	<section class="vbox">
@@ -140,9 +138,10 @@ tr:hover {
 												class="i i-statistics icon"> </i> <span class="font-bold">운영
 													공지</span>
 										</a></li>
-										<li><a href="${pageContext.request.contextPath}/boardQA/list" class="auto"> <span
-												class="pull-right text-muted"> <i
-													class="i i-circle-sm-o text"></i> <i
+										<li><a
+											href="${pageContext.request.contextPath}/boardQA/list"
+											class="auto"> <span class="pull-right text-muted">
+													<i class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
 											</span> <i class="i i-stack icon"> </i> <span class="font-bold">QNA
 													답변</span>
@@ -154,15 +153,16 @@ tr:hover {
 											</span> <i class="i i-lab icon"> </i> <span class="font-bold">매장
 													관리</span>
 										</a></li>
-										<li><a href="#" class="auto"> <span
-												class="pull-right text-muted"> <i
-													class="i i-circle-sm-o text"></i> <i
+										<li class="active"><a
+											href="${pageContext.request.contextPath}/manager/list"
+											class="auto"> <span class="pull-right text-muted">
+													<i class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
 											</span> <i class="i i-docs icon"> </i> <span class="font-bold">매니저
 													관리</span>
 										</a></li>
-										<li class="active"><a
-											href="${pageContext.request.contextPath}/customer/customerList"
+										<li><a
+											href="${pageContext.request.contextPath}/customer/list"
 											class="auto"> <span class="pull-right text-muted">
 													<i class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
@@ -193,74 +193,50 @@ tr:hover {
 					<section class="vbox">
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
-							<h3 class="font-bold m-b-none m-t-none">고객 관리</h3>
-							<div align="right">
-								<form
-									action="${pageContext.request.contextPath}/customer/customerList"
-									method="post">
-									<input type="text" placeholder="id 검색" name="customerId">
-									&nbsp; <input type="submit" value="검색">
-								</form>
-							</div>
-							현재 검색된 회원 총 ${fn:length(customerList)}명
-							<div>
-								<br />
-								<form
-									action="${pageContext.request.contextPath}/customer/delete"
-									method="post">
-									<div style="text-align: right;">
-										<span class="select"> 회원 등급 <select>
-												<option value="1">Option 1</option>
-												<option value="2">Option 2</option>
-												<option value="3">Option 3</option>
-										</select> &nbsp; &nbsp;가입일 <select id="year">
-												<option value="All">All</option>
-												<option value="2017">2017</option>
-												<option value="2016">2016</option>
-												<option value="2015">2015</option>
-										</select> <select id="month">
-												<option value="All">All</option>
-												<option value="10">10</option>
-												<option value="9">9</option>
-												<option value="8">8</option>
-										</select>
-										</span>
-									</div>
-									<br />
-									<table width="100%"
-										class="table table-striped m-b-none dataTable no-footer">
-										<tr style="text-align: center; background-color: #E7E7E7">
-											<td width="5%"><input type="checkbox" id="checkAll"></td>
-											<th width="15%" class="tbTile">고객 번호</th>
-											<th width="15%" class="tbTile">아이디</th>
-											<th width="15%" class="tbTile">이름</th>
-											<th width="20%" class="tbTile">연락처</th>
-											<th width="10%" class="tbTile">회원 등급</th>
-											<th width="20%" class="tbTile">가입일</th>
-										</tr>
-										<c:forEach items="${ customerList }" var="customer">
-											<tr>
-												<td><input type="checkbox" class="check"
-													value=${ customer.memNo } name="memNo"></td>
-												<td>${ customer.memNo }</td>
-												<td>${ customer.id }</td>
-												<td>${ customer.name }</td>
-												<td>${ customer.telephone }</td>
-												<td>등급</td>
-												<td>${ customer.date }</td>
-											</tr>
-										</c:forEach>
-									</table>
-									<br />
-									<div style="text-align: right;">
-										<c:if test="${ !empty customerList }">
-											<input type="hidden" name="_method" value="delete">
-											<input type="submit" value="삭제"
-												class="btn btn-s-md btn-primary">
-										</c:if>
-									</div>
-								</form>
-							</div>
+							<h3 class="font-bold m-b-none m-t-none">매니저 정보 수정</h3>
+							<br /> <br />
+							<form action="${pageContext.request.contextPath}/manager/update"
+								method="post">
+								<div class="ModifyManger">
+								<table >
+									<tr>
+										<th width="25%">사원 번호</th>
+										<td width="10%"/>
+										<td width="65%"><input type="text" value="${manager.staffNo}" readonly="readonly" class="impossible"></td>
+									</tr>
+									<tr>
+										<th>해당 매장</th>
+										<td/>
+										<td><input type="text" value="${manager.storeNo}" readonly="readonly" class="impossible"></td>
+									</tr>
+									<tr>
+										<th>아이디</th>
+										<td/>
+										<td><input type="text" value="${manager.managerId}" readonly="readonly" class="impossible"></td>
+									</tr>
+									<tr>
+										<th>이름</th>
+										<td/>
+										<td><input type="text" value="${manager.name}" name="name"></td>
+									</tr>
+									<tr>
+										<th>연락처</th>
+										<td/>
+										<td><input type="text" value="${manager.telephone}" name="telephone"></td>
+									</tr>
+									<tr>
+										<th>가입일</th>
+										<td/>
+										<td><input type="text" value="${manager.date}" readonly="readonly" class="impossible"></td>
+									</tr>
+								</table>
+								</div>
+								<div align="right">
+									<input type="hidden" name="_method" value="update" /> <input
+										type="submit" value="수정 완료" class="btn btn-s-md btn-primary"/>
+									<input type="button" value="취소"  class="btn btn-s-md btn-primary" id="goList">		
+								</div>
+							</form>
 						</section>
 					</section>
 				</section>

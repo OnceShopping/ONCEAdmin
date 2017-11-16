@@ -1,5 +1,8 @@
 package once.manager.control;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 import once.manager.service.ManagerService;
 import once.manager.vo.ManagerVO;
+import once.notice.vo.NoticeVO;
 import once.store.vo.StoreVO;
 
 @SessionAttributes("loginVO")
@@ -60,5 +65,56 @@ public class ManagerController {
 		model.addAttribute("message", "회원 정보 수정이 성공적으로 완료되었습니다.");
 		
 		return "manager/modifyProcess";
+	}
+	
+	//매니저 관리 조회
+	@RequestMapping(value="/list")
+	public ModelAndView list() {
+		
+		List<ManagerVO> managerList = service.selectAll();
+		
+		ModelAndView mav = new ModelAndView();
+		
+		mav.setViewName("admin/manager/list");
+		mav.addObject("managerList", managerList);
+		
+		return mav;
+	}
+	
+	//매니저 삭제
+	@RequestMapping(value="/list", method=RequestMethod.DELETE)
+	public String delete(HttpServletRequest request) {
+		
+		String [] staffNos = request.getParameterValues("staffNo");
+		int [] staffNo = new int [staffNos.length];
+		
+		for(int i=0; i<staffNos.length; i++) {
+			staffNo[i]= Integer.parseInt(staffNos[i]);
+			service.delete(staffNo[i]);
+		}
+		
+		return "redirect:/manager/list";
+	}
+	
+
+	@RequestMapping(value = "/modify/{managerId}", method = RequestMethod.GET)
+	public ModelAndView modify(@PathVariable String managerId) {
+	
+		ManagerVO manager = service.selectById(managerId);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("manager", manager);
+		mav.setViewName("admin/manager/modify");
+		
+		return mav;
+	}
+	
+	@RequestMapping(value ="/update/{managerId}", method=RequestMethod.PUT )
+	public String update(@PathVariable String managerId, HttpServletRequest request) {
+		
+		//service.update();
+		//System.out.println(request.getParameter("name"), request.getParameter("telephone"));
+		
+		return "redirect:/manager/list";
 	}
 }

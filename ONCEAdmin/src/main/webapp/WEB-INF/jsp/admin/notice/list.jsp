@@ -40,7 +40,12 @@
    src="${pageContext.request.contextPath }/resources/js/slimscroll/jquery.slimscroll.min.js"></script>
 <script
    src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
+<script type="text/javascript">
+	function doAction() {
+		location.href = "${ pageContext.request.contextPath }/notice/write"
 
+	}
+</script>
 <style type="text/css">
 th {
    text-align: center;
@@ -123,14 +128,14 @@ th {
                                  </span> <i class="i i-lab icon"> </i> <span class="font-bold">매장
                                        관리</span>
                               </a></li>
-                              <li><a href="#" class="auto"> <span
+                              <li><a href="${pageContext.request.contextPath}/manager/list" class="auto"> <span
                                     class="pull-right text-muted"> <i
                                        class="i i-circle-sm-o text"></i> <i
                                        class="i i-circle-sm text-active"></i>
                                  </span> <i class="i i-docs icon"> </i> <span class="font-bold">매니저
                                        관리</span>
                               </a></li>
-                              <li><a href="${ pageContext.request.contextPath }/customer/customerList" class="auto"> <span
+                              <li><a href="${ pageContext.request.contextPath }/customer/list" class="auto"> <span
                                     class="pull-right text-muted"><i
                                        class="i i-circle-sm-o text"></i> <i
                                        class="i i-circle-sm text-active"></i>
