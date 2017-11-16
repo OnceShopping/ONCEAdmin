@@ -54,10 +54,14 @@ public class ManagerServiceImpl implements ManagerService{
 	
 	//매니저 삭제
 	@Override
-	public void delete(int staffNo) {
-		
-		dao.delete(staffNo);
+	public void delete(String managerId) {	
+		dao.delete(managerId);
 	}
 	
+	//매니저 수정
+	@Override
+	public void update(String managerId, String telephone) {	
+		dao.update(managerId, telephone);
+	}
 }
  

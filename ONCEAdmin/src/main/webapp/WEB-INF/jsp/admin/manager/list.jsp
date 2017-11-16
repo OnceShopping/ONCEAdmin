@@ -276,7 +276,7 @@
 									<c:forEach items="${managerList}" var="manager">
 										<tr>
 											<td><input type="checkbox" value=${ manager.managerId }
-												name="staffNo" class="check"></td>
+												name="managerId" class="check"></td>
 											<td>${ manager.staffNo }</td>
 											<td>${ manager.storeNo }</td>
 											<td>${ manager.managerId }</td>

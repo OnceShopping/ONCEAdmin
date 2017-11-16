@@ -85,12 +85,10 @@ public class ManagerController {
 	@RequestMapping(value="/list", method=RequestMethod.DELETE)
 	public String delete(HttpServletRequest request) {
 		
-		String [] staffNos = request.getParameterValues("staffNo");
-		int [] staffNo = new int [staffNos.length];
+		String [] staffNos = request.getParameterValues("managerId");
 		
 		for(int i=0; i<staffNos.length; i++) {
-			staffNo[i]= Integer.parseInt(staffNos[i]);
-			service.delete(staffNo[i]);
+			service.delete(staffNos[i]);
 		}
 		
 		return "redirect:/manager/list";
@@ -103,17 +101,19 @@ public class ManagerController {
 		ManagerVO manager = service.selectById(managerId);
 		
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("manager", manager);
+		mav.addObject("managerVO", manager);
 		mav.setViewName("admin/manager/modify");
 		
 		return mav;
 	}
 	
 	@RequestMapping(value ="/update/{managerId}", method=RequestMethod.PUT )
-	public String update(@PathVariable String managerId, HttpServletRequest request) {
+	public String update(@PathVariable String managerId, @ModelAttribute @Valid ManagerVO manager) {
 		
-		//service.update();
-		//System.out.println(request.getParameter("name"), request.getParameter("telephone"));
+		System.out.println(manager.getManagerId());
+		System.out.println(manager.getTelephone());
+		
+		service.update(manager.getManagerId(), manager.getTelephone());
 		
 		return "redirect:/manager/list";
 	}

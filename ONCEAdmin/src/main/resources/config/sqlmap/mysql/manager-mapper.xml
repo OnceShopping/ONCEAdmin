@@ -46,11 +46,18 @@
  	</select>
  	
  	<!-- 매니저 삭제 -->
- 	<delete id="delete" parameterType="int">
+ 	<delete id="delete" parameterType="String">
  		delete from StoreMember
  		where 
- 		staffNo = #{staffNo}
+ 		managerId = #{managerId}
  	</delete>
+ 	
+ 	<!-- 매니저 수정 -->
+ 	<update id="update" parameterType="java.util.Map">
+ 		update StoreMember
+ 		set telephone = #{telephone}
+ 		where managerId = #{managerId}
+ 	</update>
 </mapper>
 
 

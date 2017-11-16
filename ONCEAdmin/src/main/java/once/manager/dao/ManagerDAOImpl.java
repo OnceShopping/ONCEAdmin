@@ -80,7 +80,18 @@ public class ManagerDAOImpl implements ManagerDAO {
 	
 	//매니저 삭제
 	@Override
-	public void delete(int staffNo) {
-		sqlSession.delete("once.manager.dao.ManagerDAO.delete", staffNo);
+	public void delete(String managerId) {
+		sqlSession.delete("once.manager.dao.ManagerDAO.delete", managerId);
+	}
+	
+	//매니저 수정
+	@Override
+	public void update(String managerId, String telephone) {
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("managerId", managerId);
+		map.put("telephone", telephone);
+		
+		sqlSession.update("once.manager.dao.ManagerDAO.update", map);
 	}
 }

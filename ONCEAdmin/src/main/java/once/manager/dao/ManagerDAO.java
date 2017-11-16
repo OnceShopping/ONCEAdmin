@@ -21,5 +21,7 @@ public interface ManagerDAO {
 	
 	List<ManagerVO> selectAll();
 	
-	void delete(int staffNo);
+	void delete(String managerId);
+	
+	void update(String managerId, String telephone);
 }
