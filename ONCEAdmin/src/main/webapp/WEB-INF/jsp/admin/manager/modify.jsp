@@ -207,7 +207,7 @@ input[type=text]{
 									<tr>
 										<th>해당 매장</th>
 										<td/>
-										<td><input type="text" value="${managerVO.storeNo}" readonly="readonly" class="impossible"></td>
+										<td><input type="text" value="${storeVO.storeName}" readonly="readonly" class="impossible"></td>
 									</tr>
 									<tr>
 										<th>아이디</th>

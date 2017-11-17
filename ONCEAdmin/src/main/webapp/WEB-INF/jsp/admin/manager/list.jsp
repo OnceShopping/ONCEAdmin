@@ -42,46 +42,52 @@
 <script
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
 <script type="text/javascript">
-	$(document).ready(function() {
+	$(document)
+			.ready(
+					function() {
 
-		//체크박스 전체 선택, 선택 해제
-		$('#checkAll').click(function() {
+						//체크박스 전체 선택, 선택 해제
+						$('#checkAll')
+								.click(
+										function() {
 
-			var checkVal = document.getElementsByClassName("check");
+											var checkVal = document
+													.getElementsByClassName("check");
 
-			if (this.checked) {
-				for (var i = 0; i < checkVal.length; i++)
-					checkVal[i].checked = true;
-			} else {
-				for (var i = 0; i < checkVal.length; i++)
-					checkVal[i].checked = false;
-			}
-		});
-		
-		$('#modify').click(function(){
-			
-			var checkVal = document.getElementsByClassName("check");
-			var count=0; //선택 체크한 사원의 수
-			
-			//선택한 사원의 수 확인
-			for(var i=0; i<checkVal.length; i++){
-				if(checkVal[i].checked)
-					++count;
-			}
-			
-			
-			if(count!=1) //선택한 사원이 1명 이상일 때
-				alert('사원 한명만 선택해 정보 수정을 해주시기 바랍니다.');
-			else{ //선택한 사원이 1명일 경우
-				for(var i=0; i<checkVal.length; i++){
-					if(checkVal[i].checked)
-						location.href="${ pageContext.request.contextPath }/manager/modify/"+checkVal[i].value;							
-				}
-			}
-		});
-	});
-	
-	
+											if (this.checked) {
+												for (var i = 0; i < checkVal.length; i++)
+													checkVal[i].checked = true;
+											} else {
+												for (var i = 0; i < checkVal.length; i++)
+													checkVal[i].checked = false;
+											}
+										});
+
+						$('#modify')
+								.click(
+										function() {
+
+											var checkVal = document
+													.getElementsByClassName("check");
+											var count = 0; //선택 체크한 사원의 수
+
+											//선택한 사원의 수 확인
+											for (var i = 0; i < checkVal.length; i++) {
+												if (checkVal[i].checked)
+													++count;
+											}
+
+											if (count != 1) //선택한 사원이 1명 이상일 때
+												alert('사원 한명만 선택해 정보 수정을 해주시기 바랍니다.');
+											else { //선택한 사원이 1명일 경우
+												for (var i = 0; i < checkVal.length; i++) {
+													if (checkVal[i].checked)
+														location.href = "${ pageContext.request.contextPath }/manager/modify/"
+																+ checkVal[i].value;
+												}
+											}
+										});
+					});
 </script>
 <style type="text/css">
 .addManger {
@@ -225,7 +231,7 @@
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
 							<h3 class="font-bold m-b-none m-t-none">매니저 관리</h3>
-							<br/><br/>
+							<br /> <br />
 							<form action="">
 								<div class="addManger" align="center">
 									<table style="width: 100%">
@@ -273,26 +279,36 @@
 										<td width="20%" class="tbTile">연락처</td>
 										<td width="20%" class="tbTile">가입일</td>
 									</tr>
-									<c:forEach items="${managerList}" var="manager">
+
+									<c:forEach items="${managerList}" var="manager" varStatus="managerStatus">
 										<tr>
 											<td><input type="checkbox" value=${ manager.managerId }
 												name="managerId" class="check"></td>
 											<td>${ manager.staffNo }</td>
-											<td>${ manager.storeNo }</td>
+											<c:forEach items="${storeList}" var="store" varStatus="storeStatus">
+												<c:if test="${manager.storeNo eq store.storeNo}">
+													<%-- <c:if test="${fn:length(storeList) ge status.count}">
+														<td>${ store.storeName }</td>
+													</c:if> --%>
+													<td>${ store.storeName }</td>
+												</c:if>
+											</c:forEach>
 											<td>${ manager.managerId }</td>
 											<td>${ manager.name }</td>
 											<td>${ manager.telephone }</td>
 											<td>${ manager.date }</td>
 										</tr>
 									</c:forEach>
+
 								</table>
-								<br />
-								<br />
+								<br /> <br />
 								<div align="right">
 									<c:if test="${ !empty managerList }">
-										<input type="button" value="수정" id="modify" class="btn btn-s-md btn-primary">
+										<input type="button" value="수정" id="modify"
+											class="btn btn-s-md btn-primary">
 										<input type="hidden" name="_method" value="delete">
-										<input type="submit" value="삭제" class="btn btn-s-md btn-primary">
+										<input type="submit" value="삭제"
+											class="btn btn-s-md btn-primary">
 									</c:if>
 								</div>
 							</form>

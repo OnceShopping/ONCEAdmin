@@ -26,7 +26,7 @@
  	</select>
  	
  	<select id="selectByNo" resultType="StoreVO" parameterType="String">
- 		select storeName
+ 		select storeName, storeNo
  		from Store
  		where storeNo = #{storeNo}
  	</select>

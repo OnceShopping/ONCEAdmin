@@ -1,5 +1,6 @@
 package once.manager.control;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,11 +73,38 @@ public class ManagerController {
 	public ModelAndView list() {
 		
 		List<ManagerVO> managerList = service.selectAll();
+		List<StoreVO> storeList = new ArrayList<>();
 		
 		ModelAndView mav = new ModelAndView();
+		String DiffNo = null; // 기존에 없던 새로운 storeNo
+		String ExNo = null; // 비교 기준 storeNo
+		int count;
+
+		
+		for(int i=0; i<=managerList.size()-1; i++) {
+			
+			count=0; //storeNo에 해당하는 storeName이 존재하는 것을 비교하기 위한 count
+			
+			ExNo = managerList.get(i).getStoreNo(); //ExNo : 비교 기준 storeNo
+			
+			if(i==0) {
+				storeList.add(service.selectByNo(ExNo));
+			}else {
+				for(int j=0; j<=i-1; j++) {
+					if(ExNo.equals(managerList.get(j).getStoreNo())) //기존 storeList에 추가된 storeNo가 존재하는 경우
+						++count;
+					else //기존 storeList에 추가된 storeNo가 없을 경우
+						DiffNo = ExNo;   
+				}
+				if(count==0)
+					storeList.add(service.selectByNo(DiffNo)); //새로운  storeNo에 해당하는 storeVO객체를 List에 추가
+			}
+		}
+		
+		mav.addObject("managerList", managerList);
+		mav.addObject("storeList", storeList);
 		
 		mav.setViewName("admin/manager/list");
-		mav.addObject("managerList", managerList);
 		
 		return mav;
 	}
@@ -94,24 +122,25 @@ public class ManagerController {
 		return "redirect:/manager/list";
 	}
 	
-
+	//매니저 정보 수정
 	@RequestMapping(value = "/modify/{managerId}", method = RequestMethod.GET)
 	public ModelAndView modify(@PathVariable String managerId) {
 	
 		ManagerVO manager = service.selectById(managerId);
+		StoreVO store = service.selectByNo(manager.getStoreNo());
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("managerVO", manager);
+		
+		mav.addObject("storeVO", store);
 		mav.setViewName("admin/manager/modify");
 		
 		return mav;
 	}
 	
+	//매니저 정보 수정 완료 
 	@RequestMapping(value ="/update/{managerId}", method=RequestMethod.PUT )
 	public String update(@PathVariable String managerId, @ModelAttribute @Valid ManagerVO manager) {
-		
-		System.out.println(manager.getManagerId());
-		System.out.println(manager.getTelephone());
 		
 		service.update(manager.getManagerId(), manager.getTelephone());
 		
