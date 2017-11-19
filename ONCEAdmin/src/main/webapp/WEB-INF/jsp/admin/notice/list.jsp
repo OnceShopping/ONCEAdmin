@@ -40,7 +40,12 @@
 	src="${pageContext.request.contextPath }/resources/js/slimscroll/jquery.slimscroll.min.js"></script>
 <script
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
+<script type="text/javascript">
+	function doAction() {
+		location.href = "${ pageContext.request.contextPath }/notice/write"
 
+	}
+</script>
 <style type="text/css">
 th {
 	text-align: center;
@@ -58,7 +63,7 @@ th {
 				<a class="btn btn-link visible-xs"
 					data-toggle="class:nav-off-screen,open" data-target="#nav,html">
 					<i class="fa fa-bars"></i>
-				</a> <a href="index.html" class="navbar-brand"> <span
+				</a> <a href="${ pageContext.request.contextPath }/notice/list" class="navbar-brand"> <span
 					class="hidden-nav-xs">ONCE</span>
 				</a> <a class="btn btn-link visible-xs" data-toggle="dropdown"
 					data-target=".user"> <i class="fa fa-cog"></i>
@@ -103,7 +108,7 @@ th {
 									<div
 										class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
 									<ul class="nav nav-main">
-										<li class="active"><a href="index.html" class="auto">
+										<li class="active"><a href="${ pageContext.request.contextPath }/notice/list" class="auto">
 												<i class="i i-statistics icon"> </i> <span class="font-bold">운영
 													공지</span>
 										</a></li>
