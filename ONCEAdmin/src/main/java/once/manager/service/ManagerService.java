@@ -1,5 +1,7 @@
 package once.manager.service;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import once.manager.vo.ManagerVO;
@@ -17,4 +19,9 @@ public interface ManagerService {
 
 	void modifyManager(String managerId, String password, String telephone);
 
+	List<ManagerVO> selectAll();
+	
+	void delete(String managerId);
+	
+	void update(String managerId, String telephone);
 }

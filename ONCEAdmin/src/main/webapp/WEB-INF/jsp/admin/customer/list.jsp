@@ -41,8 +41,6 @@
 	src="${pageContext.request.contextPath }/resources/js/slimscroll/jquery.slimscroll.min.js"></script>
 <script
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
-
-
 <script type="text/javascript">
 	$(document).ready(function() {
 
@@ -154,7 +152,7 @@ tr:hover {
 											</span> <i class="i i-lab icon"> </i> <span class="font-bold">매장
 													관리</span>
 										</a></li>
-										<li><a href="#" class="auto"> <span
+										<li><a href="${pageContext.request.contextPath}/manager/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
@@ -162,7 +160,7 @@ tr:hover {
 													관리</span>
 										</a></li>
 										<li class="active"><a
-											href="${pageContext.request.contextPath}/customer/customerList"
+											href="${pageContext.request.contextPath}/customer/list"
 											class="auto"> <span class="pull-right text-muted">
 													<i class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
@@ -196,7 +194,7 @@ tr:hover {
 							<h3 class="font-bold m-b-none m-t-none">고객 관리</h3>
 							<div align="right">
 								<form
-									action="${pageContext.request.contextPath}/customer/customerList"
+									action="${pageContext.request.contextPath}/customer/list"
 									method="post">
 									<input type="text" placeholder="id 검색" name="customerId">
 									&nbsp; <input type="submit" value="검색">
@@ -206,7 +204,7 @@ tr:hover {
 							<div>
 								<br />
 								<form
-									action="${pageContext.request.contextPath}/customer/delete"
+									action="${pageContext.request.contextPath}/customer/list"
 									method="post">
 									<div style="text-align: right;">
 										<span class="select"> 회원 등급 <select>
