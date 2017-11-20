@@ -24,7 +24,6 @@ import once.notice.vo.NoticeVO;
 import once.store.vo.StoreVO;
 
 @SessionAttributes("loginVO")
-@RequestMapping("/manager")
 @Controller
 public class ManagerController {
 
@@ -69,13 +68,13 @@ public class ManagerController {
 	}
 	
 	//패스워드 체크 페이지
-	@RequestMapping(value = "/check", method = RequestMethod.GET)
+	@RequestMapping(value = "/manager/check", method = RequestMethod.GET)
 	public String checkForm() {
 		return "manager/check";
 	}
 
 	//패스워드 체크 처리
-	@RequestMapping(value = "/check", method = RequestMethod.POST)
+	@RequestMapping(value = "/manager/check", method = RequestMethod.POST)
 	public String check(@ModelAttribute("loginVO") ManagerVO manager, Model model) {
 		String managerId = manager.getManagerId();
 		boolean result = service.checkPassword(managerId, manager.getPassword());
@@ -95,7 +94,7 @@ public class ManagerController {
 	}
 	
 	//회원 정보 수정 처리
-	@RequestMapping(value = "/detail/{managerId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/manager/detail/{managerId}", method = RequestMethod.GET)
 	public String modify(@PathVariable String managerId, @ModelAttribute @Valid ManagerVO manager, Model model) {
 		
 		service.modifyManager(manager.getManagerId(), manager.getPassword(), manager.getTelephone());
@@ -107,7 +106,7 @@ public class ManagerController {
 	}
 	
 	//매니저 관리 조회
-	@RequestMapping(value="/list")
+	@RequestMapping(value="/manager/list")
 	public ModelAndView list() {
 		
 		List<ManagerVO> managerList = service.selectAll();
@@ -148,7 +147,7 @@ public class ManagerController {
 	}
 	
 	//매니저 삭제
-	@RequestMapping(value="/list", method=RequestMethod.DELETE)
+	@RequestMapping(value="/manager/list", method=RequestMethod.DELETE)
 	public String delete(HttpServletRequest request) {
 		
 		String [] staffNos = request.getParameterValues("managerId");
@@ -161,7 +160,7 @@ public class ManagerController {
 	}
 	
 	//매니저 정보 수정
-	@RequestMapping(value = "/modify/{managerId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/manager/modify/{managerId}", method = RequestMethod.GET)
 	public ModelAndView modify(@PathVariable String managerId) {
 	
 		ManagerVO manager = service.selectById(managerId);
@@ -177,7 +176,7 @@ public class ManagerController {
 	}
 	
 	//매니저 정보 수정 완료 
-	@RequestMapping(value ="/update/{managerId}", method=RequestMethod.PUT )
+	@RequestMapping(value ="/manager/update/{managerId}", method=RequestMethod.PUT )
 	public String update(@PathVariable String managerId, @ModelAttribute @Valid ManagerVO manager) {
 		
 		service.update(manager.getManagerId(), manager.getTelephone());
