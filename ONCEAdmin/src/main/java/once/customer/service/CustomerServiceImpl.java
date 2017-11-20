@@ -23,4 +23,16 @@ public class CustomerServiceImpl implements CustomerService {
 		return list;
 	}
 	
+	@Override
+	public void deleteBoard(int memNo) {
+		dao.delete(memNo);
+	}
+	
+	@Override
+	public List<CustomerVO> searchBoard(String customerId) {
+		
+		List<CustomerVO> list = dao.search(customerId);
+		
+		return list;
+	}
 }

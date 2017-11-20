@@ -7,5 +7,6 @@ import once.customer.vo.CustomerVO;
 public interface CustomerService {
 
 	List<CustomerVO> selectAllBoard();
-	
+	void deleteBoard(int memNo);
+	List<CustomerVO> searchBoard(String customerId);
 }

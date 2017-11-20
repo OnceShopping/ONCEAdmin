@@ -4,14 +4,31 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="once.customer.dao.CustomerDAO">
 
-<!-- 고객 관리 -->
+
+	<sql id="select">
+		select memNo, id, name, telephone,
+		DATE_FORMAT(date, '%Y-%m-%d') as date
+		from customer
+	</sql>
+
+	<!-- 고객 관리 -->
 	<select id="selectAll" resultType="CustomerVO">
- 		  <!-- select memNo, id, name, telephone, rank, --> <!-- rank가 현재 VO 객체에서 주석 처리됨 --> 
- 		  select memNo, id, name, telephone,
- 		       DATE_FORMAT(date, '%Y-%m-%d') as date
- 		  from customer
- 		  order by memNo ASC
- 	
- 	</select>
+		<include refid="select"></include>
+		<!-- select memNo, id, name, telephone, rank, --> <!-- rank가 현재 VO 객체에서 주석 처리됨 -->
+		order by memNo ASC
+	</select>
+
+	<!-- 고객 관리 /삭제 -->
+	<delete id="delete" parameterType="int">
+		delete from customer
+		where
+		memNo = #{memNo}
+	</delete>
+
+	<!-- 고객 검색 -->
+	<select id="search" resultType="CustomerVO" parameterType="String">
+		<include refid="select"></include>
+		where id like concat('%',#{id},'%')
+	</select>
 
 </mapper>
