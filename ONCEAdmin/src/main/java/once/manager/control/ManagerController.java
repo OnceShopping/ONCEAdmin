@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import once.manager.service.ManagerService;
+import once.notice.service.NoticeService;
 import once.manager.vo.ManagerVO;
 import once.notice.vo.NoticeVO;
 import once.store.vo.StoreVO;
