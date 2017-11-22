@@ -40,4 +40,16 @@ public class NoticeServiceImpl implements NoticeService {
 		dao.delete(noticeNo);
 		
 	}
+
+	@Override
+	public List<NoticeVO> selectPage(List page) {
+		List<NoticeVO> list = dao.selectPage(page);
+		return list;
+	}
+
+	@Override
+	public void addCountNotice(int noticeNo) {
+		dao.addCountNotice(noticeNo);
+	}
+
 }

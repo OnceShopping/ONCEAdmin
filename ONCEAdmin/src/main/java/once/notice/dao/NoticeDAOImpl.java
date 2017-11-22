@@ -40,4 +40,16 @@ public class NoticeDAOImpl implements NoticeDAO {
 	public void delete(int noticeNo) {
 		sqlSession.delete("once.notice.dao.NoticeDAO.deleteNotice", noticeNo);
 	}
+
+	@Override
+	public List<NoticeVO> selectPage(List page) {
+		List<NoticeVO> list = sqlSession.selectList("once.notice.dao.NoticeDAO.selectPage", page);
+		return list;
+	}
+
+	@Override
+	public void addCountNotice(int noticeNo) {
+		sqlSession.update("once.notice.dao.NoticeDAO.addCountNotice", noticeNo);
+	}
+
 }

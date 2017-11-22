@@ -10,4 +10,6 @@ public interface NoticeService {
 	void insertNotice(NoticeVO noticeVO);
 	void updateNotice(NoticeVO noticeVO);
 	void deleteNotice(int noticeNo);
+	List<NoticeVO> selectPage(List page);
+	void addCountNotice(int noticeNo);
 }
