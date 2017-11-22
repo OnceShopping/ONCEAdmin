@@ -11,7 +11,7 @@
  	</resultMap>
  	
  	<sql id="selectAll">
- 		select noticeNo, title, content, viewcnt, date_format(regdate, '%Y-%m-%d') as regdate from notice
+ 		select noticeNo, title, content, viewcnt, date_format(regdate, '%Y-%m-%d') as regdate, imgSaveName from notice
  	</sql>
  
  	<!-- 전체 게시글 조회  -->
@@ -28,15 +28,15 @@
  	
  	<!-- 글쓰기 -->
  	<insert id="insertNotice" parameterType="noticeVO">
- 		insert into notice ( title, content )
- 		values ( #{title}, #{content} );
+ 		insert into notice ( title, content, imgSaveName, imgOriName, imgSize )
+ 		values ( #{title}, #{content}, #{imgSaveName}, #{imgOriName}, #{imgSize} );
  	</insert>
  	 	<!-- 	insert into notice(noticeNo,title,content)
  		values (seq_notice_noticeNo.nextval,#{title},#{content}) -->
  	<!-- 수정 -->
  	<update id="updateNotice" parameterType="noticeVO">
  		update notice
- 		set title=#{title},content=#{content}
+ 		set title=#{title},content=#{content}, imgSaveName=#{imgSaveName}, imgOriName=#{imgOriName}, imgSize=#{imgSize}
  		where noticeNo=#{noticeNo}
  	</update>
  	
@@ -45,6 +45,16 @@
  		delete from notice where noticeNo=#{noticeNo}
  	</delete>
  	
+ 	<!-- 게시글 페이징 -->
+ 	<select id="selectPage" resultMap="MapNoticeVO" parameterType="java.util.List">
+ 		<include refid="selectAll" />
+ 		limit #{list[0]}, #{list[1]}
+ 	</select>
+ 	
+ 	<!-- 게시글 카운트 -->
+ 	<update id="addCountNotice" parameterType="int">
+ 		 update notice set viewCnt = viewCnt + 1 where noticeNo = #{noticeNo}
+ 	</update>
 </mapper>
 
 

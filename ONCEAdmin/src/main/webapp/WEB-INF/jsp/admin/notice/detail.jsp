@@ -87,7 +87,7 @@ th {
 										</a>
 										<!-- 프로필 클릭시 나오는 메뉴 -->
 										<ul class="dropdown-menu animated fadeInRight m-t-xs">
-											<li><a href="profile.html">Profile</a></li>
+											<li><a href="${ pageContext.request.contextPath }/manager/check">Profile</a></li>
 											<li class="divider"></li>
 											<li><a href="modal.lockme.html" data-toggle="ajaxModal">Logout</a>
 											</li>
@@ -106,28 +106,28 @@ th {
 												<i class="i i-statistics icon"> </i> <span class="font-bold">운영
 													공지</span>
 										</a></li>
-										<li><a href="#" class="auto"> <span
+										<li><a href="${ pageContext.request.contextPath }/notice/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
 											</span> <i class="i i-stack icon"> </i> <span class="font-bold">QNA
 													답변</span>
 										</a></li>
-										<li><a href="#" class="auto"> <span
+										<li><a href="${ pageContext.request.contextPath }/boardQA/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
 											</span> <i class="i i-lab icon"> </i> <span class="font-bold">매장
 													관리</span>
 										</a></li>
-										<li><a href="#" class="auto"> <span
+										<li><a href="${pageContext.request.contextPath}/manager/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
 											</span> <i class="i i-docs icon"> </i> <span class="font-bold">매니저
 													관리</span>
 										</a></li>
-										<li><a href="#" class="auto"> <span
+										<li><a href="${ pageContext.request.contextPath }/customer/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
@@ -168,34 +168,27 @@ th {
 									class="table table-striped m-b-none dataTable no-footer"
 									style="text-align: center">
 									<tr>
-										<th>글번호</th>
-										<td>${ noticeVO.noticeNo }</td>
+										<th colspan="3">${ noticeVO.title }</th>
 									</tr>
 									<tr>
-										<th>제목</th>
-										<td>${ noticeVO.title }</td>
+										<td style="text-align: left; padding-left: 20px">${ noticeVO.noticeNo }</td>
+										<td></td>
+										<td style="text-align: right; padding-right: 20px">${ noticeVO.regDate }</td>
 									</tr>
 									<tr>
-										<th>내용</th>
-										<td>${ noticeVO.content }</td>
-									</tr>
-									<tr>
-										<th>작성일</th>
-										<td>${ noticeVO.regDate }</td>
-									</tr>
+										<td style="text-align: left; align: center "  colspan="3">
+										<c:if test="${ noticeVO.imgSaveName ne null }">
+											<img src="${ pageContext.request.contextPath }/upload/admin/${ noticeVO.imgSaveName }" style="width: auto; height: auto; max-width:921px; align: center">
+										</c:if>
+										<br/><br/>
+										<span >${ noticeVO.content }</span>
+										</td>
 								</table>
 								<br />
-								<form
-									action="${ pageContext.request.contextPath }/notice/${ noticeVO.noticeNo }"
-									method="get">
-									<input type="submit" value="수정" class="btn btn-s-md btn-primary"/>
-								</form>
-								<form
-									action="${ pageContext.request.contextPath }/notice/${ noticeVO.noticeNo }"
-									method="post">
-									<input type="hidden" name="_method" value="DELETE"> <input
-										type="submit" value="삭제" class="btn btn-s-md btn-primary"/>
-								</form>
+								<input type="button" value="수정" class="btn btn-s-md btn-primary"
+									onclick="location.href='${ pageContext.request.contextPath }/notice/update/${ noticeVO.noticeNo }'"/>
+								<input type="button" value="삭제" class="btn btn-s-md btn-primary"
+									onclick="location.href='${ pageContext.request.contextPath }/notice/delete/${ noticeVO.noticeNo }'"/>	
 								<input type="button"
 									onclick="location.href='${ pageContext.request.contextPath }/notice/list'"
 									value="목록" class="btn btn-s-md btn-primary"/> 

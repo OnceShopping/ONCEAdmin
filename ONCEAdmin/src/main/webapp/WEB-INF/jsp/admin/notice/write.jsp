@@ -36,11 +36,16 @@
 	src="${pageContext.request.contextPath }/resources/js/bootstrap.js"></script>
 <!-- App -->
 <script src="${pageContext.request.contextPath }/resources/js/app.js"></script>
+
 <script
 	src="${pageContext.request.contextPath }/resources/js/slimscroll/jquery.slimscroll.min.js"></script>
 <script
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
+ <!-- parsley -->
+<script src="${pageContext.request.contextPath }/resources/js/parsley/parsley.min.js"></script>
+<script src="${pageContext.request.contextPath }/resources/js/parsley/parsley.extend.js"></script>
 <script type="text/javascript">
+
 	function doAction() {
 		location.href = "${ pageContext.request.contextPath }/notice/list"
 
@@ -112,28 +117,28 @@ th {
 												<i class="i i-statistics icon"> </i> <span class="font-bold">운영
 													공지</span>
 										</a></li>
-										<li><a href="#" class="auto"> <span
+										<li><a href="${ pageContext.request.contextPath }/notice/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
 											</span> <i class="i i-stack icon"> </i> <span class="font-bold">QNA
 													답변</span>
 										</a></li>
-										<li><a href="#" class="auto"> <span
+										<li><a href="${ pageContext.request.contextPath }/boardQA/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
 											</span> <i class="i i-lab icon"> </i> <span class="font-bold">매장
 													관리</span>
 										</a></li>
-										<li><a href="#" class="auto"> <span
+										<li><a href="${pageContext.request.contextPath}/manager/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
 											</span> <i class="i i-docs icon"> </i> <span class="font-bold">매니저
 													관리</span>
 										</a></li>
-										<li><a href="#" class="auto"> <span
+										<li><a href="${ pageContext.request.contextPath }/customer/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
@@ -170,19 +175,19 @@ th {
 							<h3 class="font-bold m-b-none m-t-none">운영공지</h3>
 							<br />
 							<div style="text-align: right; width: 80%">
-								<form:form commandName="noticeVO" method="post" enctype="multipart/form-data">
-									<table border="1" width="80%">
+								<form:form commandName="noticeVO" method="post" enctype="multipart/form-data" >
+									<table border="1" width="100%">
 										<tr>
-											<th width="25%">제목</th>
-											<td><form:input type="text" path="title" /></td>
+											<td><form:input type="text" path="title" class="form-control" placeholder="제목을 입력해 주세요"/></td>
 										</tr>
 										<tr>
-											<th width="25%">내용</th>
-											<td><form:textarea rows="7" cols="10" path="content" /></td>
+											<td>
+											<form:textarea class="form-control" rows="7" cols="10" path="content" />
+											</td>
 										</tr>
 									</table>
 									<br />
-									<input type="file" value="파일등록" class="btn btn-s-md btn-primary"/>
+									<input type="file" value="파일등록" class="btn btn-s-md btn-primary" name="file"/>
 									<input type="submit" value="등록" class="btn btn-s-md btn-primary"/>
 									<input type="button" value="취소" onclick="doAction()" class="btn btn-s-md btn-primary"/>
 								</form:form>
