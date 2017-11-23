@@ -250,5 +250,15 @@ public class ManagerController {
 		
 		return managerVOList;
 	}
-
+	
+	//ID 중복 체크
+	@RequestMapping(value="/manager/checkId", method = RequestMethod.GET)
+	@ResponseBody
+	public boolean checkId(@RequestParam(value="managerId") String managerId) {
+		
+		System.out.println("managerId : "+ managerId);
+		System.out.println("service : "+service.checkId(managerId));
+		
+		return service.checkId(managerId);
+	}
 }

@@ -66,7 +66,7 @@ public class ManagerServiceImpl implements ManagerService{
 	
 	//매니저 추가
 	@Override
-	public void add(ManagerVO manager) {	
+	public void add(ManagerVO manager) {		
 		dao.insert(manager);
 	}
 	
@@ -77,6 +77,11 @@ public class ManagerServiceImpl implements ManagerService{
 		List<ManagerVO> list = dao.search(manager);
 		
 		return list;
+	}
+	
+	//ID 중복 체크
+	public boolean checkId(String managerId) {
+		return dao.checkId(managerId);
 	}
 
 }

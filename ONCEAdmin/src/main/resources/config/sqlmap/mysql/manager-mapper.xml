@@ -81,13 +81,13 @@
  		where
  		<choose>
  			<when test="name!=null">
- 				name= #{name}
+ 				name like concat('%',#{name},'%')
  			</when>
  			<when test="managerId!=null">
- 				managerId= #{managerId}
+ 				managerId like concat('%',#{managerId},'%')
  			</when>
  			<when test="storeName!=null">
- 				storeName= #{storeName}
+ 				storeName like concat('%',#{storeName},'%')
  			</when>
  		</choose>
  	</select>

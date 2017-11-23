@@ -29,4 +29,5 @@ public interface ManagerDAO {
 	
 	List<ManagerVO> search(ManagerVO manager);
 
+	boolean checkId(String managerId);
 }

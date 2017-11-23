@@ -111,4 +111,15 @@ public class ManagerDAOImpl implements ManagerDAO {
 		return list;
 	}
 
+	//ID 중복 체크
+	@Override
+	public boolean checkId(String managerId) {
+		
+		ManagerVO manager = sqlSession.selectOne("once.manager.dao.ManagerDAO.selectOneManager", managerId);
+		
+		if(manager==null)
+			return false;
+		else
+			return true;
+	}
 }
