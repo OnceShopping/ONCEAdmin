@@ -24,4 +24,9 @@ public interface ManagerDAO {
 	void delete(String managerId);
 	
 	void update(String managerId, String telephone);
+	
+	void insert(ManagerVO manager);
+	
+	List<ManagerVO> search(ManagerVO manager);
+
 }

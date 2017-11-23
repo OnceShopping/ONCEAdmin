@@ -12,6 +12,7 @@ public class ManagerVO {
 	private String type;
 	
 	private String storeNo;
+	private String storeName;
 	
 	private String name;
 	private String telephone;

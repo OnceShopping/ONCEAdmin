@@ -58,6 +58,39 @@
  		set telephone = #{telephone}
  		where managerId = #{managerId}
  	</update>
+ 	
+ 	<!-- 매니저 추가 -->
+ 	<insert id="insert" parameterType="ManagerVO">
+ 		insert into StoreMember(managerId, type, password, storeNo, name, telephone, date) 
+ 		values 
+ 		(#{managerId}, #{type}, #{password}, #{storeNo}, #{name}, #{telephone}, curDate()) 
+ 	</insert>
+ 	
+ 	<!-- storeName으로 storeNo 검색 -->
+ 	<select id="selectByName" parameterType="String" resultType="String">
+ 		select storeNo
+ 		from store
+ 		where storeName = #{storeName}
+ 	</select>
+ 	
+ 	<!-- 매니저 검색 -->
+ 	<select id="search" parameterType="String" resultType="ManagerVO">
+ 		select StoreMember.staffNo, StoreMember.managerId, StoreMember.name, StoreMember.telephone, date_format(date, '%y-%m-%d') as date, StoreMember.storeNo, store.storeName
+ 		from StoreMember left join store
+		on StoreMember.storeNo = store.storeNo
+ 		where
+ 		<choose>
+ 			<when test="name!=null">
+ 				name= #{name}
+ 			</when>
+ 			<when test="managerId!=null">
+ 				managerId= #{managerId}
+ 			</when>
+ 			<when test="storeName!=null">
+ 				storeName= #{storeName}
+ 			</when>
+ 		</choose>
+ 	</select>
 </mapper>
 
 

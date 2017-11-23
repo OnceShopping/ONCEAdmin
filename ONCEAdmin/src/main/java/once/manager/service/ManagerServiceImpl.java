@@ -63,5 +63,21 @@ public class ManagerServiceImpl implements ManagerService{
 	public void update(String managerId, String telephone) {	
 		dao.update(managerId, telephone);
 	}
+	
+	//매니저 추가
+	@Override
+	public void add(ManagerVO manager) {	
+		dao.insert(manager);
+	}
+	
+	//매니저 검색
+	@Override
+	public List<ManagerVO> search(ManagerVO manager) {
+		
+		List<ManagerVO> list = dao.search(manager);
+		
+		return list;
+	}
+
 }
  

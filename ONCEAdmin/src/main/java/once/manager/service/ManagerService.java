@@ -24,4 +24,8 @@ public interface ManagerService {
 	void delete(String managerId);
 	
 	void update(String managerId, String telephone);
+	
+	void add(ManagerVO manager);
+	
+	List<ManagerVO> search(ManagerVO manager);
 }

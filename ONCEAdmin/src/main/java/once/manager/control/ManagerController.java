@@ -1,7 +1,11 @@
 package once.manager.control;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -11,9 +15,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,6 +31,7 @@ import once.store.vo.StoreVO;
 
 @SessionAttributes("loginVO")
 @RequestMapping("/manager")
+/*@RestController*/
 @Controller
 public class ManagerController {
 
@@ -146,4 +154,64 @@ public class ManagerController {
 		
 		return "redirect:/manager/list";
 	}
+	
+	//매니저 추가
+	@RequestMapping(value="/add", method=RequestMethod.GET )
+	@ResponseBody
+	public ManagerVO addManager(@RequestParam(value="managerId") String managerId, @RequestParam(value="password") String password, @RequestParam(value="name") String name, @RequestParam(value="telephone") String telephone,@RequestParam(value="type") String type,@RequestParam(value="storeNo") String storeNo) {
+				
+		ManagerVO manager = new ManagerVO();
+		
+		manager.setManagerId(managerId);
+		manager.setPassword(password);
+		manager.setTelephone(telephone);
+		manager.setType(type);
+		manager.setName(name);
+		manager.setStoreNo(storeNo);
+		
+		service.add(manager);
+		
+		//추가된 매니저에 대한 정보 조회(staffNo, date)
+		ManagerVO managerAll = service.selectById(managerId);
+		
+		manager.setStaffNo(managerAll.getStaffNo());
+		manager.setDate(managerAll.getDate());
+		
+		//추가된 매니저의  storeNo에 대한 storeName
+		manager.setStoreName(service.selectByNo(storeNo).getStoreName());		
+		
+		return manager;
+		
+	}
+	
+	//매니저 검색
+	@RequestMapping(value="/search", method=RequestMethod.POST )
+	@ResponseBody
+	public List<ManagerVO> searchManager(@RequestParam(value="searchType") String searchType, @RequestParam(value="searchText") String searchText) {
+
+		
+		String search;
+		ManagerVO manager = new ManagerVO();
+		List<ManagerVO> managerVOList = new ArrayList<>();
+				
+		try {
+			search = URLDecoder.decode(searchText, "UTF-8"); // 한글 깨짐 현상 방지
+			
+			if(searchType.equals("name")) 
+				manager.setName(search);
+			else if(searchType.equals("managerId"))
+				manager.setManagerId(search);
+			else
+				manager.setStoreName(search);
+					
+			managerVOList = service.search(manager);
+			
+		} catch (UnsupportedEncodingException e) {
+			
+			e.printStackTrace();
+		}
+		
+		return managerVOList;
+	}
+
 }
