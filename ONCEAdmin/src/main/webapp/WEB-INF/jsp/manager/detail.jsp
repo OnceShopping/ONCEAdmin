@@ -47,6 +47,11 @@
 	            $("#udtBtn").prop("disabled", true);
 	            $("#udtBtn").css("background-color", "#177bbb");
 	            $("#pwChk").css("background-color", "#FFCECE");
+	        }  else if (pass == null || nonpass == null) {
+	        	pwdCheck = 0;
+	        	$("#udtBtn").prop("disabled", true);
+	            $("#udtBtn").css("background-color", "#aaaaaa");
+	            $("#pwChk").css("background-color", "#FFCECE");
 	        }
 	    }
 	

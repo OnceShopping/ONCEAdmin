@@ -25,27 +25,64 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import once.manager.service.ManagerService;
+import once.notice.service.NoticeService;
 import once.manager.vo.ManagerVO;
 import once.notice.vo.NoticeVO;
 import once.store.vo.StoreVO;
 
 @SessionAttributes("loginVO")
-@RequestMapping("/manager")
-/*@RestController*/
+
 @Controller
 public class ManagerController {
 
 	@Autowired
 	private ManagerService service;
 	
+	@Autowired
+	private NoticeService nService;
+	
+	@RequestMapping(value="/login", method=RequestMethod.POST)
+	public String login(@RequestParam("id")String id, @RequestParam("password")String password, Model model) {
+		
+		ManagerVO manager = new ManagerVO();
+		manager.setManagerId(id);
+		manager.setPassword(password);
+		
+		ManagerVO loginVO = service.login(manager);
+				
+		if(loginVO==null) {
+			model.addAttribute("message", "Please check your ID or Password");
+			
+			return "login/loginFail";
+		}else {
+			model.addAttribute("loginVO", loginVO);
+			System.out.println(loginVO);
+			if(loginVO.getType().equals("admin")) {
+				List<NoticeVO> list = nService.selectAllNotice();
+				model.addAttribute("list", list);
+				return "admin/notice/list";
+			}else if(loginVO.getType().equals("infoManger")) {
+				
+				return "infoManager/itemManage/addItem";
+			}else if(loginVO.getType().equals("storeManager")) {
+				
+				return "storeManager/itemManage/registerItem";
+			}else {
+				model.addAttribute("message", "type이 이상합니다");
+				
+				return "login/loginFail";
+			}
+		}
+	}
+	
 	//패스워드 체크 페이지
-	@RequestMapping(value = "/check", method = RequestMethod.GET)
+	@RequestMapping(value = "/manager/check", method = RequestMethod.GET)
 	public String checkForm() {
 		return "manager/check";
 	}
 
 	//패스워드 체크 처리
-	@RequestMapping(value = "/check", method = RequestMethod.POST)
+	@RequestMapping(value = "/manager/check", method = RequestMethod.POST)
 	public String check(@ModelAttribute("loginVO") ManagerVO manager, Model model) {
 		String managerId = manager.getManagerId();
 		boolean result = service.checkPassword(managerId, manager.getPassword());
@@ -65,7 +102,7 @@ public class ManagerController {
 	}
 	
 	//회원 정보 수정 처리
-	@RequestMapping(value = "/detail/{managerId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/manager/detail/{managerId}", method = RequestMethod.GET)
 	public String modify(@PathVariable String managerId, @ModelAttribute @Valid ManagerVO manager, Model model) {
 		
 		service.modifyManager(manager.getManagerId(), manager.getPassword(), manager.getTelephone());
@@ -77,7 +114,7 @@ public class ManagerController {
 	}
 	
 	//매니저 관리 조회
-	@RequestMapping(value="/list")
+	@RequestMapping(value="/manager/list")
 	public ModelAndView list() {
 		
 		List<ManagerVO> managerList = service.selectAll();
@@ -118,7 +155,7 @@ public class ManagerController {
 	}
 	
 	//매니저 삭제
-	@RequestMapping(value="/list", method=RequestMethod.DELETE)
+	@RequestMapping(value="/manager/list", method=RequestMethod.DELETE)
 	public String delete(HttpServletRequest request) {
 		
 		String [] staffNos = request.getParameterValues("managerId");
@@ -131,7 +168,7 @@ public class ManagerController {
 	}
 	
 	//매니저 정보 수정
-	@RequestMapping(value = "/modify/{managerId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/manager/modify/{managerId}", method = RequestMethod.GET)
 	public ModelAndView modify(@PathVariable String managerId) {
 	
 		ManagerVO manager = service.selectById(managerId);
@@ -147,7 +184,7 @@ public class ManagerController {
 	}
 	
 	//매니저 정보 수정 완료 
-	@RequestMapping(value ="/update/{managerId}", method=RequestMethod.PUT )
+	@RequestMapping(value ="/manager/update/{managerId}", method=RequestMethod.PUT )
 	public String update(@PathVariable String managerId, @ModelAttribute @Valid ManagerVO manager) {
 		
 		service.update(manager.getManagerId(), manager.getTelephone());
@@ -156,7 +193,7 @@ public class ManagerController {
 	}
 	
 	//매니저 추가
-	@RequestMapping(value="/add", method=RequestMethod.GET )
+	@RequestMapping(value="/manager/add", method=RequestMethod.GET )
 	@ResponseBody
 	public ManagerVO addManager(@RequestParam(value="managerId") String managerId, @RequestParam(value="password") String password, @RequestParam(value="name") String name, @RequestParam(value="telephone") String telephone,@RequestParam(value="type") String type,@RequestParam(value="storeNo") String storeNo) {
 				
@@ -185,7 +222,7 @@ public class ManagerController {
 	}
 	
 	//매니저 검색
-	@RequestMapping(value="/search", method=RequestMethod.POST )
+	@RequestMapping(value="/manager/search", method=RequestMethod.POST )
 	@ResponseBody
 	public List<ManagerVO> searchManager(@RequestParam(value="searchType") String searchType, @RequestParam(value="searchText") String searchText) {
 
