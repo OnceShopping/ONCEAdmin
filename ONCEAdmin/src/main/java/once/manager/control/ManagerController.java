@@ -197,6 +197,8 @@ public class ManagerController {
 	@ResponseBody
 	public ManagerVO addManager(@RequestParam(value="managerId") String managerId, @RequestParam(value="password") String password, @RequestParam(value="name") String name, @RequestParam(value="telephone") String telephone,@RequestParam(value="type") String type,@RequestParam(value="storeNo") String storeNo) {
 				
+		System.out.println(managerId);
+		
 		ManagerVO manager = new ManagerVO();
 		
 		manager.setManagerId(managerId);
@@ -255,9 +257,6 @@ public class ManagerController {
 	@RequestMapping(value="/manager/checkId", method = RequestMethod.GET)
 	@ResponseBody
 	public boolean checkId(@RequestParam(value="managerId") String managerId) {
-		
-		System.out.println("managerId : "+ managerId);
-		System.out.println("service : "+service.checkId(managerId));
 		
 		return service.checkId(managerId);
 	}

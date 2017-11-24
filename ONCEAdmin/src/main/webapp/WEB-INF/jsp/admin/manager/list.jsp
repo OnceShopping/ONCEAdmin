@@ -48,8 +48,9 @@
 		var ModalTest;
 		var requiredCheck = false;
 		
-			$('#typeSelect').val('');
-			$('#storeSelect').val('');
+			$('#typeSelect').val(''); // 매장 타입 콤보 박스 초기화
+			$('#storeSelect').val(''); // 매장 이름  콤보 박스 초기화
+			$('#searchType').val(''); // 검색 콤보 박스 초기화 
 
 			//체크박스 전체 선택, 선택 해제
 			$('#checkAll').click(function() {
@@ -124,161 +125,171 @@
 					$("#typeSelect").val("F03").prop("selected", true);
 			});
 
-				//추가
-				$('#Add').click(function() {
+			//추가
+			$('#addManager').submit(function() {	
+				//[추가] 전, 빈칸 체크  	
+				var checkId= $('#managerId').val();
+				var checkPW= $('#password').val();
+				var checkName= $('#name').val();
+				var checkTel= $('#telephone').val();
+				var checkSN= $('#storeSelect').val();
+				
+				if(checkId==""){
+					infoAlert("ID를 입력해주세요.");
+				}else if(checkPW==""){
+					infoAlert("비밀 번호를 입력해주세요.");
+				}else if(checkName==""){
+					infoAlert("이름을 입력해주세요.");
+				}else if(checkTel==""){
+					infoAlert("전화번호를 입력해주세요.");
+				}else if(checkSN===null){
+					infoAlert("매장을 선택해주세요.");
+				}else if(requiredCheck==false){
+					infoAlert("ID 중복 체크를 해주세요.");
+				}else{ // 정상적으로 모두 작성이 되어있는 경우
+					var type = $('#typeSelect').val();
+					var Mtype;
+	
+					if (type == 'info')
+						Mtype = "infoManager";
+					else if (type == '0000')
+						Mtype = "admin";
+					else
+						Mtype = "storeManager";
 
-					//[추가] 전, 빈칸 체크  	
-					var checkId= $('#managerId').val();
-					var checkPW= $('#password').val();
-					var checkName= $('#name').val();
-					var checkTel= $('#telephone').val();
-					var checkSN= $('#storeSelect').val();
-					
-					if(checkId==""){
-						infoAlert("ID를 입력해주세요.");
-					}else if(checkPW==""){
-						infoAlert("비밀 번호를 입력해주세요.");
-					}else if(checkName==""){
-						infoAlert("이름을 입력해주세요.");
-					}else if(checkTel==""){
-						infoAlert("전화번호를 입력해주세요.");
-					}else if(checkSN===null){
-						infoAlert("매장을 선택해주세요.");
-					}else if(requiredCheck==false){
-						infoAlert("ID 중복 체크를 해주세요.");
-					}else{ // 정상적으로 모두 작성이 되어있는 경우
-						var type = $('#typeSelect').val();
-						var Mtype;
-	
-						if (type == 'info')
-							Mtype = "infoManager";
-						else if (type == '0000')
-							Mtype = "admin";
-						else
-							Mtype = "storeManager";
-	
-						var params = {
-							managerId : $('#managerId').val(),
-							password : $('#password').val(),
-							name : $('#name').val(),
-							type : Mtype,
-							telephone : $('#telephone').val(),
-							storeNo : $('#storeSelect').val()
-						};
-	
-						$.ajax({
-							url : "${ pageContext.request.contextPath }/manager/add",
-							data : params,
-							type : "get",
-							cache : false,
-							contentType : "application/json; charset=UTF-8",
-							success : function(data) {
-									
-								var result = $.parseJSON(data);
+					var params = {
+						managerId : $('#managerId').val(),
+						password : $('#password').val(),
+						name : $('#name').val(),
+						type : Mtype,
+						telephone : $('#telephone').val(),
+						storeNo : $('#storeSelect').val()
+					};
+
+					$.ajax({
+						url : "${ pageContext.request.contextPath }/manager/add",
+						data : params,
+						type : "get",
+						cache : false,
+						contentType : "application/json; charset=UTF-8",
+						success : function(data) {
 								
-								printList(result); //리스트에 추가
-	
-									$('#managerId').val('');
-									$('#password').val('');
-									$('#name').val('');
-									$('#typeSelect').val('');
-									$('#telephone').val('');
-									$('#storeSelect').val('');
-							},
-							error : function(request,status, error) {
-								alert("에러 발생! : " + request.status + "message : "+ request.responseText+ "\n"+ "error : "+ error);
-							}
-						});
-					}	
-					
-				});
-				
-				$( "#dialog" ).dialog({
-					 autoOpen: false,
-				      /* title: 'ID 중복 검사 결과', */
-				      modal: true,
-				      width: '300',
-				      height: '150'
-				 });
-				
-				//id 중복 체크
-				$("#IdCheck").click(function(){
-					
-					var check = $('#managerId').val();
-					if(check==""){
-						infoAlert("ID를 입력해주세요.");
-						$('#managerId').focus();
-					}else{
-						$.ajax({
-							url : "${ pageContext.request.contextPath }/manager/checkId",
-							data : {"managerId" : $('#managerId').val()},
-							cache : false,
-							type : "get",
-							contentType : "application/json; charset=UTF-8",
-							success : function(data){
-								
-								if(data=="true"){ // 해당 id가 존재하는 경우
-									$('#dialog').html('<p>죄송합니다.</p><p>작성하신 ID가 기존에 존재합니다.</p>다시 작성해주세요.');
-									$("#dialog").dialog("open");
-								}else{ // 해당 id가 존재하지 않는 경우
-									$('#dialog').html('<p>작성하신 ID로 사용할 수 있습니다.</p>');
-									$("#dialog").dialog("open");
-									requiredCheck = true;
-								}
-							},
-							error : function(request,status, error) {
-								alert("에러 발생! : " + request.status + "message : "+ request.responseText+ "\n"+ "error : "+ error);
-							}
+							var result = $.parseJSON(data);
 							
-						});
-						
-						if(requiredCheck==false)
-							$('#managerId').focus();
-					}
-				});
-				
-				//검색
-				$('#searchForm').submit(function() {
+							printList(result); //리스트에 추가
+
+							$('#managerId').val('');
+							$('#password').val('');
+							$('#name').val('');
+							$('#typeSelect').val('');
+							$('#telephone').val('');
+							$('#storeSelect').val('');
+								
+						},
+						error : function(request,status, error) {
+							alert("에러 발생! : " + request.status + "message : "+ request.responseText+ "\n"+ "error : "+ error);
+						}
+					});
+				}
+				return false;
+			});
 			
-					if ($('#searchText').val() == "") {
-						$("#searchResult").html('검색 란을 작성해주세요.');
-						$("#exampleModal").modal();
-						return false;
-						
-					} else {
-						
-						type = $(this).serialize();
-	
-						$.ajax({
-							url : "${ pageContext.request.contextPath }/manager/search",
-							data : type.replace(/%/g,'%25'),
-							type : "post",
-							dataType : "json",
-							cache : false,
-							contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-	
-							success : function(data) {
-							
-								if(data==""){
-									$("#searchResult").html('<p>죄송하지만 검색 결과가 존재하지 않습니다.<p/>다시 한번 확인해주세요.');
-									$("#exampleModal").modal();
-								}else{
-									ModalTest = printResult(data);
-									showModal(ModalTest);
-								}	
-															
-							},error : function(request, status, error) {
-								alert("에러 발생! : " + request.status + "message : "+ request.responseText+ "\n"+ "error : "+ error);
-							}
-						});
-						
-						$('#searchText').val('');
-						return false;
-					}
-					
-				});
+			//다이얼로그 format 정의
+			$( "#dialog" ).dialog({
+				 autoOpen: false,
+			      modal: true,
+			      width: '300',
+			      height: '200',
+			      buttons : {
+			    	 OK : function(){	  
+			    	  	$(this).dialog("close");
+			    	 }
+			      }
+			 });
+			
+			//id 중복 체크
+			$("#IdCheck").click(function(){
 				
-		});
+				var check = $('#managerId').val();
+				if(check==""){
+					infoAlert("ID를 입력해주세요.");
+				}else{
+					$.ajax({
+						url : "${ pageContext.request.contextPath }/manager/checkId",
+						data : {"managerId" : $('#managerId').val()},
+						cache : false,
+						type : "get",
+						contentType : "application/json; charset=UTF-8",
+						success : function(data){
+							
+							if(data=="true"){ // 해당 id가 존재하는 경우
+								$('#dialog').html('<p>죄송합니다.</p><p>작성하신 ID가 기존에 존재합니다.</p>다시 작성해주세요.');
+								$("#dialog").dialog("open");
+								requiredCheck = false;
+							}else{ // 해당 id가 존재하지 않는 경우
+								$('#dialog').html('<p>작성하신 ID로 사용할 수 있습니다.</p>');
+								$("#dialog").dialog("open");
+								requiredCheck = true;
+							}
+						},
+						error : function(request,status, error) {
+							alert("에러 발생! : " + request.status + "message : "+ request.responseText+ "\n"+ "error : "+ error);
+						}
+						
+					});
+					
+					if(requiredCheck==false)
+						$('#managerId').focus();
+				}
+			});
+				
+			//검색
+			$('#searchForm').submit(function() {
+		
+				if ($('#searchText').val() == "") {
+					$("#searchResult").html('검색 란을 작성해주세요.');
+					$("#exampleModal").modal();
+					return false;
+					
+				} else {
+					
+					type = $(this).serialize();
+
+					$.ajax({
+						url : "${ pageContext.request.contextPath }/manager/search",
+						data : type.replace(/%/g,'%25'),
+						type : "post",
+						dataType : "json",
+						cache : false,
+						contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+
+						success : function(data) {
+						
+							if(data==""){
+								$("#searchResult").html('<p>죄송하지만 검색 결과가 존재하지 않습니다.<p/>다시 한번 확인해주세요.');
+								$("#exampleModal").modal();
+							}else{
+								ModalTest = printResult(data);
+								showModal(ModalTest);
+							}	
+														
+						},error : function(request, status, error) {
+							alert("에러 발생! : " + request.status + "message : "+ request.responseText+ "\n"+ "error : "+ error);
+						}
+					});
+					
+					$('#searchText').val(''); // 검색 텍스트 초기화 
+					$('#searchType').val(''); // 검색 콤보 박스 초기화 
+					return false;
+				}
+			});
+			
+			//ID 값을 중복 체크 이후에 바꿀 경우를 대비한 예외 처리
+			$('#managerId').on("change", function() {
+				requiredCheck = false;
+			});
+			
+	});
 	
 		function printList(result) {
 	
@@ -332,7 +343,7 @@
 		}
 		
 		function infoAlert(str){
-			$('#dialog').html('<p>'+str+'</p>');
+			$('#dialog').html("<div style='text-align:center; margin-top:auto;'><p>"+str+"</p></div>");
 			$("#dialog").dialog("open");
 		}
 		
@@ -359,6 +370,7 @@
 .managerList td {
 	text-align: center;
 }
+ 
 </style>
 </head>
 <body class="">
@@ -371,7 +383,7 @@
 						<span aria-hidden="true">×</span>
 						<span class="sr-only">Close</span>
 						</button>
-					<h3 class="modal-title" id="exampleModalLabel">검색 결과</h3>
+					<h3 class="modal-title" id="exampleModalLabel">SEARCH RESULT</h3>
 			 	</div>
 		 	<div class="modal-body">
 		 		<div id="searchResult">검색 란을 작성해주세요.</div>
@@ -382,7 +394,7 @@
 			</div>
 		 </div>
 	</div>
-	<div id="dialog" title="알림"></div>
+	<div id="dialog" title="ALERT DIALOG"></div>
 	<section class="vbox">
 		<!-- 상단바 -->
 		<header
@@ -509,7 +521,7 @@
 											<th width="10%" style="text-align: right;">ID</th>
 											<td width="5%" />
 											<td width="40%">
-												<input type="text" id="managerId" name="managerId" width="60%">&nbsp;&nbsp;&nbsp;<input type="button" id="IdCheck" value="중복 체크" name="IdCheck" width="40%"></td>
+												<input type="text" id="managerId" name="managerId" width="60%" pattern="\w" title="알파벳 또는 숫자를 입력하세요.">&nbsp;&nbsp;&nbsp;<input type="button" id="IdCheck" value="중복 체크" name="IdCheck" width="40%"></td>
 											<th width="20%" style="text-align: right;">비밀 번호</th>
 											<td width="5%" />
 											<td width="25%"><input type="password" id="password"
@@ -523,8 +535,7 @@
 											<th width="20%" style="text-align: right;">연락처</th>
 											<td width="5%" />
 											<td width="25%"><input type="tel" id="telephone"
-												name="telephone" pattern="(010)-\d{3,4}\-\d{4}"
-												placeholder="010-xxxx-xxxx"></td>
+												name="telephone" pattern="(010)|(011)|(017)|(018)-\d{3,4}-\d{4}" title="010-xxx-xxxx 또는  xxx-xxxx-xxxx 형식으로   작성해주세요." ></td>
 										</tr>
 										<tr height="20px" />
 										<tr>
@@ -551,7 +562,8 @@
 										<tr height="5px" />
 									</table>
 									<div align="right" style="padding-right: 2px;">
-										<input type="button" value="추가" id="Add">
+										<!-- <input type="button" value="추가" id="Add"> -->
+										<input type="submit" value="추가" id="Add">
 									</div>
 								</div>
 							</form>
