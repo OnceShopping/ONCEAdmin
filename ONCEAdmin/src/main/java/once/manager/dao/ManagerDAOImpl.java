@@ -94,4 +94,41 @@ public class ManagerDAOImpl implements ManagerDAO {
 		
 		sqlSession.update("once.manager.dao.ManagerDAO.update", map);
 	}
+	
+	//매니저 추가
+	@Override
+	public void insert(ManagerVO manager) {
+		
+		sqlSession.insert("once.manager.dao.ManagerDAO.insert", manager);
+	}
+	
+	//매니저 검색
+	@Override
+	public List<ManagerVO> search(ManagerVO manager) {
+		
+		List<ManagerVO> list = sqlSession.selectList("once.manager.dao.ManagerDAO.search", manager);
+		
+		return list;
+	}
+
+	//ID 중복 체크
+	@Override
+	public boolean checkId(String managerId) {
+		
+		ManagerVO manager = sqlSession.selectOne("once.manager.dao.ManagerDAO.selectOneManager", managerId);
+		
+		if(manager==null)
+			return false;
+		else
+			return true;
+	}
+	
+	//페이징
+	@Override
+	public List<ManagerVO> selectPage(List page) {
+		
+		List<ManagerVO> list = sqlSession.selectList("once.manager.dao.ManagerDAO.selectPage", page);
+		
+		return list;
+	}
 }

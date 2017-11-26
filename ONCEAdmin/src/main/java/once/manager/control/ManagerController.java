@@ -1,7 +1,11 @@
 package once.manager.control;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -11,9 +15,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,6 +31,7 @@ import once.notice.vo.NoticeVO;
 import once.store.vo.StoreVO;
 
 @SessionAttributes("loginVO")
+
 @Controller
 public class ManagerController {
 
@@ -107,9 +115,51 @@ public class ManagerController {
 	
 	//매니저 관리 조회
 	@RequestMapping(value="/manager/list")
-	public ModelAndView list() {
+	public ModelAndView list(HttpServletRequest request) {
 		
-		List<ManagerVO> managerList = service.selectAll();
+		// 현재 페이지 번호 저장 변수
+		int pageNo = 1;
+		if (request.getParameter("pageNo") != null) {
+
+			// 페이지 파라미터가 있는 경우 현재 페이지 번호를 설정
+			pageNo = Integer.parseInt(request.getParameter("pageNo"));
+		} 
+
+		// 한페이지에 보여질 목록 수
+		int listSize = 10;
+		
+		// 전체 게시글 카운트
+		int totalCount = service.selectAll().size();
+			// 마지막 페이지 구하기
+		int lastPage = (totalCount % listSize == 0) ? totalCount / listSize 
+				                                    : totalCount / listSize + 1;	
+		request.setAttribute("pageNo"  , pageNo);
+		request.setAttribute("lastPage", lastPage);
+		
+		// ======================================================================
+		// 탭 관련 작업 추가 파트
+		// ======================================================================
+		
+		// 목록에 보여질 탭 사이즈
+		int tabSize  = 5;
+		
+		// 현재 페이지에 해당하는 탭 위치 
+		int currTab   = (pageNo  -1) / tabSize + 1;
+		int beginPage = (currTab -1) * tabSize + 1;
+		int endPage   = (currTab * tabSize < lastPage) ? currTab * tabSize 
+				                                       : lastPage;
+		
+		request.setAttribute("beginPage", beginPage);
+		request.setAttribute("endPage"  , endPage);
+		// ======================================================================
+		
+		
+		// 해당 페이지의 게시글 목록
+		List<Integer> page = new ArrayList<>();
+		page.add( (pageNo - 1) * listSize );
+		page.add( listSize );
+		List<ManagerVO> managerList = service.selectPage(page);
+	
 		List<StoreVO> storeList = new ArrayList<>();
 		
 		ModelAndView mav = new ModelAndView();
@@ -182,5 +232,74 @@ public class ManagerController {
 		service.update(manager.getManagerId(), manager.getTelephone());
 		
 		return "redirect:/manager/list";
+	}
+	
+	//매니저 추가
+	@RequestMapping(value="/manager/add", method=RequestMethod.GET )
+	@ResponseBody
+	public ManagerVO addManager(@RequestParam(value="managerId") String managerId, @RequestParam(value="password") String password, @RequestParam(value="name") String name, @RequestParam(value="telephone") String telephone,@RequestParam(value="type") String type,@RequestParam(value="storeNo") String storeNo) {
+				
+		System.out.println(managerId);
+		
+		ManagerVO manager = new ManagerVO();
+		
+		manager.setManagerId(managerId);
+		manager.setPassword(password);
+		manager.setTelephone(telephone);
+		manager.setType(type);
+		manager.setName(name);
+		manager.setStoreNo(storeNo);
+		
+		service.add(manager);
+		
+		//추가된 매니저에 대한 정보 조회(staffNo, date)
+		ManagerVO managerAll = service.selectById(managerId);
+		
+		manager.setStaffNo(managerAll.getStaffNo());
+		manager.setDate(managerAll.getDate());
+		
+		//추가된 매니저의  storeNo에 대한 storeName
+		manager.setStoreName(service.selectByNo(storeNo).getStoreName());		
+		
+		return manager;
+		
+	}
+	
+	//매니저 검색
+	@RequestMapping(value="/manager/search", method=RequestMethod.POST )
+	@ResponseBody
+	public List<ManagerVO> searchManager(@RequestParam(value="searchType") String searchType, @RequestParam(value="searchText") String searchText) {
+
+		
+		String search;
+		ManagerVO manager = new ManagerVO();
+		List<ManagerVO> managerVOList = new ArrayList<>();
+				
+		try {
+			search = URLDecoder.decode(searchText, "UTF-8"); // 한글 깨짐 현상 방지
+			
+			if(searchType.equals("name")) 
+				manager.setName(search);
+			else if(searchType.equals("managerId"))
+				manager.setManagerId(search);
+			else
+				manager.setStoreName(search);
+					
+			managerVOList = service.search(manager);
+			
+		} catch (UnsupportedEncodingException e) {
+			
+			e.printStackTrace();
+		}
+		
+		return managerVOList;
+	}
+	
+	//ID 중복 체크
+	@RequestMapping(value="/manager/checkId", method = RequestMethod.GET)
+	@ResponseBody
+	public boolean checkId(@RequestParam(value="managerId") String managerId) {
+		
+		return service.checkId(managerId);
 	}
 }

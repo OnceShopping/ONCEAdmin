@@ -10,4 +10,6 @@ public interface NoticeDAO {
 	void insert(NoticeVO noticeVO);
 	void update(NoticeVO noticeVO);
 	void delete(int noticeNo);
+	List<NoticeVO> selectPage(List page);
+	void addCountNotice(int noticeNo);
 }
