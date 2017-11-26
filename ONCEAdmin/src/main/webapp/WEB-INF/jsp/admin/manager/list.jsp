@@ -29,7 +29,7 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath }/resources/css/app.css"
 	type="text/css" />
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script
 	src="${pageContext.request.contextPath }/resources/js/jquery.min.js"></script>
 <!-- Bootstrap -->
@@ -46,7 +46,8 @@
 	$(document).ready(function() {
 	
 		var ModalTest;
-		var requiredCheck = false;
+		var requiredCheck = false; //ID 중복 확인
+		var requiredCheckPW = false; //삭제 시 pw 확인
 		
 			$('#typeSelect').val(''); // 매장 타입 콤보 박스 초기화
 			$('#storeSelect').val(''); // 매장 이름  콤보 박스 초기화
@@ -200,6 +201,7 @@
 			      modal: true,
 			      width: '300',
 			      height: '200',
+			      padding : '10px',
 			      buttons : {
 			    	 OK : function(){	  
 			    	  	$(this).dialog("close");
@@ -289,7 +291,71 @@
 				requiredCheck = false;
 			});
 			
+			//다이얼로그 format 정의 - pwd 체크
+			$( "#dialog-pwd" ).dialog({
+				autoOpen: false,
+			    modal: true,
+			    width: '300',
+			    height: '200',
+			    buttons : [{
+			    	id : "cancelPwd",
+			    	text : "cancel",
+			    	click : function(){
+			    		$(this).dialog("close");
+			    	}
+			     },
+			     {
+			      	id : "OKPwd",
+			      	text : "OK",
+			      	click : function(){
+				    	$(this).dialog("close");
+				   		}
+			      }],
+			      open: function( event, ui ) {
+			    	  $('#pwd').val(''); 
+			      }
+			 });
+			
+			$('#listForm').submit(function(){
+				var checkVal = document.getElementsByClassName("check");
+				var count=0;
+				requiredCheckPW = false;
+				
+				for (var i = 0; i < checkVal.length; i++){
+					if(checkVal[i].checked)
+						count++;
+				}
+				
+				if(count==0){
+					infoAlert("삭제하고자 하시는 매니저의 체크박스를 선택해주세요.");
+				}
+				else{
+					$( "#dialog-pwd" ).dialog('open');
+				}
+						
+				if(requiredCheckPW==true)
+					return true;
+				
+				return false;
+			});
+	
+			$('#OKPwd').click(function(){
+				var CheckPwd = $('#pwd').val();
+				var loginPwd = "${sessionScope.loginVO.password}";
+				
+				clickBtn(CheckPwd, loginPwd);
+			});
 	});
+	
+		function clickBtn(CheckPwd, loginPwd){
+			if(CheckPwd != loginPwd){
+				infoAlert("죄송합니다. 비밀 번호가 일치하지 않아 해당 정보를 삭제를 할 수 없습니다.");
+			}else if(CheckPwd==""){
+				infoAlert("빈칸입니다.");
+			}else{
+				document.getElementById("listForm").submit()
+			}
+		}
 	
 		function printList(result) {
 	
@@ -303,7 +369,7 @@
 			row += "<td>" + result.date + "</td>";
 			row += "</tr>";
 	
-			$('#addList').append(row);
+			$('#addList').after(row);
 	
 		}
 	
@@ -343,7 +409,7 @@
 		}
 		
 		function infoAlert(str){
-			$('#dialog').html("<div style='text-align:center; margin-top:auto;'><p>"+str+"</p></div>");
+			$('#dialog').html("<div style='text-align:center;'><p>"+str+"</p></div>");
 			$("#dialog").dialog("open");
 		}
 		
@@ -395,6 +461,16 @@
 		 </div>
 	</div>
 	<div id="dialog" title="ALERT DIALOG"></div>
+	<div id="dialog-pwd" title="CHECK PASSWORD">
+	  	<p class="validateTips">Check your password for deleting managers' data.</p>
+	 	<form>
+		    <fieldset>
+		        <label for="password">Password</label>
+		      <input type="password" name="pwd" id="pwd" class="text ui-widget-content ui-corner-all">
+		      <input type="submit" value="H" tabindex="-1" style="position:absolute; top:-1000px">
+		    </fieldset>
+	  	</form>
+	</div>
 	<section class="vbox">
 		<!-- 상단바 -->
 		<header
@@ -521,7 +597,7 @@
 											<th width="10%" style="text-align: right;">ID</th>
 											<td width="5%" />
 											<td width="40%">
-												<input type="text" id="managerId" name="managerId" width="60%" pattern="\w" title="알파벳 또는 숫자를 입력하세요.">&nbsp;&nbsp;&nbsp;<input type="button" id="IdCheck" value="중복 체크" name="IdCheck" width="40%"></td>
+												<input type="text" id="managerId" name="managerId" width="60%" pattern="\w+" title="알파벳 또는 숫자를 입력하세요.">&nbsp;&nbsp;&nbsp;<input type="button" id="IdCheck" value="중복 체크" name="IdCheck" width="40%"></td>
 											<th width="20%" style="text-align: right;">비밀 번호</th>
 											<td width="5%" />
 											<td width="25%"><input type="password" id="password"
@@ -535,7 +611,7 @@
 											<th width="20%" style="text-align: right;">연락처</th>
 											<td width="5%" />
 											<td width="25%"><input type="tel" id="telephone"
-												name="telephone" pattern="(010)|(011)|(017)|(018)-\d{3,4}-\d{4}" title="010-xxx-xxxx 또는  xxx-xxxx-xxxx 형식으로   작성해주세요." ></td>
+												name="telephone" pattern="(010)-\d{3,4}-\d{4}" title="010-xxx-xxxx 또는  010-xxxx-xxxx 형식으로   작성해주세요." ></td>
 										</tr>
 										<tr height="20px" />
 										<tr>
@@ -580,9 +656,9 @@
 							</form>							
 							<br />
 							<form action="${pageContext.request.contextPath}/manager/list"
-								method="post">
-								<table class="managerList" id="addList">
-									<tr style="text-align: center; background-color: #E7E7E7">
+								method="post" id="listForm" name="listForm">
+								<table class="managerList" >
+									<tr style="text-align: center; background-color: #E7E7E7"  id="addList">
 										<td width="5%"><input type="checkbox" id="checkAll"></td>
 										<td width="15%" class="tbTile">사원 번호</td>
 										<td width="10%" class="tbTile">해당 매장</td>
@@ -592,8 +668,7 @@
 										<td width="20%" class="tbTile">가입일</td>
 									</tr>
 
-									<c:forEach items="${managerList}" var="manager"
-										varStatus="managerStatus">
+									<c:forEach items="${managerList}" var="manager"	varStatus="managerStatus">									
 										<tr>
 											<td><input type="checkbox" value=${ manager.managerId }
 												name="managerId" class="check"></td>
@@ -610,16 +685,46 @@
 											<td>${ manager.date }</td>
 										</tr>
 									</c:forEach>
-
-								</table>
-								<br /> <br />
+								</table>								
+								<br /> <br /> <br />
+								<div class="col-sm-4 text-right text-center-xs" style="margin-left: 340px;">                
+			                      <ul class="pagination pagination-sm m-t-none m-b-none">
+			         					<!-- 처음페이지 -->
+			         					<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=1"><i class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i></a></li>
+			                      		<!-- 이전페이지 -->
+			                      		<c:choose>
+			                      			<c:when test="${ pageNo == 1 }">
+			                      				<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=1"><i class="fa fa-chevron-left"></i></a></li>
+			                      			</c:when>
+			                      			<c:otherwise>
+			                      				<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=${ pageNo - 1}"><i class="fa fa-chevron-left"></i></a></li>
+			                      			</c:otherwise>
+			                      		</c:choose>
+			                      		<!-- 페이지번호  -->
+			                      		<c:forEach var="i" begin="${ beginPage }" end="${ endPage }">
+												<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=${i}">${i}</a></li>
+			                      		</c:forEach>
+			                      		<!-- 다음페이지 -->
+			                      		<c:choose>
+			                      			<c:when test="${ pageNo == endPage }">
+			                      				<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=${ endPage }"><i class="fa fa-chevron-right"></i></a></li>
+			                      			</c:when>
+			                      			<c:otherwise>
+			                      				<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=${ pageNo + 1 }"><i class="fa fa-chevron-right"></i></a></li>
+			                      			</c:otherwise>
+			                      		</c:choose>
+			                      		<!-- 마지막페이지 -->
+			                      		<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=${ lastPage }"><i class="fa fa-chevron-right"></i><i class="fa fa-chevron-right"></i></a></li>	
+			                      </ul>
+			                    </div>
+                    		<br /> <br />
 								<div align="right">
 									<c:if test="${ !empty managerList }">
 										<input type="button" value="수정" id="modify"
 											class="btn btn-s-md btn-primary">
 										<input type="hidden" name="_method" value="delete">
 										<input type="submit" value="삭제"
-											class="btn btn-s-md btn-primary">
+											class="btn btn-s-md btn-primary" id="deleteConfirm">
 									</c:if>
 								</div>
 							</form>

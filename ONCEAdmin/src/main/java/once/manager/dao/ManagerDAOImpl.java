@@ -122,4 +122,13 @@ public class ManagerDAOImpl implements ManagerDAO {
 		else
 			return true;
 	}
+	
+	//페이징
+	@Override
+	public List<ManagerVO> selectPage(List page) {
+		
+		List<ManagerVO> list = sqlSession.selectList("once.manager.dao.ManagerDAO.selectPage", page);
+		
+		return list;
+	}
 }

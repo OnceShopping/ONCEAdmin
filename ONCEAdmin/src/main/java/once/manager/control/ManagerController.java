@@ -115,9 +115,51 @@ public class ManagerController {
 	
 	//매니저 관리 조회
 	@RequestMapping(value="/manager/list")
-	public ModelAndView list() {
+	public ModelAndView list(HttpServletRequest request) {
 		
-		List<ManagerVO> managerList = service.selectAll();
+		// 현재 페이지 번호 저장 변수
+		int pageNo = 1;
+		if (request.getParameter("pageNo") != null) {
+
+			// 페이지 파라미터가 있는 경우 현재 페이지 번호를 설정
+			pageNo = Integer.parseInt(request.getParameter("pageNo"));
+		} 
+
+		// 한페이지에 보여질 목록 수
+		int listSize = 10;
+		
+		// 전체 게시글 카운트
+		int totalCount = service.selectAll().size();
+			// 마지막 페이지 구하기
+		int lastPage = (totalCount % listSize == 0) ? totalCount / listSize 
+				                                    : totalCount / listSize + 1;	
+		request.setAttribute("pageNo"  , pageNo);
+		request.setAttribute("lastPage", lastPage);
+		
+		// ======================================================================
+		// 탭 관련 작업 추가 파트
+		// ======================================================================
+		
+		// 목록에 보여질 탭 사이즈
+		int tabSize  = 5;
+		
+		// 현재 페이지에 해당하는 탭 위치 
+		int currTab   = (pageNo  -1) / tabSize + 1;
+		int beginPage = (currTab -1) * tabSize + 1;
+		int endPage   = (currTab * tabSize < lastPage) ? currTab * tabSize 
+				                                       : lastPage;
+		
+		request.setAttribute("beginPage", beginPage);
+		request.setAttribute("endPage"  , endPage);
+		// ======================================================================
+		
+		
+		// 해당 페이지의 게시글 목록
+		List<Integer> page = new ArrayList<>();
+		page.add( (pageNo - 1) * listSize );
+		page.add( listSize );
+		List<ManagerVO> managerList = service.selectPage(page);
+	
 		List<StoreVO> storeList = new ArrayList<>();
 		
 		ModelAndView mav = new ModelAndView();

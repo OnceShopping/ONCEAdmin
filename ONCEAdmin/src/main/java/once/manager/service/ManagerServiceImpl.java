@@ -83,6 +83,14 @@ public class ManagerServiceImpl implements ManagerService{
 	public boolean checkId(String managerId) {
 		return dao.checkId(managerId);
 	}
-
+	
+	//페이징
+	@Override
+	public List<ManagerVO> selectPage(List page) {
+		
+		List<ManagerVO> list = dao.selectPage(page);
+		
+		return list;
+	}
 }
  
