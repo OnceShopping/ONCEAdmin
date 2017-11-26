@@ -29,7 +29,7 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath }/resources/css/app.css"
 	type="text/css" />
-
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script
 	src="${pageContext.request.contextPath }/resources/js/jquery.min.js"></script>
 <!-- Bootstrap -->
@@ -41,11 +41,17 @@
 	src="${pageContext.request.contextPath }/resources/js/slimscroll/jquery.slimscroll.min.js"></script>
 <script
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>	
 <script type="text/javascript">
 	$(document).ready(function() {
-
-			$('#typeSelect').val('');
-			$('#storeSelect').val('');
+	
+		var ModalTest;
+		var requiredCheck = false; //ID 중복 확인
+		//var requiredCheckPW = false; //삭제 시 pw 확인
+		
+			$('#typeSelect').val(''); // 매장 타입 콤보 박스 초기화
+			$('#storeSelect').val(''); // 매장 이름  콤보 박스 초기화
+			$('#searchType').val(''); // 검색 콤보 박스 초기화 
 
 			//체크박스 전체 선택, 선택 해제
 			$('#checkAll').click(function() {
@@ -58,7 +64,8 @@
 						checkVal[i].checked = false;
 				}
 			});
-
+			
+			//정보 수정
 			$('#modify').click(function() {
 				var checkVal = document.getElementsByClassName("check");
 					var count = 0; //선택 체크한 사원의 수
@@ -78,7 +85,8 @@
 							}
 						}
 			});
-
+			
+			//매장 선택 - 첫 번째 콤보박스 선택 시 두 번째 콤보박스에 표시되는 option 제어 
 			$('#typeSelect').on("change", function() {
 
 				var state = $('#typeSelect option:selected').val();
@@ -101,55 +109,75 @@
 						else
 							$('.F03').show();
 					}
-				});
+			});
+			
+			//매장 선택 - 두 번째 콤보박스에서 option 선택 시 첫 번째 콤보박스 option이 자동으로 설정될 수 있도록 제어
+			$('#storeSelect').on("change",function() {
 
-				$('#storeSelect').on("change",function() {
+				var store = $('#storeSelect').val();
 
-					var store = $('#storeSelect').val();
-
-					if ((store == 'INFO1F')|| (store == 'INFOB1'))
-						$("#typeSelect").val("info").prop("selected", true);
-					else if ((store == 'S1F01')|| (store == 'S1F02'))
-						$("#typeSelect").val("F01").prop("selected", true);
-					else if ((store == 'S2F01')|| (store == 'S2F01'))
-						$("#typeSelect").val("F02").prop("selected", true);
-					else
-						$("#typeSelect").val("F03").prop("selected", true);
-
-				});
-
-				$('#Add').click(function() {
-
-				var type = $('#typeSelect').val();
-				var Mtype;
-
-				if (type == 'info')
-					Mtype = "infoManager";
-				else if (type == '0000')
-					Mtype = "admin";
+				if ((store == 'INFO1F')|| (store == 'INFOB1'))
+					$("#typeSelect").val("info").prop("selected", true);
+				else if ((store == 'S1F01')|| (store == 'S1F02'))
+					$("#typeSelect").val("F01").prop("selected", true);
+				else if ((store == 'S2F01')|| (store == 'S2F01'))
+					$("#typeSelect").val("F02").prop("selected", true);
 				else
-					Mtype = "storeManager";
+					$("#typeSelect").val("F03").prop("selected", true);
+			});
 
-				var params = {
-					managerId : $('#managerId').val(),
-					password : $('#password').val(),
-					name : $('#name').val(),
-					type : Mtype,
-					telephone : $('#telephone').val(),
-					storeNo : $('#storeSelect').val()
-				};
+			//추가
+			$('#addManager').submit(function() {	
+				//[추가] 전, 빈칸 체크  	
+				var checkId= $('#managerId').val();
+				var checkPW= $('#password').val();
+				var checkName= $('#name').val();
+				var checkTel= $('#telephone').val();
+				var checkSN= $('#storeSelect').val();
+				
+				if(checkId==""){
+					infoAlert("ID를 입력해주세요.");
+				}else if(checkPW==""){
+					infoAlert("비밀 번호를 입력해주세요.");
+				}else if(checkName==""){
+					infoAlert("이름을 입력해주세요.");
+				}else if(checkTel==""){
+					infoAlert("전화번호를 입력해주세요.");
+				}else if(checkSN===null){
+					infoAlert("매장을 선택해주세요.");
+				}else if(requiredCheck==false){
+					infoAlert("ID 중복 체크를 해주세요.");
+				}else{ // 정상적으로 모두 작성이 되어있는 경우
+					var type = $('#typeSelect').val();
+					var Mtype;
+	
+					if (type == 'info')
+						Mtype = "infoManager";
+					else if (type == '0000')
+						Mtype = "admin";
+					else
+						Mtype = "storeManager";
 
-				$.ajax({
-					url : "${ pageContext.request.contextPath }/manager/add",
-					data : params,
-					type : "get",
-					cache : false,
-					contentType : "application/json; charset=UTF-8",
-					success : function(data) {
+					var params = {
+						managerId : $('#managerId').val(),
+						password : $('#password').val(),
+						name : $('#name').val(),
+						type : Mtype,
+						telephone : $('#telephone').val(),
+						storeNo : $('#storeSelect').val()
+					};
+
+					$.ajax({
+						url : "${ pageContext.request.contextPath }/manager/add",
+						data : params,
+						type : "get",
+						cache : false,
+						contentType : "application/json; charset=UTF-8",
+						success : function(data) {
+								
+							var result = $.parseJSON(data);
 							
-						var result = $.parseJSON(data);
-						
-						printList(result); //리스트에 추가
+							printList(result); //리스트에 추가
 
 							$('#managerId').val('');
 							$('#password').val('');
@@ -157,26 +185,84 @@
 							$('#typeSelect').val('');
 							$('#telephone').val('');
 							$('#storeSelect').val('');
-					},
-					error : function(request,status, error) {
-						alert("에러 발생! : " + request.status + "message : "+ request.responseText+ "\n"+ "error : "+ error);
-					}
-				});
+								
+						},
+						error : function(request,status, error) {
+							alert("에러 발생! : " + request.status + "message : "+ request.responseText+ "\n"+ "error : "+ error);
+						}
+					});
+				}
+				return false;
+			});
+			
+			//다이얼로그 format 정의
+			$( "#dialog" ).dialog({
+				 autoOpen: false,
+			      modal: true,
+			      width: '300',
+			      height: '200',
+			      padding : '10px',
+			      buttons : {
+			    	 OK : function(){	  
+			    	  	$(this).dialog("close");
+			    	 }
+			      }
+			 });
+			
+			//id 중복 체크
+			$("#IdCheck").click(function(){
+				
+				var check = $('#managerId').val();
+				if(check==""){
+					infoAlert("ID를 입력해주세요.");
+				}else{
+					$.ajax({
+						url : "${ pageContext.request.contextPath }/manager/checkId",
+						data : {"managerId" : $('#managerId').val()},
+						cache : false,
+						type : "get",
+						contentType : "application/json; charset=UTF-8",
+						success : function(data){
+							
+							if(data=="true"){ // 해당 id가 존재하는 경우
+								$('#dialog').html('<p>죄송합니다.</p><p>작성하신 ID가 기존에 존재합니다.</p>다시 작성해주세요.');
+								$("#dialog").dialog("open");
+								requiredCheck = false;
+							}else{ // 해당 id가 존재하지 않는 경우
+								$('#dialog').html('<p>작성하신 ID로 사용할 수 있습니다.</p>');
+								$("#dialog").dialog("open");
+								requiredCheck = true;
+							}
+						},
+						error : function(request,status, error) {
+							alert("에러 발생! : " + request.status + "message : "+ request.responseText+ "\n"+ "error : "+ error);
+						}
+						
+					});
+					
+					if(requiredCheck==false)
+						$('#managerId').focus();
+				}
 			});
 				
+			//검색
 			$('#searchForm').submit(function() {
 		
 				if ($('#searchText').val() == "") {
-					alert('검색하고자 하는 것을 작성해주세요.');
-					$('#searchText').focus();
+					$("#searchResult").html('검색 란을 작성해주세요.');
+					$("#exampleModal").modal();
 					return false;
-				} else {
+				}else if($('#searchType').val()==null){
+					$("#searchResult").html('검색 타입을 설정해주세요.');
+					$("#exampleModal").modal();
+					return false;
+				}else {
 					
 					type = $(this).serialize();
 
 					$.ajax({
 						url : "${ pageContext.request.contextPath }/manager/search",
-						data : type.replace(/%/g,'%25'),
+						data : type.replace(/%/g,'%25'), 
 						type : "post",
 						dataType : "json",
 						cache : false,
@@ -184,69 +270,150 @@
 
 						success : function(data) {
 						
-							printResult(data);
-							
+							if(data==""){
+								$("#searchResult").html('<p>죄송하지만 검색 결과가 존재하지 않습니다.<p/>다시 한번 확인해주세요.');
+								$("#exampleModal").modal();
+							}else{
+								ModalTest = printResult(data);
+								showModal(ModalTest);
+							}	
+														
 						},error : function(request, status, error) {
 							alert("에러 발생! : " + request.status + "message : "+ request.responseText+ "\n"+ "error : "+ error);
 						}
 					});
 					
-					return true;
+					$('#searchText').val(''); // 검색 텍스트 초기화 
+					$('#searchType').val(''); // 검색 콤보 박스 초기화 
+					return false;
 				}
 			});
-		
-		});
-
-	function printList(result) { //매니저를 리스트에 추가시키는 로직
-
-		var row = "<tr>";
-		row += "<td><input type='checkbox' value= " + result.managerId + " name='managerId' class='check'></td>";
-		row += "<td>" + result.staffNo + "</td>";
-		row += "<td>" + result.storeName + "</td>";
-		row += "<td>" + result.managerId + "</td>";
-		row += "<td>" + result.name + "</td>";
-		row += "<td>" + result.telephone + "</td>";
-		row += "<td>" + result.date + "</td>";
-		row += "</tr>";
-
-		$('#addList').append(row);
-
-	}
-	
-	function printResult(data) { //모달 다이얼로그에 검색한 매니저에 대한 정보를 설정하는 로직
-		
-		var row = "<table style='width: 100%;' id='searchList'";
-		row += "<tr>";
-		row += "<td width='10%' style='text-align: center'>사원 번호</td>";
-		row += "<td width='15%' style='text-align: center'>해당 매장</td>";
-		row += "<td width='15%' style='text-align: center'>아이디</td>";
-		row += "<td width='10%' style='text-align: center'>이름</td>";
-		row += "<td width='15%' style='text-align: center'>연락처</td>";
-		row += "<td width='15%' style='text-align: center'>가입일</td>";
-		row += "</tr>";
-		
-		$.each(data,function(index,item){
 			
-			row += "<tr>";
-			row += "<td>" + item.staffNo + "</td>";
-			row += "<td>" + item.storeName + "</td>";
-			row += "<td>" + item.managerId + "</td>";
-			row += "<td>" + item.name + "</td>";
-			row += "<td>" + item.telephone + "</td>";
-			row += "<td>" + item.date + "</td>";
+			//ID 값을 중복 체크 이후에 바꿀 경우를 대비한 예외 처리
+			$('#managerId').on("change", function() {
+				requiredCheck = false;
+			});
+			
+			//다이얼로그 format 정의 - pwd 체크
+			$( "#dialog-pwd" ).dialog({
+				autoOpen: false,
+			    modal: true,
+			    width: '300',
+			    height: '200',
+			    buttons : [{
+			    	id : "cancelPwd", //취소 버튼
+			    	text : "cancel",
+			    	click : function(){
+			    		$(this).dialog("close");
+			    	}
+			     },
+			     {
+			      	id : "OKPwd",  //OK 버튼
+			      	text : "OK",
+			      	click : function(){
+				    	$(this).dialog("close");
+				   		}
+			      }],
+			      open: function( event, ui ) {
+			    	  $('#pwd').val(''); 
+			      }
+			 });
+			
+			//삭제 controller로 가기 전
+			$('#listForm').submit(function(){
+				var checkVal = document.getElementsByClassName("check");
+				var count=0;
+				requiredCheckPW = false;
+				
+				for (var i = 0; i < checkVal.length; i++){
+					if(checkVal[i].checked)
+						count++;
+				}
+				
+				if(count==0)
+					infoAlert("삭제하고자 하시는 매니저의 체크박스를 선택해주세요.");
+				else
+					$( "#dialog-pwd" ).dialog('open');
+				
+				return false;
+			});
+		
+			//삭제 시 비밀번호를 확인하는 다이얼로그의 "OK"버튼 클릭 시
+			$('#OKPwd').click(function(){
+				var CheckPwd = $('#pwd').val();
+				var loginPwd = "${sessionScope.loginVO.password}";
+				
+				clickBtn(CheckPwd, loginPwd);
+			});
+	});
+		//삭제 시 비밀번호를 확인하는 다이얼로그를 통해 비밀번호를 비교
+		function clickBtn(CheckPwd, loginPwd){
+			if(CheckPwd != loginPwd)
+				infoAlert("죄송합니다. 비밀 번호가 일치하지 않아 해당 정보를 삭제를 할 수 없습니다.");
+			else
+				document.getElementById("listForm").submit();
+		}
+	
+		function printList(result) {
+	
+			var row = "<tr>";
+			row += "<td><input type='checkbox' value= " + result.managerId + " name='managerId' class='check'></td>";
+			row += "<td>" + result.staffNo + "</td>";
+			row += "<td>" + result.storeName + "</td>";
+			row += "<td>" + result.managerId + "</td>";
+			row += "<td>" + result.name + "</td>";
+			row += "<td>" + result.telephone + "</td>";
+			row += "<td>" + result.date + "</td>";
+			row += "</tr>";
+	
+			$('#addList').after(row);
+	
+		}
+	
+		function printResult(data) {
+	
+			var row = "<table style='width: 100%;' id='searchList'>";
+			row += "<tr style='width: 100%; height:30px; border: 1 solid; background: #E0DFDF;'>";
+			row += "<th style='text-align: center; width='10%'; height:30px;'>사원 번호</th>";
+			row += "<th style='text-align: center; width='10%'; height:30px;'>해당 매장</th>";
+			row += "<th style='text-align: center; width='20%'; height:30px;'>아이디</th>";
+			row += "<th style='text-align: center; width='20%'; height:30px;'>이름</th>";
+			row += "<th style='text-align: center; width='20%'; height:30px;'>연락처</th>";
+			row += "<th style='text-align: center; width='20%'; height:30px;'>가입일</th>";
 			row += "</tr>";
 			
-		});
+			$.each(data,function(index,item){
+				
+				row += "<tr>";
+				row += "<td style='text-align: center; height:30px;'>" + item.staffNo + "</td>";
+				row += "<td style='text-align: center; height:30px;'>" + item.storeName + "</td>";
+				row += "<td style='text-align: center; height:30px;'>" + item.managerId + "</td>";
+				row += "<td style='text-align: center; height:30px;'>" + item.name + "</td>";
+				row += "<td style='text-align: center; height:30px;'>" + item.telephone + "</td>";
+				row += "<td style='text-align: center; height:30px;'>" + item.date + "</td>";
+				row += "</tr>";
+				
+			});
+			
+			row += "</table>";
+	
+			return row;
+		}
+	
+		function showModal(ModalTest){
+			$("#searchResult").html(ModalTest);
+			$("#exampleModal").modal();
+		}
 		
-		row += "</table>";
-		 
-		document.getElementById('searchResult').innerHTML = row;
-
-	}
+		function infoAlert(str){
+			$('#dialog').html("<div style='text-align:center;'><p>"+str+"</p></div>");
+			$("#dialog").dialog("open");
+		}
+		
 </script>
 <style type="text/css">
 .addDiv {
-	width: 600px;
+	width: 700px;
 	background: #E0DFDF;
 	border: none;
 	margin-left: auto;
@@ -266,9 +433,41 @@
 .managerList td {
 	text-align: center;
 }
+ 
 </style>
 </head>
 <body class="">
+	<!-- Modal --> 						
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">×</span>
+						<span class="sr-only">Close</span>
+						</button>
+					<h3 class="modal-title" id="exampleModalLabel">SEARCH RESULT</h3>
+			 	</div>
+		 	<div class="modal-body">
+		 		<div id="searchResult">검색 란을 작성해주세요.</div>
+			</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		 </div>
+	</div>
+	<div id="dialog" title="ALERT DIALOG"></div>
+	<div id="dialog-pwd" title="CHECK PASSWORD">
+	  	<p class="validateTips">Check your password for deleting managers' data.</p>
+	 	<form>
+		    <fieldset>
+		        <label for="password">Password</label>
+		      <input type="password" name="pwd" id="pwd" class="text ui-widget-content ui-corner-all">
+		      <input type="submit" value="H" tabindex="-1" style="position:absolute; top:-1000px">
+		    </fieldset>
+	  	</form>
+	</div>
 	<section class="vbox">
 		<!-- 상단바 -->
 		<header
@@ -390,13 +589,12 @@
 							<br />
 							<form action="" name="addManager" id="addManager">
 								<div class="addDiv" align="center">
-									<table style="width: 100%">
+									<table style="width: 100%;">
 										<tr>
-											<th width="15%" style="text-align: right;">ID</th>
+											<th width="10%" style="text-align: right;">ID</th>
 											<td width="5%" />
-											<td width="15%"><input type="text" id="managerId"
-												name="managerId"></td>
-											<td width="20%" />
+											<td width="40%">
+												<input type="text" id="managerId" name="managerId" width="60%" pattern="\w+" title="알파벳 또는 숫자를 입력하세요.">&nbsp;&nbsp;&nbsp;<input type="button" id="IdCheck" value="중복 체크" name="IdCheck" width="40%"></td>
 											<th width="20%" style="text-align: right;">비밀 번호</th>
 											<td width="5%" />
 											<td width="25%"><input type="password" id="password"
@@ -404,15 +602,13 @@
 										</tr>
 										<tr height="10px" />
 										<tr>
-											<th width="15%" style="text-align: right;">이름</th>
+											<th width="10%" style="text-align: right;">이름</th>
 											<td width="5%" />
-											<td width="15%"><input type="text" id="name" name="name"></td>
-											<td width="20%" />
+											<td width="40%"><input type="text" id="name" name="name"></td>
 											<th width="20%" style="text-align: right;">연락처</th>
 											<td width="5%" />
 											<td width="25%"><input type="tel" id="telephone"
-												name="telephone" pattern="(010)-\d{3,4}\-\d{4}"
-												placeholder="010-xxxx-xxxx"></td>
+												name="telephone" pattern="(010)-\d{3,4}-\d{4}" title="010-xxx-xxxx 또는  010-xxxx-xxxx 형식으로   작성해주세요." ></td>
 										</tr>
 										<tr height="20px" />
 										<tr>
@@ -439,7 +635,8 @@
 										<tr height="5px" />
 									</table>
 									<div align="right" style="padding-right: 2px;">
-										<input type="button" value="추가" id="Add">
+										<!-- <input type="button" value="추가" id="Add"> -->
+										<input type="submit" value="추가" id="Add">
 									</div>
 								</div>
 							</form>
@@ -450,33 +647,15 @@
 										<option value="storeName">해당 매장</option>
 										<option value="managerId">아이디</option>
 									</select>&nbsp; <input type="text" name="searchText" id="searchText">&nbsp;
-									<input type="submit" value="검색" data-toggle="modal" data-target="#exampleModal" id="modalBtn"/>
-									<!-- <input type="button" style="display: none;" class="btn btn-primary" id="modalBtn"/>	 -->
+									<input type="submit" value="검색" id="modalBtn"  data-toggle="modal" data-target="#exampleModal"/>
+									<!-- <input type="button" style="display: none;" id="modalBtn"  data-toggle="modal" data-target="#exampleModal" /> -->
 								</div>
-							</form>
-								<!-- Modal --> 						
-									<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-									  <div class="modal-dialog">
-									    <div class="modal-content">
-									      <div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-										<h4 class="modal-title" id="exampleModalLabel">검색 결과</h4>
-									      </div>
-									      <div class="modal-body" id="searchResult">
-											검색 결과가 없음
-									      </div>
-									      <div class="modal-footer">
-										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-									      </div>
-									    </div>
-									  </div>
-									</div>
-								
+							</form>							
 							<br />
 							<form action="${pageContext.request.contextPath}/manager/list"
-								method="post">
-								<table class="managerList" id="addList">
-									<tr style="text-align: center; background-color: #E7E7E7">
+								method="post" id="listForm" name="listForm">
+								<table class="managerList" >
+									<tr style="text-align: center; background-color: #E7E7E7"  id="addList">
 										<td width="5%"><input type="checkbox" id="checkAll"></td>
 										<td width="15%" class="tbTile">사원 번호</td>
 										<td width="10%" class="tbTile">해당 매장</td>
@@ -486,8 +665,7 @@
 										<td width="20%" class="tbTile">가입일</td>
 									</tr>
 
-									<c:forEach items="${managerList}" var="manager"
-										varStatus="managerStatus">
+									<c:forEach items="${managerList}" var="manager"	varStatus="managerStatus">									
 										<tr>
 											<td><input type="checkbox" value=${ manager.managerId }
 												name="managerId" class="check"></td>
@@ -504,16 +682,46 @@
 											<td>${ manager.date }</td>
 										</tr>
 									</c:forEach>
-
-								</table>
-								<br /> <br />
+								</table>								
+								<br /> <br /> <br />
+								<div class="col-sm-4 text-right text-center-xs" style="margin-left: 340px;">                
+			                      <ul class="pagination pagination-sm m-t-none m-b-none">
+			         					<!-- 처음페이지 -->
+			         					<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=1"><i class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i></a></li>
+			                      		<!-- 이전페이지 -->
+			                      		<c:choose>
+			                      			<c:when test="${ pageNo == 1 }">
+			                      				<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=1"><i class="fa fa-chevron-left"></i></a></li>
+			                      			</c:when>
+			                      			<c:otherwise>
+			                      				<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=${ pageNo - 1}"><i class="fa fa-chevron-left"></i></a></li>
+			                      			</c:otherwise>
+			                      		</c:choose>
+			                      		<!-- 페이지번호  -->
+			                      		<c:forEach var="i" begin="${ beginPage }" end="${ endPage }">
+												<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=${i}">${i}</a></li>
+			                      		</c:forEach>
+			                      		<!-- 다음페이지 -->
+			                      		<c:choose>
+			                      			<c:when test="${ pageNo == endPage }">
+			                      				<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=${ endPage }"><i class="fa fa-chevron-right"></i></a></li>
+			                      			</c:when>
+			                      			<c:otherwise>
+			                      				<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=${ pageNo + 1 }"><i class="fa fa-chevron-right"></i></a></li>
+			                      			</c:otherwise>
+			                      		</c:choose>
+			                      		<!-- 마지막페이지 -->
+			                      		<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=${ lastPage }"><i class="fa fa-chevron-right"></i><i class="fa fa-chevron-right"></i></a></li>	
+			                      </ul>
+			                    </div>
+                    		<br /> <br />
 								<div align="right">
 									<c:if test="${ !empty managerList }">
 										<input type="button" value="수정" id="modify"
 											class="btn btn-s-md btn-primary">
 										<input type="hidden" name="_method" value="delete">
 										<input type="submit" value="삭제"
-											class="btn btn-s-md btn-primary">
+											class="btn btn-s-md btn-primary" id="deleteConfirm">
 									</c:if>
 								</div>
 							</form>

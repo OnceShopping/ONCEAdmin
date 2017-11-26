@@ -29,4 +29,7 @@ public interface ManagerDAO {
 	
 	List<ManagerVO> search(ManagerVO manager);
 
+	boolean checkId(String managerId);
+	
+	List<ManagerVO> selectPage(List page);
 }

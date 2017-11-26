@@ -28,4 +28,8 @@ public interface ManagerService {
 	void add(ManagerVO manager);
 	
 	List<ManagerVO> search(ManagerVO manager);
+	
+	boolean checkId(String managerId);
+	
+	List<ManagerVO> selectPage(List page);
 }
