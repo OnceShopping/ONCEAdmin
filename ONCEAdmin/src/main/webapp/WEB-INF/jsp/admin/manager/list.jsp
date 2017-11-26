@@ -47,7 +47,7 @@
 	
 		var ModalTest;
 		var requiredCheck = false; //ID 중복 확인
-		var requiredCheckPW = false; //삭제 시 pw 확인
+		//var requiredCheckPW = false; //삭제 시 pw 확인
 		
 			$('#typeSelect').val(''); // 매장 타입 콤보 박스 초기화
 			$('#storeSelect').val(''); // 매장 이름  콤보 박스 초기화
@@ -252,14 +252,17 @@
 					$("#searchResult").html('검색 란을 작성해주세요.');
 					$("#exampleModal").modal();
 					return false;
-					
-				} else {
+				}else if($('#searchType').val()==null){
+					$("#searchResult").html('검색 타입을 설정해주세요.');
+					$("#exampleModal").modal();
+					return false;
+				}else {
 					
 					type = $(this).serialize();
 
 					$.ajax({
 						url : "${ pageContext.request.contextPath }/manager/search",
-						data : type.replace(/%/g,'%25'),
+						data : type.replace(/%/g,'%25'), 
 						type : "post",
 						dataType : "json",
 						cache : false,
@@ -298,14 +301,14 @@
 			    width: '300',
 			    height: '200',
 			    buttons : [{
-			    	id : "cancelPwd",
+			    	id : "cancelPwd", //취소 버튼
 			    	text : "cancel",
 			    	click : function(){
 			    		$(this).dialog("close");
 			    	}
 			     },
 			     {
-			      	id : "OKPwd",
+			      	id : "OKPwd",  //OK 버튼
 			      	text : "OK",
 			      	click : function(){
 				    	$(this).dialog("close");
@@ -316,6 +319,7 @@
 			      }
 			 });
 			
+			//삭제 controller로 가기 전
 			$('#listForm').submit(function(){
 				var checkVal = document.getElementsByClassName("check");
 				var count=0;
@@ -326,19 +330,15 @@
 						count++;
 				}
 				
-				if(count==0){
+				if(count==0)
 					infoAlert("삭제하고자 하시는 매니저의 체크박스를 선택해주세요.");
-				}
-				else{
+				else
 					$( "#dialog-pwd" ).dialog('open');
-				}
-						
-				if(requiredCheckPW==true)
-					return true;
 				
 				return false;
 			});
-	
+		
+			//삭제 시 비밀번호를 확인하는 다이얼로그의 "OK"버튼 클릭 시
 			$('#OKPwd').click(function(){
 				var CheckPwd = $('#pwd').val();
 				var loginPwd = "${sessionScope.loginVO.password}";
@@ -346,15 +346,12 @@
 				clickBtn(CheckPwd, loginPwd);
 			});
 	});
-	
+		//삭제 시 비밀번호를 확인하는 다이얼로그를 통해 비밀번호를 비교
 		function clickBtn(CheckPwd, loginPwd){
-			if(CheckPwd != loginPwd){
+			if(CheckPwd != loginPwd)
 				infoAlert("죄송합니다. 비밀 번호가 일치하지 않아 해당 정보를 삭제를 할 수 없습니다.");
-			}else if(CheckPwd==""){
-				infoAlert("빈칸입니다.");
-			}else{
-				document.getElementById("listForm").submit()
-			}
+			else
+				document.getElementById("listForm").submit();
 		}
 	
 		function printList(result) {
