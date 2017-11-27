@@ -31,9 +31,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 	
 	@Override
-	public List<CustomerVO> search(String id) {
+	public List<CustomerVO> search(CustomerVO customer) {
 		
-		List<CustomerVO> list = sqlSession.selectList("once.customer.dao.CustomerDAO.search", id);
+		List<CustomerVO> list = sqlSession.selectList("once.customer.dao.CustomerDAO.search", customer);
 		
 		return list;
 	}

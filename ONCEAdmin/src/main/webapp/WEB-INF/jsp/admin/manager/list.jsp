@@ -47,7 +47,6 @@
 	
 		var ModalTest;
 		var requiredCheck = false; //ID 중복 확인
-		//var requiredCheckPW = false; //삭제 시 pw 확인
 		
 			$('#typeSelect').val(''); // 매장 타입 콤보 박스 초기화
 			$('#storeSelect').val(''); // 매장 이름  콤보 박스 초기화
@@ -354,6 +353,7 @@
 				document.getElementById("listForm").submit();
 		}
 	
+		//매니저 추가 후 표에 데이터를 뿌려주기
 		function printList(result) {
 	
 			var row = "<tr>";
@@ -370,6 +370,7 @@
 	
 		}
 	
+		//List 데이터를 각각의 데이터로 뽑아 검색 모달 다이얼로그에 출력되도록 태그 설정 
 		function printResult(data) {
 	
 			var row = "<table style='width: 100%;' id='searchList'>";
@@ -399,12 +400,14 @@
 	
 			return row;
 		}
-	
+		
+		//검색 모달 다이얼로그 정보 출력 태그 설정 
 		function showModal(ModalTest){
 			$("#searchResult").html(ModalTest);
 			$("#exampleModal").modal();
 		}
 		
+		//알림 모달 다이얼로그 태그 설정
 		function infoAlert(str){
 			$('#dialog').html("<div style='text-align:center;'><p>"+str+"</p></div>");
 			$("#dialog").dialog("open");
@@ -459,7 +462,7 @@
 	</div>
 	<div id="dialog" title="ALERT DIALOG"></div>
 	<div id="dialog-pwd" title="CHECK PASSWORD">
-	  	<p class="validateTips">Check your password for deleting managers' data.</p>
+	  	<p class="validateTips">해당 정보를 삭제하기 위해서 비밀 번호를 다시 한번 입력해주세요.</p>
 	 	<form>
 		    <fieldset>
 		        <label for="password">Password</label>
@@ -634,7 +637,6 @@
 										<tr height="5px" />
 									</table>
 									<div align="right" style="padding-right: 2px;">
-										<!-- <input type="button" value="추가" id="Add"> -->
 										<input type="submit" value="추가" id="Add">
 									</div>
 								</div>
@@ -646,8 +648,7 @@
 										<option value="storeName">해당 매장</option>
 										<option value="managerId">아이디</option>
 									</select>&nbsp; <input type="text" name="searchText" id="searchText">&nbsp;
-									<input type="submit" value="검색" id="modalBtn"  data-toggle="modal" data-target="#exampleModal"/>
-									<!-- <input type="button" style="display: none;" id="modalBtn"  data-toggle="modal" data-target="#exampleModal" /> -->
+									<input type="submit" value="검색" data-toggle="modal" data-target="#exampleModal"/>
 								</div>
 							</form>							
 							<br />

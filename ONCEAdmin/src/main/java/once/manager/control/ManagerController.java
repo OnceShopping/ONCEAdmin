@@ -270,7 +270,6 @@ public class ManagerController {
 	@ResponseBody
 	public List<ManagerVO> searchManager(@RequestParam(value="searchType") String searchType, @RequestParam(value="searchText") String searchText) {
 
-		
 		String search;
 		ManagerVO manager = new ManagerVO();
 		List<ManagerVO> managerVOList = new ArrayList<>();
