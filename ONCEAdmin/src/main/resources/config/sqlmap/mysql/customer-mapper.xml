@@ -31,4 +31,9 @@
 		where id like concat('%',#{id},'%')
 	</select>
 
+	<!-- 페이징 -->
+	<select id="selectPage" resultType="CustomerVO" parameterType="java.util.List">
+		<include refid="select"></include>
+			limit #{list[0]}, #{list[1]}
+	</select>
 </mapper>
