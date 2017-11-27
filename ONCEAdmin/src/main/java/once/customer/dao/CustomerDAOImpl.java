@@ -38,4 +38,10 @@ public class CustomerDAOImpl implements CustomerDAO {
 		return list;
 	}
 	
+	@Override
+	public List<CustomerVO> selectPage(List page) {
+		
+		List<CustomerVO> list = sqlSession.selectList("once.customer.dao.CustomerDAO.selectPage", page);
+		return list;
+	}
 }

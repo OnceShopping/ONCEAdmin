@@ -29,7 +29,7 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath }/resources/css/app.css"
 	type="text/css" />
-
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script
 	src="${pageContext.request.contextPath }/resources/js/jquery.min.js"></script>
 <!-- Bootstrap -->
@@ -41,6 +41,7 @@
 	src="${pageContext.request.contextPath }/resources/js/slimscroll/jquery.slimscroll.min.js"></script>
 <script
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 
@@ -57,7 +58,89 @@
 					checkVal[i].checked = false;
 			}
 		});
+		
+		//다이얼로그 format 정의 - alert창
+		$( "#dialog" ).dialog({
+			 autoOpen: false,
+		      modal: true,
+		      width: '300',
+		      height: '200',
+		      padding : '10px',
+		      buttons : {
+		    	 OK : function(){	  
+		    	  	$(this).dialog("close");
+		    	 }
+		      }
+		 });
+		
+		//다이얼로그 format 정의 - pwd 체크
+		$( "#dialog-pwd" ).dialog({
+			autoOpen: false,
+		    modal: true,
+		    width: '300',
+		    height: '200',
+		    buttons : [{
+		    	id : "cancelPwd", //취소 버튼
+		    	text : "cancel",
+		    	click : function(){
+		    		$(this).dialog("close");
+		    	}
+		     },
+		     {
+		      	id : "OKPwd",  //OK 버튼
+		      	text : "OK",
+		      	click : function(){
+			    	$(this).dialog("close");
+			   		}
+		      }],
+		      open: function( event, ui ) {
+		    	  $('#pwd').val(''); 
+		      }
+		});
+		
+		//삭제 controller로 가기 전
+		$('#listForm').submit(function(){
+			var checkVal = document.getElementsByClassName("check");
+			var count=0;
+			requiredCheckPW = false;
+			
+			for (var i = 0; i < checkVal.length; i++){
+				if(checkVal[i].checked)
+					count++;
+			}
+			
+			if(count==0)
+				infoAlert("삭제하고자 하시는 매니저의 체크박스를 선택해주세요.");
+			else
+				$( "#dialog-pwd" ).dialog('open');
+			
+			return false;
+		});
+	
+		//삭제 시 비밀번호를 확인하는 다이얼로그의 "OK"버튼 클릭 시
+		$('#OKPwd').click(function(){
+			var CheckPwd = $('#pwd').val();
+			var loginPwd = "${sessionScope.loginVO.password}";
+			
+			alert(loginPwd);
+			clickBtn(CheckPwd, loginPwd);
+		});
+		
 	});
+	
+	//삭제 시 비밀번호를 확인하는 다이얼로그를 통해 비밀번호를 비교
+	function clickBtn(CheckPwd, loginPwd){
+		if(CheckPwd != loginPwd)
+			infoAlert("죄송합니다. 비밀 번호가 일치하지 않아 해당 정보를 삭제를 할 수 없습니다.");
+		else
+			document.getElementById("listForm").submit();
+	}
+	
+	function infoAlert(str){
+		$('#dialog').html("<div style='text-align:center;'><p>"+str+"</p></div>");
+		$("#dialog").dialog("open");
+	}
+	
 </script>
 <style type="text/css">
 th {
@@ -77,6 +160,17 @@ tr:hover {
 </style>
 </head>
 <body class="">
+<!-- modal -->
+	<div id="dialog" title="ALERT DIALOG"></div>
+	<div id="dialog-pwd" title="CHECK PASSWORD">
+	  	<p class="validateTips">Check your password for deleting managers' data.</p>
+	 	<form>
+		    <fieldset>
+		        <label for="password">Password</label>
+		      <input type="password" name="pwd" id="pwd" class="text ui-widget-content ui-corner-all">
+		    </fieldset>
+	  	</form>
+	</div>
 	<section class="vbox">
 		<!-- 상단바 -->
 		<header
@@ -200,12 +294,12 @@ tr:hover {
 									&nbsp; <input type="submit" value="검색">
 								</form>
 							</div>
-							현재 검색된 회원 총 ${fn:length(customerList)}명
+							현재 검색된 회원 총 ${fn:length(customerAll)}명
 							<div>
 								<br />
 								<form
 									action="${pageContext.request.contextPath}/customer/list"
-									method="post">
+									method="post" id="listForm" name="listForm">
 									<div style="text-align: right;">
 										<span class="select"> 회원 등급 <select>
 												<option value="1">Option 1</option>
@@ -249,9 +343,41 @@ tr:hover {
 											</tr>
 										</c:forEach>
 									</table>
-									<br />
+									<br /><br /> <br /> <br />
+								<div class="col-sm-4 text-right text-center-xs" style="margin-left: 340px;">                
+			                      <ul class="pagination pagination-sm m-t-none m-b-none">
+			         					<!-- 처음페이지 -->
+			         					<li><a href="${ pageContext.request.contextPath }/customer/list?pageNo=1"><i class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i></a></li>
+			                      		<!-- 이전페이지 -->
+			                      		<c:choose>
+			                      			<c:when test="${ pageNo == 1 }">
+			                      				<li><a href="${ pageContext.request.contextPath }/customer/list?pageNo=1"><i class="fa fa-chevron-left"></i></a></li>
+			                      			</c:when>
+			                      			<c:otherwise>
+			                      				<li><a href="${ pageContext.request.contextPath }/customer/list?pageNo=${ pageNo - 1}"><i class="fa fa-chevron-left"></i></a></li>
+			                      			</c:otherwise>
+			                      		</c:choose>
+			                      		<!-- 페이지번호  -->
+			                      		<c:forEach var="i" begin="${ beginPage }" end="${ endPage }">
+												<li><a href="${ pageContext.request.contextPath }/customer/list?pageNo=${i}">${i}</a></li>
+			                      		</c:forEach>
+			                      		<!-- 다음페이지 -->
+			                      		<c:choose>
+			                      			<c:when test="${ pageNo == endPage }">
+			                      				<li><a href="${ pageContext.request.contextPath }/customer/list?pageNo=${ endPage }"><i class="fa fa-chevron-right"></i></a></li>
+			                      			</c:when>
+			                      			<c:otherwise>
+			                      				<li><a href="${ pageContext.request.contextPath }/customer/list?pageNo=${ pageNo + 1 }"><i class="fa fa-chevron-right"></i></a></li>
+			                      			</c:otherwise>
+			                      		</c:choose>
+			                      		<!-- 마지막페이지 -->
+			                      		<li><a href="${ pageContext.request.contextPath }/customer/list?pageNo=${ lastPage }"><i class="fa fa-chevron-right"></i><i class="fa fa-chevron-right"></i></a></li>	
+			                      </ul>
+			                    </div>
+                    		<br /> <br />
 									<div style="text-align: right;">
 										<c:if test="${ !empty customerList }">
+											<input type="button" value="목록 처음으로" onclick="location.href='${pageContext.request.contextPath}/customer/list'" class="btn btn-s-md btn-primary">
 											<input type="hidden" name="_method" value="delete">
 											<input type="submit" value="삭제"
 												class="btn btn-s-md btn-primary">

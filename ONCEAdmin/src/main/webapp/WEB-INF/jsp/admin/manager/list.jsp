@@ -195,7 +195,7 @@
 				return false;
 			});
 			
-			//다이얼로그 format 정의
+			//다이얼로그 format 정의 - alert창
 			$( "#dialog" ).dialog({
 				 autoOpen: false,
 			      modal: true,
@@ -464,7 +464,6 @@
 		    <fieldset>
 		        <label for="password">Password</label>
 		      <input type="password" name="pwd" id="pwd" class="text ui-widget-content ui-corner-all">
-		      <input type="submit" value="H" tabindex="-1" style="position:absolute; top:-1000px">
 		    </fieldset>
 	  	</form>
 	</div>
@@ -721,7 +720,7 @@
 											class="btn btn-s-md btn-primary">
 										<input type="hidden" name="_method" value="delete">
 										<input type="submit" value="삭제"
-											class="btn btn-s-md btn-primary" id="deleteConfirm">
+											class="btn btn-s-md btn-primary">
 									</c:if>
 								</div>
 							</form>
