@@ -1,5 +1,7 @@
 package once.customer.control;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,18 +100,31 @@ public class CustomerController {
 	}
 	
 	//고객 조회
-	@RequestMapping(value="/list", method=RequestMethod.POST)
-	public ModelAndView searchList(HttpServletRequest request) {
+	@RequestMapping(value="/search", method=RequestMethod.POST)
+	@ResponseBody
+	public List<CustomerVO> searchList(@RequestParam(value="searchType") String searchType, @RequestParam(value="searchText") String searchText) {
 	   
-	    String customerId = request.getParameter("customerId");
-	      
-	   
-	    List<CustomerVO> customerList = service.searchBoard(customerId);
+		System.out.println("searchType : " + searchType);
+		System.out.println("searchText : " + searchText);
 		
-	    ModelAndView mav = new ModelAndView();
-	    mav.setViewName("admin/customer/list");
-		mav.addObject("customerList", customerList);
-	    
-		return mav;
+		String search;
+		CustomerVO customer = new CustomerVO();
+		List<CustomerVO> customerList = new ArrayList<>();
+				
+		try {
+			search = URLDecoder.decode(searchText, "UTF-8");
+			
+			if(searchType.equals("name")) 
+				customer.setName(search);
+			else
+				customer.setId(search);
+			
+			customerList = service.searchBoard(customer);
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		return customerList;
 	}
 }

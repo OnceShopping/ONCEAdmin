@@ -32,9 +32,9 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	//검색
 	@Override
-	public List<CustomerVO> searchBoard(String customerId) {
+	public List<CustomerVO> searchBoard(CustomerVO customer) {
 		
-		List<CustomerVO> list = dao.search(customerId);
+		List<CustomerVO> list = dao.search(customer);
 		
 		return list;
 	}
