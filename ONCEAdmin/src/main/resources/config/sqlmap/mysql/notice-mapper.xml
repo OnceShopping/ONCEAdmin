@@ -48,7 +48,7 @@
  	<!-- 게시글 페이징 -->
  	<select id="selectPage" resultMap="MapNoticeVO" parameterType="java.util.List">
  		<include refid="selectAll" />
- 		limit #{list[0]}, #{list[1]}
+ 		order by noticeno desc limit #{list[0]}, #{list[1]}
  	</select>
  	
  	<!-- 게시글 카운트 -->
