@@ -106,7 +106,7 @@ th {
 												<i class="i i-statistics icon"> </i> <span class="font-bold">운영
 													공지</span>
 										</a></li>
-										<li><a href="${ pageContext.request.contextPath }/notice/list" class="auto"> <span
+										<li><a href="${ pageContext.request.contextPath }/boardQA/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>

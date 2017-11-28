@@ -6,32 +6,56 @@
   
  	<!-- t_board의 view_cnt, reg_date mapping -->
  	<resultMap type="BoardQAVO" id="MapBoardVO">
- 		<result column="view_cnt" property="viewCnt"/>
- 		<result column="reg_date" property="regDate" />
+ 		<result column="viewcnt" property="viewCnt"/>
+ 		<result column="regdate" property="regDate" />
  	</resultMap>
  	
  	<sql id="selectAll">
- 		select no, title, writer, content, view_cnt,
- 		       to_char(reg_date, 'yyyy-mm-dd') as reg_date
- 		  from t_board
+ 		select b.boardNo, b.title, date_format(b.regdate, '%Y-%m-%d') as regdate, b.viewcnt, b.content, b.family, b.parent, b.depth, b.intent, b.writer, b.memNo, 
+ 		 b.category1, b.category2, b.category3 
+ 		 from boardqa b
  	</sql>
- 
+ 	
  	<!-- 전체 게시글 조회  -->
- 	<select id="selectAllBoard" resultMap="MapBoardVO">
+ 	<select id="selectAllBoard" resultMap="MapBoardVO" >
  		<include refid="selectAll" />
- 		 order by no desc
+ 		order by b.boardno desc
+ 	</select>
+ 	
+ 	<!-- 날짜선택 게시글 조회 -->
+ 	<select id="selectConfirmBoard" parameterType="java.util.List" resultMap="MapBoardVO">
+ 		<include refid="selectAll"/>
+ 		where  b.regdate between #{list[0]} and #{list[1]}
+ 		order by b.boardno desc
+ 	</select>
+ 	
+ 	<!-- 검색 게시글 조회  -->
+ 	<select id="selectSearchBoard" parameterType="BoardQAVO" resultMap="MapBoardVO">
+ 		<include refid="selectAll"/>
+ 		<where>
+ 			
+ 			<if test="title != null">
+ 				and b.title like '${title}'
+ 			</if>
+ 			<if test="memNo != 0">
+ 				and c.memNo like '${memNo}'
+ 			</if>
+ 			<if test="content != null">
+ 				and content like '${content}'
+ 			</if>
+ 		</where>
  	</select>
  	
  	<!-- 새글 등록  -->
  	<insert id="insertBoard" parameterType="BoardQAVO">
- 		insert into t_board(no, title, writer, content)
- 		 values(seq_t_board_no.nextval, #{title}, #{writer}, #{content})
+ 		insert into boardqa( title, writer, content, family, parent, depth, intent ,category1, category2, category3, memNo, regDate)
+ 		 values( #{title}, #{writer}, #{content}, #{family}, #{parent}, #{depth}, #{intent}, #{category1}, #{category2}, #{category3}, #{memNo}, curdate())
  	</insert>
  	
  	<!-- 글번호 조회 -->
- 	<select id="selectOneBoard" resultMap="MapBoardVO" parameterType="int">
+ 	<select id="selectOneBoard" resultMap="MapBoardVO" parameterType="int" >
  		<include refid="selectAll" />
- 		where no = #{no}
+ 		 where  b.boardNo = #{boardNo}
  	</select>
  	
  	<!-- 글 수정 -->
@@ -43,9 +67,60 @@
  	
  	<!-- 글 삭제 -->
  	<delete id="deleteBoard" parameterType="int">
- 		delete from t_board where no = #{no}
+ 		delete from boardqa where b.no = #{no}
  	</delete>
  	
+ 	 	<!-- 게시글 페이징 -->
+ 	<select id="selectPage" resultMap="MapBoardVO" parameterType="java.util.List">
+ 		<include refid="selectAll" />
+ 		 order by b.boardno desc limit #{list[0]}, #{list[1]}
+ 	</select>
+ 	
+ 	<!-- 모든 조건 검색 -->
+ 	<select id="selectSearch" resultMap="MapBoardVO" parameterType="hashMap">
+ 		<include refid="selectAll" />
+ 		<where>
+			<if test="date1 != null and date2 != null">
+				and b.regdate between #{date1} and  #{date2}
+ 			</if>
+ 			<if test="selectCategory3 != null and selectCategory3 != 'all' ">
+ 				and b.category3 = #{ selectCategory3 }
+ 			</if>
+ 			<choose>
+ 				<when test="title != null and content != null">
+ 					and b.title like '%${title}%' or b.content like '%${content}%'
+ 				</when>
+ 				<when test="title != null">
+ 					and b.title like '%${title}%'
+ 				</when>
+ 				<when test="writer != null">
+ 					and b.writer like '%${writer}%'
+ 				</when>
+
+ 				<when test="content != null">
+ 					and b.content like '%${content}%'
+ 				</when>
+ 			</choose>
+ <!-- 			<if test="title != null ">
+ 				and b.title like '%${title}%'
+ 			</if>
+ 			<if test="id != null"> 
+ 				and c.id like '%${id}%'
+ 			</if>
+ 			<if test="content != null ">
+ 				and b.content like '%${content}%'
+ 			</if>
+ 			<if test="title != null and content != null">
+ 				and b.title like '%${title}%' or b.content like '%${content}%'
+ 			</if> -->
+ 		</where>
+ 		order by b.family desc, b.depth asc limit #{startPage}, #{count}
+ 	</select>
+ 	
+ 	<!-- 게시글 카운트 -->
+ 	<update id="addCountBoardQA" parameterType="int">
+ 		 update boardqa set viewCnt = viewCnt + 1 where BoardNo = #{BoardNo}
+ 	</update>
 </mapper>
 
 
