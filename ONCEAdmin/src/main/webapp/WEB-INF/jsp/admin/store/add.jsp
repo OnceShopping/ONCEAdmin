@@ -475,7 +475,7 @@
 							사업자 등록 번호
 						</th>
 						<td>
-							<input type="text" name="companyNo" class="form-control" id="companyNo" required/>
+							<input type="text" name="companyNo" class="form-control" id="companyNo" pattern="\d{3}\-\d{4}\-\d{4}" title="xxx-xxxx-xxxx와 같은 형식으로  작성해 주세요" required/>
 						</td>
 					</tr>
 					<tr>
@@ -483,7 +483,7 @@
 							매장  전화번호
 						</th>
 						<td>
-							<input type="text" name="phone" class="form-control" id="phone" required/>
+							<input type="text" name="phone" class="form-control" id="phone" pattern="0\d{1,2}\-\d{3,4}\-\d{4}" title="0x-xxx-xxxx 또는  0xx-xxxx-xxxx와 같은 형식으로  작성해 주세요" required/>
 						</td>
 					</tr>
 				</table>

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -151,14 +151,14 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">사업자 등록 번호:</label>
 				<div class="col-sm-5">
-					<input type="text" class="form-control" id="companyNo" name="companyNo" value="${storeVO.companyNo}" />
+					<input type="text" class="form-control" id="companyNo" name="companyNo" value="${storeVO.companyNo}" pattern="\d{3}\-\d{4}\-\d{4}" title="xxx-xxxx-xxxx와 같은 형식으로  작성해 주세요" required/>
 				</div>
 			</div>
 			<div class="line line-dashed b-b line-lg pull-in"></div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">매장 전화번호:</label>
 				<div class="col-sm-5">
-					<input type="text" class="form-control" id="phone" name="phone" value="${storeVO.phone}">
+					<input type="text" class="form-control" id="phone" name="phone" value="${storeVO.phone}" pattern="0\d{1,2}\-\d{3,4}\-\d{4}" title="0x-xxx-xxxx 또는  0xx-xxxx-xxxx와 같은 형식으로  작성해 주세요" required/>
 				</div>
 			</div>
 			<div class="line line-dashed b-b line-lg pull-in"></div>
