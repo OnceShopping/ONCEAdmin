@@ -19,7 +19,7 @@ public class StoreDAOImpl implements StoreDAO {
 	private SqlSessionTemplate sqlSesssion;
 
 	@Override
-	public StoreVO checkStore(String storeNo) {
+	public StoreVO checkStoreName(String storeNo) {
 		return sqlSesssion.selectOne("once.store.dao.StoreDAO.checkStoreName",storeNo);
 	}
 
