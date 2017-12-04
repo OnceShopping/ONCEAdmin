@@ -1,5 +1,8 @@
 package once.store.service;
 
-public interface StoreService {
+import once.store.vo.StoreVO;
 
+public interface StoreService {
+	
+	StoreVO checkStore(String storeNo);
 }

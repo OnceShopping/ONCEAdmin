@@ -44,6 +44,7 @@
 <script src="${pageContext.request.contextPath }/resources/js/datepicker/bootstrap-datepicker.js"></script>
 
 <script type="text/javascript">
+	
 	var pageNo=${pageNo};
 	var date1='${date1}';
 	var date2='${date2}';
@@ -52,15 +53,18 @@
 	var selectCategory3='${selectCategory3}';
 	
 $(document).ready(function() { 
-	if(selectCategory3 == null)
-	$('#selectCategory3').val('all');
+	if(selectCategory3 == '') {
+		$('#selectCategory3').val('all');
+	} else {
+		$('#selectCategory3').val(selectCategory3);
+	}
 	
-	 
-//	$('#selectCategory3').change(function() {
-//		location.href='${ pageContext.request.contextPath }/boardQA/list';
-//		alert(selectCategory3);
-//		location.href="${ pageContext.request.contextPath }/boardQA/list?selectCategory3="+$('#selectCategory3').val();
-//	});
+	$('#selectCategory3').change(function() {
+		selectCategory3 = $('#selectCategory3').val();
+		location.href='${ pageContext.request.contextPath}/boardQA/list?pageNo='+1+'&date1='+date1+'&date2='+date2+'&searchC='+searchC
+		+'&search='+search+'&selectCategory3='+selectCategory3;
+	});
+	
 });
 	function searchCheck() {
 		if( $('#date1').val() == "" || $('#date2').val() == "" ) {
@@ -92,7 +96,7 @@ $(document).ready(function() {
 		selectCategory3 = $('#selectCategory3').val();
 				
 		location.href='${ pageContext.request.contextPath}/boardQA/list?pageNo='+paging+'&date1='+date1+'&date2='+date2+'&searchC='+searchC
-		+'&search='+search+'&selectCategory3='+selectCategory3
+		+'&search='+search+'&selectCategory3='+selectCategory3;
 		
 	}
 </script>
@@ -164,9 +168,10 @@ ul {
 									<ul class="nav nav-main">
 										<li><a
 											href="${ pageContext.request.contextPath }/notice/list"
-											class="auto"><i class="i i-circle-sm-o text"></i> <i
-												class="i i-circle-sm text-active"></i> <i
-												class="i i-statistics icon"> </i> <span class="font-bold">운영
+											class="auto"> <span class="pull-right text-muted">
+												<i class="i i-circle-sm-o text"></i> <i
+												class="i i-circle-sm text-active"></i> 
+											</span> <i class="i i-statistics icon"> </i> <span class="font-bold">운영
 													공지</span> </a></li>
 										<li class="active"><a
 											href="${ pageContext.request.contextPath }/boardQA/list"

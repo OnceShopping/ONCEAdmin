@@ -17,9 +17,9 @@
  	</sql>
  	
  	<!-- 전체 게시글 조회  -->
- 	<select id="selectAllBoard" resultMap="MapBoardVO" >
+ 	<select id="selectAllBoard" resultMap="MapBoardVO" parameterType="String">
  		<include refid="selectAll" />
- 		order by b.boardno desc
+ 		where category2= #{category2} order by b.boardno desc
  	</select>
  	
  	<!-- 날짜선택 게시글 조회 -->
@@ -48,8 +48,8 @@
  	
  	<!-- 새글 등록  -->
  	<insert id="insertBoard" parameterType="BoardQAVO">
- 		insert into boardqa( title, writer, content, family, parent, depth, intent ,category1, category2, category3, memNo, regDate)
- 		 values( #{title}, #{writer}, #{content}, #{family}, #{parent}, #{depth}, #{intent}, #{category1}, #{category2}, #{category3}, #{memNo}, curdate())
+ 		insert into boardqa( title, writer, content, family, parent, depth, intent ,category1, category2, category3, memNo, regDate, staffNo)
+ 		 values( #{title}, #{writer}, #{content}, #{family}, #{parent}, #{depth}, #{intent}, #{category1}, #{category2}, #{category3}, #{memNo}, curdate(), #{staffNo})
  	</insert>
  	
  	<!-- 글번호 조회 -->
@@ -66,8 +66,15 @@
  	</update>
  	
  	<!-- 글 삭제 -->
- 	<delete id="deleteBoard" parameterType="int">
- 		delete from boardqa where b.no = #{no}
+ 	<delete id="deleteBoard" parameterType="BoardQAVO">
+ 		<choose>
+ 			<when test="parent != 0">
+		 		delete from boardqa where boardNo = #{boardNo} or parent =#{boardNo}
+ 			</when>
+ 			<otherwise>
+ 				delete from boardqa where family = #{boardNo}	
+ 			</otherwise>
+ 		</choose>
  	</delete>
  	
  	 	<!-- 게시글 페이징 -->
@@ -80,6 +87,7 @@
  	<select id="selectSearch" resultMap="MapBoardVO" parameterType="hashMap">
  		<include refid="selectAll" />
  		<where>
+ 			category2 = #{category2}
 			<if test="date1 != null and date2 != null">
 				and b.regdate between #{date1} and  #{date2}
  			</if>
@@ -101,20 +109,11 @@
  					and b.content like '%${content}%'
  				</when>
  			</choose>
- <!-- 			<if test="title != null ">
- 				and b.title like '%${title}%'
- 			</if>
- 			<if test="id != null"> 
- 				and c.id like '%${id}%'
- 			</if>
- 			<if test="content != null ">
- 				and b.content like '%${content}%'
- 			</if>
- 			<if test="title != null and content != null">
- 				and b.title like '%${title}%' or b.content like '%${content}%'
- 			</if> -->
  		</where>
- 		order by b.family desc, b.depth asc limit #{startPage}, #{count}
+ 		order by b.family desc, b.depth asc 
+ 		<if test="startPage != null and count != null">
+ 			limit  #{startPage}, #{count}
+ 		</if>
  	</select>
  	
  	<!-- 게시글 카운트 -->

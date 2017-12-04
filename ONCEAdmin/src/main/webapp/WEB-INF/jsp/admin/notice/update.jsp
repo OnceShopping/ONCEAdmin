@@ -108,10 +108,13 @@ th {
 									<div
 										class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
 									<ul class="nav nav-main">
-										<li class="active"><a href="${ pageContext.request.contextPath }/notice/list" class="auto">
-												<i class="i i-statistics icon"> </i> <span class="font-bold">운영
-													공지</span>
-										</a></li>
+										<li class="active"><a
+											href="${ pageContext.request.contextPath }/notice/list"
+											class="auto"> <span class="pull-right text-muted">
+												<i class="i i-circle-sm-o text"></i> <i
+												class="i i-circle-sm text-active"></i> 
+											</span> <i class="i i-statistics icon"> </i> <span class="font-bold">운영
+													공지</span> </a></li>
 										<li><a href="${ pageContext.request.contextPath }/boardQA/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
