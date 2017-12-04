@@ -16,8 +16,8 @@ public class BoardQAServiceImpl implements BoardQAService {
 	private BoardQADAO dao;
 
 	@Override
-	public List<BoardQAVO> selectAllBoard() {
-		List<BoardQAVO> list = dao.selectAll();
+	public List<BoardQAVO> selectAllBoard(String storeName) {
+		List<BoardQAVO> list = dao.selectAll(storeName);
 		return list;
 	}
 
@@ -39,9 +39,8 @@ public class BoardQAServiceImpl implements BoardQAService {
 	}
 
 	@Override
-	public void deleteBoard(int boardNo) {
-		// TODO Auto-generated method stub
-		
+	public void deleteBoard(BoardQAVO boardQAVO) {
+		dao.delete(boardQAVO);
 	}
 
 	@Override

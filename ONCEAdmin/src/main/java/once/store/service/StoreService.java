@@ -1,13 +1,13 @@
 package once.store.service;
 
 import java.util.List;
-
 import javax.validation.Valid;
-
 import once.store.vo.StoreVO;
 
 public interface StoreService {
 
+  StoreVO checkStore(String storeNo);
+  
 	List<StoreVO> selectFirst();
 
 	List<StoreVO> selectSecond();
@@ -23,5 +23,5 @@ public interface StoreService {
 	void modifyStore(@Valid StoreVO store);
 
 	void deleteStore(String storeNo);
-
+  
 }

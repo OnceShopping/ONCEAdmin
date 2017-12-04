@@ -1,13 +1,14 @@
 package once.store.dao;
 
 import java.util.List;
-
 import javax.validation.Valid;
-
 import once.store.vo.StoreVO;
+
 
 public interface StoreDAO {
 
+	StoreVO checkStore(String storeNo);
+  
 	List<StoreVO> selectFirst();
 
 	List<StoreVO> selectSecond();
@@ -23,5 +24,4 @@ public interface StoreDAO {
 	void modifyStore(@Valid StoreVO store);
 
 	void deleteStore(String storeNo);
-
 }

@@ -17,6 +17,11 @@ public class StoreServiceImpl implements StoreService {
 	private StoreDAO dao;
 
 	@Override
+	public StoreVO checkStore(String storeNo) {
+		return dao.checkStore(storeNo);
+	}
+
+  @Override
 	public List<StoreVO> selectFirst() {
 		List<StoreVO> list = dao.selectFirst();
 		return list;
@@ -58,5 +63,4 @@ public class StoreServiceImpl implements StoreService {
 	public void deleteStore(String storeNo) {
 		dao.deleteStore(storeNo);
 	}
-	
 }

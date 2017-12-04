@@ -1,6 +1,5 @@
 package once.boardQA.control;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +22,8 @@ import once.boardQA.service.BoardQAService;
 import once.boardQA.vo.BoardQAVO;
 import once.manager.service.ManagerService;
 import once.manager.vo.ManagerVO;
+import once.store.service.StoreService;
+import once.store.vo.StoreVO;
 
 @RequestMapping("/boardQA")
 @Controller
@@ -34,54 +35,21 @@ public class BoardQAController {
 	@Autowired
 	private ManagerService mService;
 	
+	@Autowired
+	private StoreService sService;
+	
 	@RequestMapping("/list")
-	public ModelAndView list(HttpServletRequest request) {
-
-		// 현재 페이지 번호 저장 변수
-		int pageNo = 1;
-		if (request.getParameter("pageNo") != null) {
-			// 페이지 파라미터가 있는 경우 현재 페이지 번호를 설정
-			pageNo = Integer.parseInt(request.getParameter("pageNo"));
-		} 
-		// 한페이지에 보여질 목록 수
-		int listSize = 5;
+	public ModelAndView list(HttpServletRequest request , HttpSession session) {
+		// 로그인한 manager테이블 정보 알아냄
+		ManagerVO loginVO = (ManagerVO)session.getAttribute("loginVO");
 		
-		// 전체 게시글 카운트
-		int totalCount = service.selectAllBoard().size();
-
-		// 마지막 페이지 구하기
-		int lastPage = (totalCount % listSize == 0) ? totalCount / listSize 
-				                                    : totalCount / listSize + 1;	
-
-		request.setAttribute("pageNo"  , pageNo);
-		request.setAttribute("lastPage", lastPage);
-
-
-		// ======================================================================
-		// 탭 관련 작업 추가 파트
-		// ======================================================================
-		// 목록에 보여질 탭 사이즈
-		int tabSize  = 5;
-		// 현재 페이지에 해당하는 탭 위치 
-		int currTab   = (pageNo  -1) / tabSize + 1;
-		int beginPage = (currTab -1) * tabSize + 1;
-		int endPage   = (currTab * tabSize < lastPage) ? currTab * tabSize 
-				                                       : lastPage;
-		
-		request.setAttribute("beginPage", beginPage);
-		request.setAttribute("endPage"  , endPage);
-		// ======================================================================
-		
-		// 해당 페이지의 게시글 목록
-		List<Integer> page = new ArrayList<>();
-		page.add( (pageNo - 1) * listSize );
-		page.add( listSize );
-//		List<BoardQAVO> BoardList = service.selectPage(page);
+		System.out.println(request.getAttribute("type"));
+		String type = (String)request.getAttribute("type");
+		// manager테이블에 매칭되는  store테이블을 찾음
+		StoreVO storeVO = sService.checkStore(loginVO.getStoreNo());
 		
 		Map<String, Object> boardQAMap = new HashMap<>();
-		boardQAMap.put("startPage", (pageNo -1 ) * listSize);
-		boardQAMap.put("count", listSize );
-		
+
 		String date1;
 		String date2;
 		String selectCategory3;
@@ -123,16 +91,60 @@ public class BoardQAController {
 		}
 		
 		System.out.println(boardQAMap);
+		boardQAMap.put("category2", storeVO.getStoreName());
+
+		
+		// 현재 페이지 번호 저장 변수
+		int pageNo = 1;
+		if (request.getParameter("pageNo") != null) {
+			// 페이지 파라미터가 있는 경우 현재 페이지 번호를 설정
+			pageNo = Integer.parseInt(request.getParameter("pageNo"));
+		} 
+		// 한페이지에 보여질 목록 수
+		int listSize = 5;
+		
+		boardQAMap.put("startPage", null);
+		boardQAMap.put("count", null );	
+		// storeName이 일치하는 전체 게시글 카운트
+		int totalCount = service.selectSearch(boardQAMap).size();
+		
+		boardQAMap.put("startPage", (pageNo -1 ) * listSize);
+		boardQAMap.put("count", listSize );	
+		
 		List<BoardQAVO> Searchlist = service.selectSearch(boardQAMap);
+		
+		// 마지막 페이지 구하기
+		int lastPage = (totalCount % listSize == 0) ? totalCount / listSize 
+				                                    : totalCount / listSize + 1;	
+
+		request.setAttribute("pageNo"  , pageNo);
+		request.setAttribute("lastPage", lastPage);
+
+
+		// ======================================================================
+		// 탭 관련 작업 추가 파트
+		// ======================================================================
+		// 목록에 보여질 탭 사이즈
+		int tabSize  = 5;
+		// 현재 페이지에 해당하는 탭 위치 
+		int currTab   = (pageNo  -1) / tabSize + 1;
+		int beginPage = (currTab -1) * tabSize + 1;
+		int endPage   = (currTab * tabSize < lastPage) ? currTab * tabSize 
+				                                       : lastPage;
+		
+		request.setAttribute("beginPage", beginPage);
+		request.setAttribute("endPage"  , endPage);
+		// ======================================================================
+	
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("BoardList", Searchlist);
-		mav.setViewName("admin/boardQA/list");
+		mav.setViewName(type + "/boardQA/list");
 		
 		return mav;
 	}
 
 	@RequestMapping(value = "/detail/{boardNo}", method = RequestMethod.GET)
-	public String selectOne(@PathVariable int boardNo, Model mod, HttpServletRequest request, HttpServletResponse response) {
+	public String selectOne(@PathVariable int boardNo, Model mod, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		BoardQAVO boardQAVO = service.selectOneBoard(boardNo);
 		Cookie[] Cookies = request.getCookies(); //모든 쿠키의 값을 가져옴
 		System.out.println(Cookies.length);
@@ -148,17 +160,18 @@ public class BoardQAController {
 		}
 	}
 		mod.addAttribute("boardQAVO", boardQAVO);
-		
-		return "admin/boardQA/detail";
+		String type = (String)request.getAttribute("type");
+				
+		return type +"/boardQA/detail";
 	}
 	
 	@RequestMapping(value = "/write/{boardNo}", method = RequestMethod.GET)
-	public String writeForm(Model model, @PathVariable int boardNo) {
+	public String writeForm(Model model, @PathVariable int boardNo, HttpServletRequest request) {
 		BoardQAVO boardQAVO = new BoardQAVO();
 		
 		model.addAttribute("boardQAVO", boardQAVO);
-		
-		return "admin/boardQA/write";
+		String type = (String)request.getAttribute("type");
+		return type +"/boardQA/write";
 	}
 	
 	@RequestMapping(value = "/write/{boardNo}", method = RequestMethod.POST)
@@ -178,7 +191,7 @@ public class BoardQAController {
 			indent += "&nbsp;&nbsp;";
 		}
 		pBoardQAVO.setTitle(indent+"└>RE:"+title);
-		pBoardQAVO.setContent(sboardQAVO.getContent());
+		pBoardQAVO.setContent(sboardQAVO.getContent().replace("\r\n", "<br>"));
 		
 		ManagerVO managerVO = mService.selectById(loginVO.getManagerId());
 		pBoardQAVO.setStaffNo(managerVO.getStaffNo());
@@ -188,9 +201,10 @@ public class BoardQAController {
 		return "redirect:/boardQA/list";
 	}
 	
-	@RequestMapping(value = "/{boardNo}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/delete/{boardNo}")
 	public String delete(@PathVariable int boardNo) {
-		service.deleteBoard(boardNo);
+		BoardQAVO boardQAVO = service.selectOneBoard(boardNo);
+		service.deleteBoard(boardQAVO);
 		return "redirect:/boardQA/list";
 	}
 	

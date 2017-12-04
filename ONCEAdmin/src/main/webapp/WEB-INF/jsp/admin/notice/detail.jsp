@@ -28,7 +28,7 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath }/resources/css/app.css"
 	type="text/css" />
-
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script
 	src="${pageContext.request.contextPath }/resources/js/jquery.min.js"></script>
 <!-- Bootstrap -->
@@ -40,16 +40,99 @@
 	src="${pageContext.request.contextPath }/resources/js/slimscroll/jquery.slimscroll.min.js"></script>
 <script
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>	
+<script>
 
+$(document).ready(function() {
+	//다이얼로그 format 정의 - alert창
+	$( "#dialog" ).dialog({
+		 autoOpen: false,
+	      modal: true,
+	      width: '300',
+	      height: '200',
+	      padding : '10px',
+	      buttons : {
+	    	 OK : function(){	  
+	    	  	$(this).dialog("close");
+	    	 }
+	      }
+	 });
+	
+	//다이얼로그 format 정의 - pwd 체크	
+	$( "#dialog-pwd" ).dialog({
+		autoOpen: false,
+	    modal: true,
+	    width: '300',
+	    height: '200',
+	    buttons : [{
+	    	id : "cancelPwd", //취소 버튼
+	    	text : "cancel",
+	    	click : function(){
+	    		$(this).dialog("close");
+	    	}
+	     },
+	     {
+	      	id : "OKPwd",  //OK 버튼
+	      	text : "OK",
+	      	click : function(){
+		    	$(this).dialog("close");
+		   		}
+	      }],
+	      open: function( event, ui ) {
+	    	  $('#pwd').val(''); 
+	      }
+	 });
+	
+	//삭제 controller로 가기 전
+	$('#deleteNotice').click(function(){
+		
+		$( "#dialog-pwd" ).dialog('open');
+		
+	});
+	//삭제 시 비밀번호를 확인하는 다이얼로그의 "OK"버튼 클릭 시
+	$('#OKPwd').click(function(){
+		var CheckPwd = $('#pwd').val();
+		var loginPwd = "${sessionScope.loginVO.password}";
+		
+		clickBtn(CheckPwd, loginPwd);
+	});
+
+	//삭제 시 비밀번호를 확인하는 다이얼로그를 통해 비밀번호를 비교
+	function clickBtn(CheckPwd, loginPwd){
+	if(CheckPwd != loginPwd)
+		infoAlert("죄송합니다. 비밀 번호가 일치하지 않아 해당 정보를 삭제를 할 수 없습니다.");
+	else
+		location.href="${ pageContext.request.contextPath }/notice/delete/${ noticeVO.noticeNo }";
+	}
+
+	//알림 모달 다이얼로그 태그 설정
+	function infoAlert(str){
+		$('#dialog').html("<div style='text-align:center;'><p>"+str+"</p></div>");
+		$("#dialog").dialog("open");
+	}
+});
+</script>
 <style type="text/css">
 th {
 	text-align: center;
 	font-size: 13pt;
 }
+
 </style>
 </head>
 <body class="">
 	<section class="vbox">
+		<!-- Modal -->
+		<div id="dialog" title="ALERT DIALOG"></div>
+		<div id="dialog-pwd" title="CHECK PASSWORD">
+			<p class="validateTips">해당 정보를 삭제하기 위해서 비밀 번호를 다시 한번 입력해주세요.</p>
+			<form>
+				<fieldset>
+					<label for="password">Password</label> <input type="password"
+						name="pwd" id="pwd" class="text ui-widget-content ui-corner-all">
+				</fieldset>
+			</form>
+		</div>
 		<!-- 상단바 -->
 		<header
 			class="bg-white header header-md navbar navbar-fixed-top-xs box-shadow">
@@ -102,10 +185,13 @@ th {
 									<div
 										class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
 									<ul class="nav nav-main">
-										<li class="active"><a href="${ pageContext.request.contextPath }/notice/list" class="auto">
-												<i class="i i-statistics icon"> </i> <span class="font-bold">운영
-													공지</span>
-										</a></li>
+										<li class="active"><a
+											href="${ pageContext.request.contextPath }/notice/list"
+											class="auto"> <span class="pull-right text-muted">
+												<i class="i i-circle-sm-o text"></i> <i
+												class="i i-circle-sm text-active"></i> 
+											</span> <i class="i i-statistics icon"> </i> <span class="font-bold">운영
+													공지</span> </a></li>
 										<li><a href="${ pageContext.request.contextPath }/boardQA/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
@@ -187,9 +273,9 @@ th {
 								<br />
 								<input type="button" value="수정" class="btn btn-s-md btn-primary"
 									onclick="location.href='${ pageContext.request.contextPath }/notice/update/${ noticeVO.noticeNo }'"/>
-								<input type="button" value="삭제" class="btn btn-s-md btn-primary"
-									onclick="location.href='${ pageContext.request.contextPath }/notice/delete/${ noticeVO.noticeNo }'"/>	
-								<input type="button"
+								<input type="button" value="삭제" class="btn btn-s-md btn-primary" id="deleteNotice"
+									/>	
+								<input type="button" 
 									onclick="location.href='${ pageContext.request.contextPath }/notice/list'"
 									value="목록" class="btn btn-s-md btn-primary"/> 
 							</div>

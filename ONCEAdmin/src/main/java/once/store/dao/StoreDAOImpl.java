@@ -16,6 +16,13 @@ import once.store.vo.StoreVO;
 public class StoreDAOImpl implements StoreDAO {
 
 	@Autowired
+	private SqlSessionTemplate sqlSesssion;
+
+	@Override
+	public StoreVO checkStore(String storeNo) {
+		return sqlSesssion.selectOne("once.store.dao.StoreDAO.checkStoreName",storeNo);
+	}
+
 	private SqlSessionTemplate sqlSession;
 
 	@Override
@@ -67,5 +74,4 @@ public class StoreDAOImpl implements StoreDAO {
 	public void deleteStore(String storeNo) {
 		sqlSession.delete("once.store.dao.StoreDAO.deleteStore", storeNo);
 	}
-	
 }

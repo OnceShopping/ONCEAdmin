@@ -16,8 +16,8 @@ public class BoardQADAOImpl implements BoardQADAO {
 	private SqlSessionTemplate sqlSession;
 
 	@Override
-	public List<BoardQAVO> selectAll() {
-		List<BoardQAVO> list = sqlSession.selectList("once.boardQA.dao.BoardQADAO.selectAllBoard");
+	public List<BoardQAVO> selectAll(String storeName) {
+		List<BoardQAVO> list = sqlSession.selectList("once.boardQA.dao.BoardQADAO.selectAllBoard", storeName);
 		return list;
 	}
 
@@ -37,8 +37,8 @@ public class BoardQADAOImpl implements BoardQADAO {
 	}
 
 	@Override
-	public void delete(int boardNo) {
-		sqlSession.delete("once.boardQA.dao.BoardQADAO.deleteBoard", boardNo);		
+	public void delete(BoardQAVO boardQAVO) {
+		sqlSession.delete("once.boardQA.dao.BoardQADAO.deleteBoard", boardQAVO);		
 	}
 
 	@Override
