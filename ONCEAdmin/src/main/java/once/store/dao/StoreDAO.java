@@ -7,7 +7,7 @@ import once.store.vo.StoreVO;
 
 public interface StoreDAO {
 
-	StoreVO checkStore(String storeNo);
+	StoreVO checkStoreName(String storeNo);
   
 	List<StoreVO> selectFirst();
 

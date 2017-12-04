@@ -46,7 +46,7 @@ public class BoardQAController {
 		System.out.println(request.getAttribute("type"));
 		String type = (String)request.getAttribute("type");
 		// manager테이블에 매칭되는  store테이블을 찾음
-		StoreVO storeVO = sService.checkStore(loginVO.getStoreNo());
+		StoreVO storeVO = sService.checkStoreName(loginVO.getStoreNo());
 		
 		Map<String, Object> boardQAMap = new HashMap<>();
 

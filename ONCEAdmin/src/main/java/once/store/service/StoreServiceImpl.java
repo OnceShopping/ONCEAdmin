@@ -17,8 +17,8 @@ public class StoreServiceImpl implements StoreService {
 	private StoreDAO dao;
 
 	@Override
-	public StoreVO checkStore(String storeNo) {
-		return dao.checkStore(storeNo);
+	public StoreVO checkStoreName(String storeNo) {
+		return dao.checkStoreName(storeNo);
 	}
 
   @Override

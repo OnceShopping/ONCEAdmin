@@ -6,7 +6,7 @@ import once.store.vo.StoreVO;
 
 public interface StoreService {
 
-  StoreVO checkStore(String storeNo);
+  StoreVO checkStoreName(String storeNo);
   
 	List<StoreVO> selectFirst();
 
