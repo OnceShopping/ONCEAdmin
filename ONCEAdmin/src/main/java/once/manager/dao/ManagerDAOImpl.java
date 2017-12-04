@@ -131,4 +131,23 @@ public class ManagerDAOImpl implements ManagerDAO {
 		
 		return list;
 	}
+
+	@Override
+	public List<ManagerVO> selectInfoStaff() {
+		List<ManagerVO> list = sqlSession.selectList("once.manager.dao.ManagerDAO.selectInfoStaff");
+		return list;
+	}
+
+	@Override
+	public List<ManagerVO> selectInfoStaffPage(List<Integer> page) {
+		List<ManagerVO> list = sqlSession.selectList("once.manager.dao.ManagerDAO.selectInfoStaffPage", page);
+		return list;
+	}
+
+	@Override
+	public List<ManagerVO> searchInfoStaff(ManagerVO manager) {
+		List<ManagerVO> list = sqlSession.selectList("once.manager.dao.ManagerDAO.searchInfoStaff", manager);
+		return list;
+	}
+
 }

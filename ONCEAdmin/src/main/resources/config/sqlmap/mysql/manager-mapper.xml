@@ -100,6 +100,38 @@
  		order by staffNo DESC
  		limit #{list[0]}, #{list[1]}
  	</select>
+ 	
+ 	 <select id="selectInfoStaff" resultType="ManagerVO">
+ 		<include refid="refAll" />
+ 		where type = 'infoStaff'
+ 		order by staffNo ASC;
+ 	</select>
+ 	
+  	<select id="selectInfoStaffPage" parameterType="java.util.List" resultType="ManagerVO">
+ 		<include refid="refAll" />
+ 		where type = 'infoStaff'
+ 		order by staffNo DESC
+ 		limit #{list[0]}, #{list[1]}
+ 	</select>
+ 	
+ 	<select id="searchInfoStaff" parameterType="String" resultType="ManagerVO">
+ 		select StoreMember.staffNo, StoreMember.managerId, StoreMember.name, StoreMember.telephone, date_format(date, '%y-%m-%d') as date, StoreMember.storeNo, store.storeName
+ 		from StoreMember left join store
+		on StoreMember.storeNo = store.storeNo
+ 		where type = 'infoStaff' and
+ 		<choose>
+ 			<when test="name!=null">
+ 				name like concat('%',#{name},'%')
+ 			</when>
+ 			<when test="managerId!=null">
+ 				managerId like concat('%',#{managerId},'%')
+ 			</when>
+ 			<when test="storeName!=null">
+ 				storeName like concat('%',#{storeName},'%')
+ 			</when>
+ 		</choose>
+ 	</select>
+ 	
 </mapper>
 
 
