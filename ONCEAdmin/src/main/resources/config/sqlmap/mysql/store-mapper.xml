@@ -3,12 +3,60 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="once.store.dao.StoreDAO">
+
  	
  	<!-- 매니저에 따라 store조회 -->
- 	<select id="checkStore" parameterType="String" resultType="StoreVO">
+ 	<select id="checkStoreName" parameterType="String" resultType="StoreVO">
  		select * from store where storeNo = #{storeNo};
  	</select>
+  
+ 	<select id="selectFirst" resultType="StoreVO">
+ 		select storeNo, storeName, floor, imgSaveName
+ 		from Store
+ 		where floor = '1F' and storeCategory not in ('info')
+ 	</select>
  	
+ 	<select id="selectSecond" resultType="StoreVO">
+ 		select storeNo, storeName, floor, imgSaveName
+ 		from Store
+ 		where floor = '2F'
+ 	</select>
+ 	
+ 	<select id="selectThird" resultType="StoreVO">
+ 		select storeNo, storeName, floor, imgSaveName
+ 		from Store
+ 		where floor = '3F'
+ 	</select>
+ 	
+ 	<insert id="addStore" parameterType="StoreVO">
+ 		insert into Store
+ 		(ceo, companyNo, phone, storeNo, storeName, storeCategory, floor, logo, imgSaveName, imgSize)
+ 		values
+ 		(#{ceo}, #{companyNo}, #{phone}, #{storeNo}, #{storeName}, #{storeCategory}, #{floor}, #{logo}, #{imgSaveName}, #{imgSize})
+ 	</insert>
+ 	
+ 	<select id="checkStore" resultType="int">
+ 		select count(*)
+ 		from Store
+ 		where storeNo = #{storeNo}
+ 	</select>
+ 	
+ 	<select id="selectByStoreNo" resultType="StoreVO">
+ 		select storeNo, storeName, storeCategory, ceo, companyNo, phone, imgSaveName
+ 		from Store
+ 		where storeNo = #{storeNo}
+ 	</select>
+ 	
+	<update id="modifyStore" parameterType="StoreVO">
+ 		update Store
+ 		set ceo = #{ceo}, companyNo = #{companyNo}, phone = #{phone}, logo = #{logo}, imgSaveName = #{imgSaveName}, imgSize = #{imgSize}
+ 		where storeNo = #{storeNo}
+ 	</update>
+ 	
+ 	<delete id="deleteStore" parameterType="String">
+ 		delete from Store
+ 		where storeNo = #{storeNo}
+ 	</delete>
 </mapper>
 
 

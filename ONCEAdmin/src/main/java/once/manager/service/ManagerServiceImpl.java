@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import once.manager.dao.ManagerDAO;
 import once.manager.vo.ManagerVO;
+import once.notice.vo.NoticeVO;
 import once.store.vo.StoreVO;
 
 @Service
@@ -63,5 +64,53 @@ public class ManagerServiceImpl implements ManagerService{
 	public void update(String managerId, String telephone) {	
 		dao.update(managerId, telephone);
 	}
+	
+	//매니저 추가
+	@Override
+	public void add(ManagerVO manager) {		
+		dao.insert(manager);
+	}
+	
+	//매니저 검색
+	@Override
+	public List<ManagerVO> search(ManagerVO manager) {
+		
+		List<ManagerVO> list = dao.search(manager);
+		
+		return list;
+	}
+	
+	//ID 중복 체크
+	public boolean checkId(String managerId) {
+		return dao.checkId(managerId);
+	}
+	
+	//페이징
+	@Override
+	public List<ManagerVO> selectPage(List page) {
+		
+		List<ManagerVO> list = dao.selectPage(page);
+		
+		return list;
+	}
+
+	@Override
+	public List<ManagerVO> selectInfoStaff() {
+		List<ManagerVO> list = dao.selectInfoStaff();
+		return list;
+	}
+
+	@Override
+	public List<ManagerVO> selectInfoStaffPage(List<Integer> page) {
+		List<ManagerVO> list = dao.selectInfoStaffPage(page);
+		return list;
+	}
+
+	@Override
+	public List<ManagerVO> searchInfoStaff(ManagerVO manager) {
+		List<ManagerVO> list = dao.searchInfoStaff(manager);
+		return list;
+	}
+
 }
  

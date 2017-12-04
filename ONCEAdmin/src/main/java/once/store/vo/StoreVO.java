@@ -13,5 +13,7 @@ public class StoreVO {
 	private String storeCategory;
 	private String logo;
 	private String floor;
-	
+	private String imgOriName;
+	private String imgSaveName;
+	private int imgSize;	
 }
