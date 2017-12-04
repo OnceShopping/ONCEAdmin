@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import once.manager.vo.ManagerVO;
+import once.notice.vo.NoticeVO;
 import once.store.vo.StoreVO;
 
 public interface ManagerService {
@@ -32,4 +33,11 @@ public interface ManagerService {
 	boolean checkId(String managerId);
 	
 	List<ManagerVO> selectPage(List page);
+
+	List<ManagerVO> selectInfoStaff();
+
+	List<ManagerVO> selectInfoStaffPage(List<Integer> page);
+
+	List<ManagerVO> searchInfoStaff(ManagerVO manager);
+
 }

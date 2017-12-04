@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import once.manager.dao.ManagerDAO;
 import once.manager.vo.ManagerVO;
+import once.notice.vo.NoticeVO;
 import once.store.vo.StoreVO;
 
 @Service
@@ -92,5 +93,24 @@ public class ManagerServiceImpl implements ManagerService{
 		
 		return list;
 	}
+
+	@Override
+	public List<ManagerVO> selectInfoStaff() {
+		List<ManagerVO> list = dao.selectInfoStaff();
+		return list;
+	}
+
+	@Override
+	public List<ManagerVO> selectInfoStaffPage(List<Integer> page) {
+		List<ManagerVO> list = dao.selectInfoStaffPage(page);
+		return list;
+	}
+
+	@Override
+	public List<ManagerVO> searchInfoStaff(ManagerVO manager) {
+		List<ManagerVO> list = dao.searchInfoStaff(manager);
+		return list;
+	}
+
 }
  
