@@ -32,4 +32,11 @@ public interface ManagerDAO {
 	boolean checkId(String managerId);
 	
 	List<ManagerVO> selectPage(List page);
+
+	List<ManagerVO> selectInfoStaff();
+
+	List<ManagerVO> selectInfoStaffPage(List<Integer> page);
+
+	List<ManagerVO> searchInfoStaff(ManagerVO manager);
+
 }

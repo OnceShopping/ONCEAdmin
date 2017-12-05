@@ -1,6 +1,7 @@
 package once.boardQA.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,20 +16,19 @@ public class BoardQAServiceImpl implements BoardQAService {
 	private BoardQADAO dao;
 
 	@Override
-	public List<BoardQAVO> selectAllBoard() {
-		List<BoardQAVO> list = dao.selectAll();
-		return null;
+	public List<BoardQAVO> selectAllBoard(String storeName) {
+		List<BoardQAVO> list = dao.selectAll(storeName);
+		return list;
 	}
 
 	@Override
 	public BoardQAVO selectOneBoard(int boardNo) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.selectOne(boardNo);
 	}
 
 	@Override
 	public void insertBoard(BoardQAVO board) {
-		// TODO Auto-generated method stub
+		dao.insert(board);
 		
 	}
 
@@ -39,8 +39,30 @@ public class BoardQAServiceImpl implements BoardQAService {
 	}
 
 	@Override
-	public void deleteBoard(int boardNo) {
-		// TODO Auto-generated method stub
-		
+	public void deleteBoard(BoardQAVO boardQAVO) {
+		dao.delete(boardQAVO);
+	}
+
+	@Override
+	public List<BoardQAVO> selectPage(List page) {
+		List<BoardQAVO> list = dao.selectPage(page);
+		return list;
+	}
+
+	@Override
+	public List<BoardQAVO> selectConfirmBoard(List<String> list) {
+		List<BoardQAVO> BoardList = dao.selectConfirmBoard(list);
+		return BoardList;
+	}
+
+	@Override
+	public List<BoardQAVO> selectSearch(Map<String, Object> boardQAMap) {
+		List<BoardQAVO> Boardlist = dao.selectSearch(boardQAMap);
+		return Boardlist;
+	}
+
+	@Override
+	public void addCountBoardQA(int boardNo) {
+		dao.addCountBoardQA(boardNo);
 	}
 }

@@ -42,7 +42,8 @@
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
 	
 <script type="text/javascript">
-	function doAction() {
+
+function doAction() {
 		location.href = "${ pageContext.request.contextPath }/notice/write"
 
 	}
@@ -116,12 +117,13 @@ ul {
 									<ul class="nav nav-main">
 										<li class="active"><a
 											href="${ pageContext.request.contextPath }/notice/list"
-											class="auto"><i class="i i-circle-sm-o text"></i> <i
-												class="i i-circle-sm text-active"></i> <i
-												class="i i-statistics icon"> </i> <span class="font-bold">운영
+											class="auto"> <span class="pull-right text-muted">
+												<i class="i i-circle-sm-o text"></i> <i
+												class="i i-circle-sm text-active"></i> 
+											</span> <i class="i i-statistics icon"> </i> <span class="font-bold">운영
 													공지</span> </a></li>
 										<li><a
-											href="${ pageContext.request.contextPath }/notice/list"
+											href="${ pageContext.request.contextPath }/boardQA/list"
 											class="auto"> <span class="pull-right text-muted">
 													<i class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
@@ -180,7 +182,8 @@ ul {
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
 							<h3 class="font-bold m-b-none m-t-none">운영공지</h3>
-							<br />
+							<br /> 
+							
 							<div style="text-align: right; width: 80%">
 								<table width="100%"
 									class="table table-striped m-b-none dataTable no-footer"
@@ -194,7 +197,7 @@ ul {
 									<c:forEach var="noticeList" items="${ list }">
 										<tr>
 											<td>${ noticeList.noticeNo }</td>
-											<td><a
+											<td style="text-align: left"><a
 												href="${ pageContext.request.contextPath }/notice/detail/${ noticeList.noticeNo }">${ noticeList.title }</a></td>
 											<td>${ noticeList.viewCnt }</td>
 											<td>${ noticeList.regDate }</td>

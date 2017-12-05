@@ -42,7 +42,7 @@ public class ManagerController {
 	private NoticeService nService;
 	
 	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public String login(@RequestParam("id")String id, @RequestParam("password")String password, Model model) {
+	public String login(@RequestParam("id")String id, @RequestParam("password")String password, Model model, HttpServletRequest request) {
 		
 		ManagerVO manager = new ManagerVO();
 		manager.setManagerId(id);
@@ -58,7 +58,48 @@ public class ManagerController {
 			model.addAttribute("loginVO", loginVO);
 			System.out.println(loginVO);
 			if(loginVO.getType().equals("admin")) {
-				List<NoticeVO> list = nService.selectAllNotice();
+				
+				// 현재 페이지 번호 저장 변수
+				int pageNo = 1;
+				if (request.getParameter("pageNo") != null) {
+					// 페이지 파라미터가 있는 경우 현재 페이지 번호를 설정
+					pageNo = Integer.parseInt(request.getParameter("pageNo"));
+				} 
+				// 한페이지에 보여질 목록 수
+				int listSize = 10;
+				
+				// 전체 게시글 카운트
+				int totalCount = nService.selectAllNotice().size();
+
+				// 마지막 페이지 구하기
+				int lastPage = (totalCount % listSize == 0) ? totalCount / listSize 
+						                                    : totalCount / listSize + 1;	
+
+				request.setAttribute("pageNo"  , pageNo);
+				request.setAttribute("lastPage", lastPage);
+
+
+				// ======================================================================
+				// 탭 관련 작업 추가 파트
+				// ======================================================================
+				// 목록에 보여질 탭 사이즈
+				int tabSize  = 5;
+				// 현재 페이지에 해당하는 탭 위치 
+				int currTab   = (pageNo  -1) / tabSize + 1;
+				int beginPage = (currTab -1) * tabSize + 1;
+				int endPage   = (currTab * tabSize < lastPage) ? currTab * tabSize 
+						                                       : lastPage;
+				
+				request.setAttribute("beginPage", beginPage);
+				request.setAttribute("endPage"  , endPage);
+				// ======================================================================
+				
+				// 해당 페이지의 게시글 목록
+				List<Integer> page = new ArrayList<>();
+				page.add( (pageNo - 1) * listSize );
+				page.add( listSize );
+				List<NoticeVO> list = nService.selectPage(page);
+				
 				model.addAttribute("list", list);
 				return "admin/notice/list";
 			}else if(loginVO.getType().equals("infoManger")) {
@@ -66,7 +107,7 @@ public class ManagerController {
 				return "infoManager/itemManage/addItem";
 			}else if(loginVO.getType().equals("storeManager")) {
 				
-				return "storeManager/itemManage/registerItem";
+				return "storeManager/itemManage/register";
 			}else {
 				model.addAttribute("message", "type이 이상합니다");
 				
@@ -270,7 +311,6 @@ public class ManagerController {
 	@ResponseBody
 	public List<ManagerVO> searchManager(@RequestParam(value="searchType") String searchType, @RequestParam(value="searchText") String searchText) {
 
-		
 		String search;
 		ManagerVO manager = new ManagerVO();
 		List<ManagerVO> managerVOList = new ArrayList<>();
@@ -302,4 +342,115 @@ public class ManagerController {
 		
 		return service.checkId(managerId);
 	}
+	
+	//인포 스태프 리스트
+	@RequestMapping(value="/info/staffList")
+	public ModelAndView infoStaffList(HttpServletRequest request) {
+		
+		int pageNo = 1;
+		if (request.getParameter("pageNo") != null) {
+
+			pageNo = Integer.parseInt(request.getParameter("pageNo"));
+		} 
+
+		int listSize = 10;
+		int totalCount = service.selectInfoStaff().size();
+		int lastPage = (totalCount % listSize == 0) ? totalCount / listSize 
+				                                    : totalCount / listSize + 1;	
+		request.setAttribute("pageNo"  , pageNo);
+		request.setAttribute("lastPage", lastPage);
+		
+		int tabSize  = 5;
+		int currTab   = (pageNo  -1) / tabSize + 1;
+		int beginPage = (currTab -1) * tabSize + 1;
+		int endPage   = (currTab * tabSize < lastPage) ? currTab * tabSize 
+				                                       : lastPage;
+		
+		request.setAttribute("beginPage", beginPage);
+		request.setAttribute("endPage"  , endPage);
+		
+		
+		List<Integer> page = new ArrayList<>();
+		page.add( (pageNo - 1) * listSize );
+		page.add( listSize );
+		List<ManagerVO> staffList = service.selectInfoStaffPage(page);
+	
+		List<StoreVO> storeList = new ArrayList<>();
+		
+		ModelAndView mav = new ModelAndView();
+		String DiffNo = null;
+		String ExNo = null;
+		int count;
+
+		
+		for(int i=0; i<=staffList.size()-1; i++) {
+			
+			count=0;
+			
+			ExNo = staffList.get(i).getStoreNo();
+			
+			if(i==0) {
+				storeList.add(service.selectByNo(ExNo));
+			}else {
+				for(int j=0; j<=i-1; j++) {
+					if(ExNo.equals(staffList.get(j).getStoreNo()))
+						++count;
+					else
+						DiffNo = ExNo;   
+				}
+				if(count==0)
+					storeList.add(service.selectByNo(DiffNo));
+			}
+		}
+		
+		mav.addObject("staffList", staffList);
+		mav.addObject("storeList", storeList);
+		
+		mav.setViewName("infoManager/staff/list");
+		
+		return mav;
+	}
+	
+	//인포 스태프 검색
+	@RequestMapping(value="/info/searchStaff", method=RequestMethod.POST )
+	@ResponseBody
+	public List<ManagerVO> searchInfoStaff(@RequestParam(value="searchType") String searchType, @RequestParam(value="searchText") String searchText) {
+
+		String search;
+		ManagerVO manager = new ManagerVO();
+		List<ManagerVO> managerList = new ArrayList<>();
+				
+		try {
+			search = URLDecoder.decode(searchText, "UTF-8");
+			
+			if(searchType.equals("name")) 
+				manager.setName(search);
+			else if(searchType.equals("managerId"))
+				manager.setManagerId(search);
+			else
+				manager.setStoreName(search);
+					
+			managerList = service.searchInfoStaff(manager);
+			
+		} catch (UnsupportedEncodingException e) {
+			
+			e.printStackTrace();
+		}
+		
+		return managerList;
+	}
+	
+	//인포 스태프 삭제
+	@RequestMapping(value="/info/staffList", method=RequestMethod.DELETE)
+	public String deleteInfoStaff(HttpServletRequest request) {
+		
+		String [] staffNos = request.getParameterValues("managerId");
+		
+		for(int i=0; i<staffNos.length; i++) {
+			service.delete(staffNos[i]);
+		}
+		
+		return "redirect:/info/staffList";
+	}
+	
 }
