@@ -74,7 +74,6 @@ public class NoticeController {
 		page.add( (pageNo - 1) * listSize );
 		page.add( listSize );
 		List<NoticeVO> list = service.selectPage(page);
-		request.setAttribute("list"    , list);
 		
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("list", list);
