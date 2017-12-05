@@ -339,31 +339,31 @@ function showModal(ModalTest){
 								<div class="col-sm-4 text-right text-center-xs" style="margin-left: 340px;">                
 			                      <ul class="pagination pagination-sm m-t-none m-b-none">
 			         					<!-- 처음페이지 -->
-			         					<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=1"><i class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i></a></li>
+			         					<li><a href="${ pageContext.request.contextPath }/item/list?pageNo=1"><i class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i></a></li>
 			                      		<!-- 이전페이지 -->
 			                      		<c:choose>
 			                      			<c:when test="${ pageNo == 1 }">
-			                      				<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=1"><i class="fa fa-chevron-left"></i></a></li>
+			                      				<li><a href="${ pageContext.request.contextPath }/item/list?pageNo=1"><i class="fa fa-chevron-left"></i></a></li>
 			                      			</c:when>
 			                      			<c:otherwise>
-			                      				<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=${ pageNo - 1}"><i class="fa fa-chevron-left"></i></a></li>
+			                      				<li><a href="${ pageContext.request.contextPath }/item/list?pageNo=${ pageNo - 1}"><i class="fa fa-chevron-left"></i></a></li>
 			                      			</c:otherwise>
 			                      		</c:choose>
 			                      		<!-- 페이지번호  -->
 			                      		<c:forEach var="i" begin="${ beginPage }" end="${ endPage }">
-												<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=${i}">${i}</a></li>
+												<li><a href="${ pageContext.request.contextPath }/item/list?pageNo=${i}">${i}</a></li>
 			                      		</c:forEach>
 			                      		<!-- 다음페이지 -->
 			                      		<c:choose>
 			                      			<c:when test="${ pageNo == endPage }">
-			                      				<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=${ endPage }"><i class="fa fa-chevron-right"></i></a></li>
+			                      				<li><a href="${ pageContext.request.contextPath }/item/list?pageNo=${ endPage }"><i class="fa fa-chevron-right"></i></a></li>
 			                      			</c:when>
 			                      			<c:otherwise>
-			                      				<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=${ pageNo + 1 }"><i class="fa fa-chevron-right"></i></a></li>
+			                      				<li><a href="${ pageContext.request.contextPath }/item/list?pageNo=${ pageNo + 1 }"><i class="fa fa-chevron-right"></i></a></li>
 			                      			</c:otherwise>
 			                      		</c:choose>
 			                      		<!-- 마지막페이지 -->
-			                      		<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=${ lastPage }"><i class="fa fa-chevron-right"></i><i class="fa fa-chevron-right"></i></a></li>	
+			                      		<li><a href="${ pageContext.request.contextPath }/item/list?pageNo=${ lastPage }"><i class="fa fa-chevron-right"></i><i class="fa fa-chevron-right"></i></a></li>	
 			                      </ul>
 			                    </div>
                     		<br /> <br />

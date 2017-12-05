@@ -114,7 +114,7 @@
  	</select>
  	
  	<!-- item list 페이징 -->
- 	<select id="selectPage" parameterType="java.util.List" resultTyep="">
+ 	<select id="selectPage" parameterType="java.util.List" resultType="ItemContentsVO">
  		<include refid="refItem"/>
  		order by detailNo DESC
  		limit #{list[0]}, #{list[1]}

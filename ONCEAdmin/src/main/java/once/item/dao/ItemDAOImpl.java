@@ -122,11 +122,11 @@ public class ItemDAOImpl implements ItemDAO {
 		return list;
 	}
 	
-	//item list 페이징
+	//itemList 페이징
 	@Override
 	public List<ItemContentsVO> selectPage(List page) {
 		
-		List<ItemContentsVO> list = sqlSession.selectList("once.manager.dao.ManagerDAO.selectPage", page);
+		List<ItemContentsVO> list = sqlSession.selectList("once.item.dao.ItemDAO.selectPage", page);
 		
 		return list;
 	}

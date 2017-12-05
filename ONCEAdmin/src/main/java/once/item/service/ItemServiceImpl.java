@@ -88,7 +88,7 @@ public class ItemServiceImpl implements ItemService {
 		return dao.search(item);
 	}
 	
-	//item list 페이징
+	//itemList 페이징
 	@Override
 	public List<ItemContentsVO> selectPage(List page) {
 		return dao.selectPage(page);
