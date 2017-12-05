@@ -247,23 +247,7 @@ public class ItemController {
 	//매장의 등록된 상품 리스트 출력
 	@RequestMapping(value = "/list", method=RequestMethod.GET)
 	public ModelAndView itemList(HttpSession session, HttpServletRequest request) {
-		
-		/*ManagerVO manager = (ManagerVO)session.getAttribute("loginVO");
-		
-		String storeName = service.findStore(manager.getManagerId()).getStoreName(); 
-		
-		List<ItemContentsVO> items = new ArrayList<>();
-
-		items = service.selectAll(storeName);
-		
-		ModelAndView mav = new ModelAndView();
-		
-		mav.addObject("items", items);
-		mav.addObject("storeName", storeName);
-		mav.setViewName("storeManager/itemManage/list");
-		
-		return mav;*/
-		
+				
 		ManagerVO manager = (ManagerVO)session.getAttribute("loginVO");
 		
 		String storeName = service.findStore(manager.getManagerId()).getStoreName();
@@ -300,11 +284,9 @@ public class ItemController {
 	
 		
 		ModelAndView mav = new ModelAndView();
-		String DiffNo = null; // 기존에 없던 새로운 storeNo
-		String ExNo = null; // 비교 기준 storeNo
-		int count;
 	
 		mav.addObject("itemList", itemList);
+		mav.addObject("storeName", storeName);
 		
 		mav.setViewName("storeManager/itemManage/list");
 		
