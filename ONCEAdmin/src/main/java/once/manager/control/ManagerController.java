@@ -31,7 +31,6 @@ import once.notice.vo.NoticeVO;
 import once.store.vo.StoreVO;
 
 @SessionAttributes("loginVO")
-
 @Controller
 public class ManagerController {
 
@@ -103,10 +102,9 @@ public class ManagerController {
 				model.addAttribute("list", list);
 				return "admin/notice/list";
 			}else if(loginVO.getType().equals("infoManger")) {
-				
 				return "infoManager/itemManage/addItem";
 			}else if(loginVO.getType().equals("storeManager")) {
-				
+				model.addAttribute("storeName", service.selectById(id).getStoreName());
 				return "storeManager/itemManage/register";
 			}else {
 				model.addAttribute("message", "type이 이상합니다");

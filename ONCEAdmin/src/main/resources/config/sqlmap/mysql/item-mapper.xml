@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="once.item.dao.ItemDAO">
+     
+    <!-- ref) 공통  select -->
+     <sql id="refItem">
+     	select storeNo, storeName, managerId, itemName, price, itemCategory1, num, itemCategory2, itemCategory3, color, itemNo, size, count, detailNo
+     	from itemList
+     </sql>
+     
+    <!-- 상품 선택 -->
+    <select id="selectItem" parameterType="itemContentsVO" resultType="itemContentsVO">
+       select storeNo, itemName, price, salePrice, startDate, endDate, color, size, imgSaveName 
+      from itemContents
+       where itemName=#{ itemName } and color=#{ color } and size=#{ size };
+    </select>
+    
+    <!-- 상품 colorList 선택 -->
+    <select id="getColorList" parameterType="String" resultType="String">
+       select distinct color from itemcontents  where itemName=#{ itemName };
+    </select>   
+    
+    <!-- 상품 sizeList 선택 -->
+    <select id="getSizeList" parameterType="String" resultType="String">
+       select distinct size from itemcontents  where itemName=#{ itemName };
+    </select>
+    
+    <!-- store 검색 -->
+    <select id="findStore" parameterType="String" resultType="ItemContentsVO">
+    	select Store.storeName, Store.storeNo
+    	from Store 
+    	inner join StoreMember on Store.storeNo=StoreMember.storeNo
+    	where StoreMember.managerId=#{ managerId }
+    </select>
+    
+    <!-- item 등록 -->
+    <insert id="addItem" parameterType="ItemContentsVO">
+    	insert into Item (storeNo, itemName, itemCategory1, itemCategory2, itemCategory3, price)
+    	values (#{storeNo}, #{itemName}, #{itemCategory1}, #{itemCategory2}, #{itemCategory3}, #{price})
+    </insert>
+    
+    <!-- item 테이블에 item의 detail 추가 등록 -->
+    <update id="updateDetail" parameterType="ItemContentsVO">
+    	update Item
+    	set detail = #{detail}
+    	where num = #{num}
+    </update>
+    
+  	<!-- Item 테이블에서 ItemColor 테이블과 ImgTable의 F.K가 되는 num 값 가져오기 -->
+    <select id="findNum" resultType="INT">
+    	select Max(num)
+    	from Item
+    </select>
+    
+    <!-- itemColor 등록 -->
+    <insert id="addItemColor" parameterType="ItemContentsVO">
+    	insert into ItemColor ( color, itemNo, num )
+    	values (#{ color }, #{ itemNo }, #{ num })
+    </insert>
+    
+    <!-- itemDetail 등록 -->
+    <insert id="addItemDetail" parameterType="ItemContentsVO">
+    	insert into itemDetail ( size, count, itemNo )
+    	values (#{ size }, #{ count }, #{ itemNo })
+    </insert>
+    
+    <!-- ImgTable 이미지 등록 -->
+    <insert id="addImage" parameterType="ItemImgVO">
+    	insert into ImageTable ( imgSaveName, imageSize, imgOriName, num ) 
+    	values (#{ imgSaveName }, #{ imageSize }, #{ imgOriName }, #{ num })
+    </insert>
+    
+    <!-- 매장의 등록된 상품 리스트 출력 -->
+    <select id="selectAll" parameterType="String" resultType="ItemContentsVO">
+    	<include refid="refItem"/>
+    	where storeName = #{storeName}
+    	order by detailNo ASC
+    </select>
+    
+    <!-- 상품 코드 존재 여부 확인 -->
+    <select id="checkItemNo" parameterType="String" resultType="ItemContentsVO">
+    	<include refid="refItem"/>
+    	where itemNo = #{itemNo}
+    </select>
+    
+    <!-- 상품 추가 page에서 선택한 사이즈 삭제 -->
+    <delete id="deleteSize" parameterType="String">
+    	delete from itemDetail
+ 		where 
+ 		size = #{size}
+    </delete>
+    
+    <!-- size가 동일한 상품의 중복 추가 여부 확인 -->
+    <select id="checkSize" parameterType="ItemContentsVO" resultType="ItemContentsVO">
+    	<include refid="refItem"/>
+    	where size=#{size} and itemNo=#{itemNo}
+    </select>
+    
+    <!-- item 검색 -->
+ 	<select id="search" parameterType="ItemContentsVO" resultType="ItemContentsVO">
+ 		<include refid="refItem"/>
+ 		where storeName=#{storeName}
+ 		and
+ 		<choose>
+ 			<when test="itemName!=null">
+ 				itemName like concat('%',#{itemName},'%')
+ 			</when>
+ 			<when test="itemNo!=null">
+ 				itemNo like concat('%',#{itemNo},'%')
+ 			</when>
+ 		</choose>
+ 	</select>
+ 	
+ 	<!-- item list 페이징 -->
+ 	<select id="selectPage" parameterType="java.util.List" resultTyep="">
+ 		<include refid="refItem"/>
+ 		order by detailNo DESC
+ 		limit #{list[0]}, #{list[1]}
+ 	</select>
+</mapper>

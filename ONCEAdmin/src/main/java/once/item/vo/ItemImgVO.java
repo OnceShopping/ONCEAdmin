@@ -7,10 +7,10 @@ public class ItemImgVO {
 
 	private int imgNo;
 	
-	private String itemName;
+	private int num;
 	
 	private String imgSaveName;
-	private String imgSize;
+	private String imageSize;
 	private String imgOriName;
 	
 }
