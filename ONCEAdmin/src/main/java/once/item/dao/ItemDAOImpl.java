@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import once.item.vo.ItemContentsVO;
+import once.item.vo.ItemDetailVO;
 import once.item.vo.ItemImgVO;
-import once.manager.vo.ManagerVO;
 
 @Repository
 public class ItemDAOImpl implements ItemDAO {
@@ -32,7 +32,7 @@ public class ItemDAOImpl implements ItemDAO {
 	//item 테이블에 detail 등록
 	@Override
 	public void updateDetail(ItemContentsVO item) {
-		sqlSession.update("once.item.dao.ItemDAO.updateDetail", "item");
+		sqlSession.update("once.item.dao.ItemDAO.updateDetail", item);
 		
 	}
 	
@@ -50,7 +50,7 @@ public class ItemDAOImpl implements ItemDAO {
 	
 	//itemDetail 테이블에 상품 등록
 	@Override
-	public void addItemDetail(ItemContentsVO item) {
+	public void addItemDetail(ItemDetailVO item) {
 		sqlSession.insert("once.item.dao.ItemDAO.addItemDetail", item);	
 	}
 
@@ -89,12 +89,6 @@ public class ItemDAOImpl implements ItemDAO {
 		return check;
 	}
 	
-	//선택한 size 삭제
-	@Override
-	public void deleteSize(String size) {
-		sqlSession.delete("once.item.dao.ItemDAO.deleteSize", size);
-	}
-	
 	//추가하려는 size가 기존 DB에 존재하는지 여부 확인
 	@Override
 	public boolean checkSize(ItemContentsVO item) {
@@ -130,4 +124,5 @@ public class ItemDAOImpl implements ItemDAO {
 		
 		return list;
 	}
+
 }

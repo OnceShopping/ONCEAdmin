@@ -241,7 +241,7 @@
 					<section class="vbox">
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
-							<h3 class="font-bold m-b-none m-t-none">${storeName} 상품 등록</h3>
+							<h3 class="font-bold m-b-none m-t-none">[${ storeName}] 상품 등록</h3>
 							<br /> <br />
 							<form action="${ pageContext.request.contextPath }/item/register"
 								method="post" enctype="multipart/form-data">
@@ -334,7 +334,7 @@
 											name="price" required="required"></td>
 									</tr>
 									<tr style="height: 50px;">
-										<td style="text-align: left: ;">상품 대표 이미지 등록</td>
+										<td style="text-align: left: ;">상품 대표 이미지</td>
 										<td style="width: 30px;"></td>
 										<td style="text-align: center;"><input type="file" value="파일 찾기" name="attachFile" required="required"></td>
 									</tr>

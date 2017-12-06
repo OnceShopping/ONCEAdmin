@@ -61,7 +61,7 @@
     </insert>
     
     <!-- itemDetail 등록 -->
-    <insert id="addItemDetail" parameterType="ItemContentsVO">
+    <insert id="addItemDetail" parameterType="ItemDetailVO">
     	insert into itemDetail ( size, count, itemNo )
     	values (#{ size }, #{ count }, #{ itemNo })
     </insert>

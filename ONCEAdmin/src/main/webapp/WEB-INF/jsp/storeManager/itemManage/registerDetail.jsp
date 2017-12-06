@@ -46,44 +46,40 @@
 var index = 0; //추가된 size와 count에 해당하는 index
 
 	$(document).ready(function(){
+
 		
 		var add = false;
-		
+			
 		//상품의 size와 갯수를 추가하는 로직
 		$('#addItem').click(function(){
 			
-			var item = {
-					size : $('#size').val(),
-					count : $('#count').val()
-			}
+			var size = $('#size').val();
+			var count = $('#count').val();
 			
-			$.ajax({
-				url : "${ pageContext.request.contextPath }/item/add/"+$('#itemNo').val(),
-				dataType:'JSON',
-				data : item,
-				cache : false,
-				contentType : "application/json; charset=UTF-8",
-				success : function(data) {
-					
-					if(data!=null){ //새롭게 상품이 추가되는 경우
-						addList(data);
-						add = true;					
-					}else
-						//alert('아래 리스트에 추가된 상품이 존재합니다. 확인해보세요.');
-						infoAlert('아래 리스트에 추가된 상품이 존재합니다. 확인해보세요.');
-				},error : function(request,status, error) {
-					alert("에러 발생! : "+ request.status+ "message : "+ request.responseText+ "\n"+ "error : "+ error);
-				}
-			});
-			
-			$('#size').val('');
-			$('#count').val('');
+			if(size==""&&count=="")
+				infoAlert('추가하려는 상품의 size와 count를 입력해주세요.');
+			else if(size=="")
+				infoAlert('추가하려는 상품의  size를 입력해주세요.');
+			else if(count=="")
+				infoAlert('추가하려는 상품의  count를 입력해주세요.');
+			}else{
+				if(!checkSize(size)) {//기존에 추가된 size가 없는 경우
+					addList(size, count);
+					add = true;
+				}else
+					infoAlert('추가한 사이즈가 바로 아래 리스트에 존재합니다. 다시 작성해주세요.');
+
+				$('#size').val('');
+				$('#count').val('');
+			}	
 		});
 		
-		$('#addManager').submit(function() {	
-			if(add==false){ //상품의 size와 수량을 추가하지 않은 경우
+		//상품의 size와 수량을 추가하지 않은 경우를 위한 예외 처리
+		$('#registerItem').submit(function() {	
+			if(add==false) 
 				return false;
-			}	
+			else
+				return true;
 		});
 		
 		//다이얼로그 format 정의 - alert창
@@ -102,42 +98,37 @@ var index = 0; //추가된 size와 count에 해당하는 index
 	});
 
 	//리스트에 추가한 상품의 size와 갯수를 표시
-	function addList(data){
+	function addList(size, count){
 		
 		var contents = "<tr>";
 		contents += "<td style='text-align:center;'>"+$('#itemName').val()+"</td>";
 		contents += "<td style='text-align:center;'>"+$('#itemNo').val()+"</td>";
-		contents += "<td style='text-align:center;'>"+data.size+"</td>";
-		contents += "<td style='text-align:center;'>"+data.count+"</td>";
-		contents += "<td style='width: 20%; text-align:center;'><a class='delete' id="+data.size+" onclick=deleteItem('"+(++index)+"') style='color:red;'><i class='fa fa-times' aria-hidden='true'></i></a></td>";
+		contents += "<td style='text-align:center;'>"+size+"<input type='hidden' class='addSize' value='"+size+"' name='size'></td>";
+		contents += "<td style='text-align:center;'>"+count+"<input type='hidden' value='"+count+"' name='count'></td>";
+		contents += "<td style='width: 20%; text-align:center;'><a class='delete' id="+size+" onclick=deleteItem('"+(++index)+"') style='color:red;'><i class='fa fa-times' aria-hidden='true'></i></a></td>";
 		contents += "</tr>";
 		
 		$('#AddList').append(contents);
 		
 	}
-	
-	//추가한 size와 갯수를 삭제
+
 	function deleteItem(index){
-		
 		var item = document.getElementsByClassName('delete')[index-1].id;
 		var list = document.getElementById('AddList');
 		
-		$.ajax({
-			url : "${ pageContext.request.contextPath }/item/delete",
-			dataType:'JSON',
-			type:'get',
-			data : {
-				'size' : item
-			},
-			cache : false,
-			contentType : "application/json; charset=UTF-8",
-			success : function(data) {
-				alert(data);
-				list.deleteRow(index);
-			},error : function(request,status, error) {
-				alert("에러 발생! : "+ request.status+ "message : "+ request.responseText+ "\n"+ "error : "+ error);
-			}
-		}); 
+		list.deleteRow(index);
+	}
+	
+	//추가한 사이즈가 존재하는지 여부 확인
+	function checkSize(size){
+		var result=false;
+		var sizeList = 	document.getElementsByClassName('addSize');
+		
+		for(var i=0; i<sizeList.length; i++){
+			if(sizeList[i].value==size)
+				result=true;
+		}
+		return result;
 	}
 	
 	//알림 모달 다이얼로그 태그 설정
@@ -289,10 +280,10 @@ var index = 0; //추가된 size와 count에 해당하는 index
 					<section class="vbox">
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
-							<h3 class="font-bold m-b-none m-t-none">${storeName}상품 등록</h3>
+							<h3 class="font-bold m-b-none m-t-none">[${item.storeName}]상품 등록</h3>
 							<br /> <br />
 							<form action="${ pageContext.request.contextPath }/item/registerDetail"
-								method="post" enctype="multipart/form-data">
+								method="post" enctype="multipart/form-data" id="registerItem">
 								<div style="background-color: #E0DFDF; height: 30px; padding: 5px;"
 									id="registerImg">
 									<i class="fa fa-angle-double-right" aria-hidden="true"></i> <span

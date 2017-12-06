@@ -3,6 +3,7 @@ package once.item.service;
 import java.util.List;
 
 import once.item.vo.ItemContentsVO;
+import once.item.vo.ItemDetailVO;
 import once.item.vo.ItemImgVO;
 
 public interface ItemService {
@@ -23,7 +24,7 @@ public interface ItemService {
 	public void addItemColor(ItemContentsVO item);
 	
 	//itemDetail 테이블에 상품 등록
-	public void addItemDetail(ItemContentsVO item);
+	public void addItemDetail(ItemDetailVO item);
 	
 	//imgTable 테이블에 상품 등록
 	public void addImage(ItemImgVO itemImg);
@@ -33,9 +34,6 @@ public interface ItemService {
 
 	//상품 코드 기존 DB에 존재하는지 여부 확인
 	public boolean checkItemNo(String itemNo);
-	
-	//선택한 size 삭제
-	public void deleteSize(String size);
 	
 	//추가하려는 size가 기존 DB에 존재하는지 여부 확인
 	public boolean checkSize(ItemContentsVO item);

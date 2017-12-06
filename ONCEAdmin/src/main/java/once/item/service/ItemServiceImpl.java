@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import once.item.dao.ItemDAO;
 import once.item.vo.ItemContentsVO;
+import once.item.vo.ItemDetailVO;
 import once.item.vo.ItemImgVO;
 
 @Service
@@ -47,7 +48,7 @@ public class ItemServiceImpl implements ItemService {
 	
 	//itemDetail 테이블에 상품 등록
 	@Override
-	public void addItemDetail(ItemContentsVO item) {
+	public void addItemDetail(ItemDetailVO item) {
 		dao.addItemDetail(item);
 	}
 	
@@ -69,13 +70,7 @@ public class ItemServiceImpl implements ItemService {
 	public boolean checkItemNo(String itemNo) {		
 		return dao.checkItemNo(itemNo);
 	}
-	
-	//선택한 size 삭제
-	@Override
-	public void deleteSize(String size) {
-		dao.deleteSize(size);
-	}
-	
+
 	//추가하려는 size가 기존 DB에 존재하는지 여부 확인
 	@Override
 	public boolean checkSize(ItemContentsVO item) {
