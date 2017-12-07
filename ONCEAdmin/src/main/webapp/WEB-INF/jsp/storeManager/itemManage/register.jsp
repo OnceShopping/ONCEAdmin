@@ -320,11 +320,11 @@
 								<br /> <br />
 								<table style="margin-left: 100px;">
 									<tr style="height: 60px;">
-										<td style="text-align: left;">상품 이름</td>
+										<td style="width: 150px; text-align: left;">상품 이름</td>
 										<td style="width: 30px;"></td>
 										<td style="width: 300px;"><input type="text" name="itemName"
 											required="required"></td>
-										<td style="width: 200px;"/>	
+										<td style="width: 100px;"/>	
 										<td rowspan="5" style="width: 300px;"><div class="storeLogoImg" id="storeLogoImg"></div></td>	
 									</tr>
 									<tr style="height: 60px;">

@@ -93,8 +93,7 @@ public class ItemController {
 	    MultipartFile mFile = mRequest.getFile(formFileName);
 	         
 	    // 원본 파일명
-	    String oriFileName = mFile.getOriginalFilename();
-	    System.out.println("원본 파일명 : " + oriFileName);    
+	    String oriFileName = mFile.getOriginalFilename(); 
 	    
 		    if(oriFileName != null && !oriFileName.equals("")) {
 		    	
@@ -185,7 +184,6 @@ public class ItemController {
 	         
 	    // 원본 파일명
 	    String oriFileName = mFile.getOriginalFilename();
-	    System.out.println("원본 파일명 : " + oriFileName);    
 	    
 		    if(oriFileName != null && !oriFileName.equals("")) {
 		         
