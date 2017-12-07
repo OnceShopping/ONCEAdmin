@@ -61,7 +61,7 @@
 					if (data == false)
 						$('#checkItemNo').html("<span style='color:green;'><i class='fa fa-check' aria-hidden='true'></i>&nbsp;&nbsp;&nbsp;해당 상품코드로 등록이 가능합니다.</span>");
 					else {
-						$('#checkItemNo').html("<span style='color:red;'><i class='fa fa-times' aria-hidden='true'></i>&nbsp;&nbsp;&nbsp;기존의 상품이 등록되어 있어 해당 상품코드로 등록이 불가능합니다.</span>");
+						$('#checkItemNo').html("<span style='color:red;'><i class='fa fa-times' aria-hidden='true'></i>&nbsp;&nbsp;&nbsp;해당 상품코드가 이미 등록이 되어 있습니다.</span>");
 						$('#itemNo').val('');
 						$('#itemNo').focus();
 					}
@@ -96,6 +96,16 @@
 		});		
 		
 	});
+	
+	//이미지 미리 보기
+    function fileInfo(f){
+    	var file = f.files;
+    	var reader = new FileReader();
+    	reader.onload = function(rst){
+    		$('#storeLogoImg').html('<img src="' + rst.target.result + '"height="250" width="200">');
+    	}
+    	reader.readAsDataURL(file[0]);
+    }
 </script>
 <style type="text/css">
 .ui-menu {
@@ -246,10 +256,10 @@
 							<form action="${ pageContext.request.contextPath }/item/register"
 								method="post" enctype="multipart/form-data">
 									<div
-										style="background-color: #E0DFDF; height: 30px; padding: 5px;"
+										style="background-color: #E0DFDF; height: 30px; padding: 5px; margin-top:50px;"
 										id="category">
 										<i class="fa fa-angle-double-right" aria-hidden="true"></i>
-										<span style="font-size: 10pt; font-weight: bold;">&nbsp;&nbsp;&nbsp;카테고리
+										<span style="font-size: 10pt; font-weight: bold; ">카테고리
 											선택</span>
 									</div>
 									<table id="categoryTable"
@@ -309,34 +319,36 @@
 								</div>
 								<br /> <br />
 								<table style="margin-left: 100px;">
-									<tr style="height: 50px;">
+									<tr style="height: 60px;">
 										<td style="text-align: left;">상품 이름</td>
 										<td style="width: 30px;"></td>
-										<td><input type="text" name="itemName"
+										<td style="width: 300px;"><input type="text" name="itemName"
 											required="required"></td>
+										<td style="width: 200px;"/>	
+										<td rowspan="5" style="width: 300px;"><div class="storeLogoImg" id="storeLogoImg"></div></td>	
 									</tr>
-									<tr style="height: 50px;">
+									<tr style="height: 60px;">
 										<td style="text-align: left;">상품 코드</td>
 										<td style="width: 30px;"></td>
-										<td><input type="text" name="itemNo" id="itemNo" required="required">&nbsp;&nbsp;<span
-											id="checkItemNo"></span></td>
-										
+										<td colspan="2"><input type="text" name="itemNo" id="itemNo" required="required"><span style="padding-left: 20px;" id="checkItemNo"></span>
+										</td>
 									</tr>
-									<tr style="height: 50px;">
+									<tr style="height: 60px;">
 										<td style="text-align: left;">색상</td>
 										<td style="width: 30px;"></td>
 										<td><input type="text" name="color" required="required"></td>
+										<td rowspan="3" style="width: 200px;"/>
 									</tr>
-									<tr style="height: 50px;">
+									<tr style="height: 60px;">
 										<td style="text-align: left;">가격</td>
 										<td style="width: 30px;"></td>
 										<td><input type="number"
 											name="price" required="required"></td>
 									</tr>
-									<tr style="height: 50px;">
+									<tr style="height: 70px;">
 										<td style="text-align: left: ;">상품 대표 이미지</td>
 										<td style="width: 30px;"></td>
-										<td style="text-align: center;"><input type="file" value="파일 찾기" name="attachFile" required="required"></td>
+										<td style="text-align: center;"><input type="file" value="파일 찾기" name="attachFile" required="required"onchange="javascript:document.getElementById('file_route').value=this.value; fileInfo(this);"><input type="hidden" readonly="readonly" title="File Route" id="file_route"></td>
 									</tr>
 								</table>
 								<br /> <br />

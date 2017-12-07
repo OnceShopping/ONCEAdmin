@@ -62,7 +62,7 @@ var index = 0; //추가된 size와 count에 해당하는 index
 				infoAlert('추가하려는 상품의  size를 입력해주세요.');
 			else if(count=="")
 				infoAlert('추가하려는 상품의  count를 입력해주세요.');
-			}else{
+			else{
 				if(!checkSize(size)) {//기존에 추가된 size가 없는 경우
 					addList(size, count);
 					add = true;
@@ -137,6 +137,17 @@ var index = 0; //추가된 size와 count에 해당하는 index
 		$("#dialog").dialog("open");
 	}
 	
+	//이미지 미리 보기
+    function fileInfo(f){
+    	var file = f.files;
+    	var reader = new FileReader();
+    	reader.onload = function(rst){
+    		$('.carousel-inner').prepend("<div class='item active'><img src='" + rst.target.result+"</div>");
+    		$('.item').prepend('<div class="carousel-caption">AAA</div>');
+    	}
+    	reader.readAsDataURL(file[0]);
+    }
+	   
 </script>
 <style type="text/css">
 .ui-menu {
@@ -280,27 +291,52 @@ var index = 0; //추가된 size와 count에 해당하는 index
 					<section class="vbox">
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
-							<h3 class="font-bold m-b-none m-t-none">[${item.storeName}]상품 등록</h3>
+							<h3 class="font-bold m-b-none m-t-none">[${item.storeName}] 상품 등록</h3>
 							<br /> <br />
 							<form action="${ pageContext.request.contextPath }/item/registerDetail"
 								method="post" enctype="multipart/form-data" id="registerItem">
 								<div style="background-color: #E0DFDF; height: 30px; padding: 5px;"
 									id="registerImg">
 									<i class="fa fa-angle-double-right" aria-hidden="true"></i> <span
-										style="font-size: 10pt; font-weight: bold;">&nbsp;&nbsp;&nbsp;상품 이미지 등록 </span>
+										style="font-size: 10pt; font-weight: bold;  margin-top:50px;">상품 이미지 등록 </span>
 								</div>
 								<table style="margin-left: 100px;" id="images">
 									<tr style="height: 100px;">
 										<td style="width: 200px;">상세 이미지 등록</td>
-										<td><input type="file" value="파일 찾기"></td>
+										<td><input type="file" value="파일 찾기" id="uploadLogo1" accept="image/*" onchange="javascript:document.getElementById('file_route').value=this.value; fileInfo(this);"><input type="hidden" readonly="readonly" title="File Route" id="file_route"></td>
+										<!-- 이미지 -->
+										<td rowspan="3" style="width: 300px;">
+											<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+											  <!-- Indicators -->
+											  <ol class="carousel-indicators">
+											    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+											    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+											    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+											  </ol>
+											
+											  <!-- Wrapper for slides -->
+											  <div class="carousel-inner" role="listbox">
+											  </div>
+											
+											  <!-- Controls -->
+											  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+											    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+											    <span class="sr-only">Previous</span>
+											  </a>
+											  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+											    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+											    <span class="sr-only">Next</span>
+											  </a>
+											</div>
+										</td>
 									</tr>
 									<tr style="height: 100px;">
 										<td>상세 이미지 등록</td>
-										<td><input type="file" value="파일 찾기"></td>
+										<td><input type="file" value="파일 찾기" id="uploadLogo2" accept="image/*" onchange="javascript:document.getElementById('file_route').value=this.value; fileInfo(this);"><input type="hidden" readonly="readonly" title="File Route" id="file_route"></td>
 									</tr>
 									<tr style="height: 100px;">
 										<td>상세 이미지 등록</td>
-										<td><input type="file" value="파일 찾기"></td>
+										<td><input type="file" value="파일 찾기" id="uploadLogo3" accept="image/*" onchange="javascript:document.getElementById('file_route').value=this.value; fileInfo(this);"><input type="hidden" readonly="readonly" title="File Route" id="file_route"></td>
 									</tr>
 								</table>
 								<br /> <br />
@@ -312,14 +348,14 @@ var index = 0; //추가된 size와 count에 해당하는 index
 										정보 등록 </span>
 								</div>
 								<div>
-								<p style="padding-top: 50px; font-weight: bold; margin-left: 25px;">[SIZE및 수량 등록]</p>
+								<p style="padding-top: 50px; font-weight: bold; margin-left: 25px; margin-bottom: 10px;">[SIZE 및 COUNT 등록]</p>
 								<table id="itemDetail" style="margin-left: 90px; margin-top: 20px;">
 									<tr>
 										<td style="width: 50px;" align="right">SIZE</td>
 										<td style="width: 10px;"></td>
 										<td style="width: 50px;"><input type="text" name="size" id="size"></td>
 										<td style="width: 20px;"></td>
-										<td style="width: 50px;" align="right">수량</td>
+										<td style="width: 50px;" align="right">COUNT</td>
 										<td style="width: 10px;"></td>
 										<td style="width: 50px;"><input type="number"
 											name="count" id="count"></td>
@@ -345,10 +381,9 @@ var index = 0; //추가된 size와 count에 해당하는 index
 								</div><br/><br/><br/><br/>
 								<div>
 									<p style="font-weight: bold; margin-left: 25px;">[상품 상세 정보]</p>
-										<div style="margin-left: 110px;  margin-top: 20px;">
-											<textarea rows="3" cols="100" name="detail"></textarea>
-											<!-- <pre id="detail" name="detail" conenteditable="true"></pre> -->
-										</div>
+									<div style="margin-left: 110px;  margin-top: 20px;">
+										<textarea rows="3" cols="100" name="detail"></textarea>
+									</div>
 								</div>
 								<br/><br/>
 								<div align="right">
@@ -356,7 +391,6 @@ var index = 0; //추가된 size와 count에 해당하는 index
 									<input type="submit" value="등록" class="btn btn-s-md btn-primary" id="finish">
 									<input type="hidden" value="${ item.itemNo }" name="itemNo" id="itemNo">
 									<input type="hidden" value="${ item.itemName }" name="itemName" id="itemName">
-									<input type="hidden" value="${ item.num }" name="num">
 									<input type="hidden" value="${ loginVO.managerId }" name="id">
 								</div>
 							</form>

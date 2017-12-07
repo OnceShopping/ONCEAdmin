@@ -77,9 +77,7 @@ public class ItemDAOImpl implements ItemDAO {
 		
 		boolean check = false;
 		
-		ItemContentsVO checkObj = new ItemContentsVO();
-		
-		checkObj = sqlSession.selectOne("once.item.dao.ItemDAO.checkItemNo", itemNo);
+		List<ItemContentsVO> checkObj = sqlSession.selectList("once.item.dao.ItemDAO.checkItemNo", itemNo);
 		
 		if(checkObj != null) //동일한 itemNo가 DB에 존재하는 경우
 			check = true;
