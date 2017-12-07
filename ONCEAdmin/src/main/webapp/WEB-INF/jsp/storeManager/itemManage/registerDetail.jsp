@@ -46,7 +46,9 @@
 var index = 0; //추가된 size와 count에 해당하는 index
 var img = 0; //상세 이미지를 등록했는지 여부
 
+var first = 0;
 var second = 0;
+var third = 0;	
 	
 	$(document).ready(function(){
 		
@@ -69,19 +71,11 @@ var second = 0;
 					addList(size, count);
 					add = true;
 				}else
-					infoAlert('추가한 사이즈가 바로 아래 리스트에 존재합니다. 다시 작성해주세요.');
+					infoAlert('추가한 사이즈가 바로 아래 리스트에 존재합니다.<br/>다시 작성해주세요.');
 
 				$('#size').val('');
 				$('#count').val('');
 			}	
-		});
-		
-		//상품의 size와 수량을 추가하지 않은 경우를 위한 예외 처리
-		$('#registerItem').submit(function() {	
-			if(add==false) 
-				return false;
-			else
-				return true;
 		});
 		
 		//다이얼로그 format 정의 - alert창
@@ -98,6 +92,7 @@ var second = 0;
 		      }
 		 });
 		
+		//상품 상세 이미지의 값을 change 이벤트가 발생하기 전에 우선 체크
 		$('#uploadLogo1').click(function(){
 			first = $('#uploadLogo1').val();
 		});
@@ -108,6 +103,18 @@ var second = 0;
 		
 		$('#uploadLogo3').click(function(){
 			third = $('#uploadLogo3').val();
+		});
+		
+		//상품의 size와 수량을 추가하지 않은 경우를 위한 예외 처리
+		$('#finish').click(function() {	
+			if(add==false) 
+				infoAlert("<span style='text-align:left;'><strong>[필수 입력]</strong></span><br/><br/>상품의 size와 count를 입력해주세요.");
+			else
+				document.getElementById("registerItem").submit();
+		});
+		
+		$('#registerItem').submit(function(){
+			return false;	
 		});
 	});
 
@@ -147,7 +154,7 @@ var second = 0;
 	
 	//알림 모달 다이얼로그 태그 설정
 	function infoAlert(str){
-		$('#dialog').html("<div style='text-align:center;'><p>"+str+"</p></div>");
+		$('#dialog').html("<div><p>"+str+"</p></div>");
 		$("#dialog").dialog("open");
 	}
 	
@@ -163,9 +170,9 @@ var second = 0;
     			if(imgIndex=='0')
     				$('#itemImg').prepend("<div class='item active' id='detail1'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200' style='margin-left: auto; margin-right: auto;'></div>");
     			else if(imgIndex=='1')
-    				$('#itemImg').prepend("<div class='item active' id='detail2'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200' style='margin-left: auto; margin-right: auto;'></div>");
+    				$('#itemImg').prepend("<div class='item active' id='detail2'><img src='" + rst.target.result+"' alt='Second slide' height='250' width='200' style='margin-left: auto; margin-right: auto;'></div>");
     			else
-    				$('#itemImg').prepend("<div class='item active' id='detail3'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200' style='margin-left: auto; margin-right: auto;'></div>");
+    				$('#itemImg').prepend("<div class='item active' id='detail3'><img src='" + rst.target.result+"' alt='Third slide' height='250' width='200' style='margin-left: auto; margin-right: auto;'></div>");
     		}else{
 				if(imgIndex=='0'){
 					if(first=="")
@@ -176,17 +183,17 @@ var second = 0;
 					if(second=="")
 						$('#itemImg').append("<div class='item' id='detail2'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'></div>");
 					else
-						$('#detail2').html("<img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'>");
+						$('#detail2').html("<img src='" + rst.target.result+"' alt='Second slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'>");
 				}else
 					if(third=="")
 						$('#itemImg').append("<div class='item' id='detail3'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'></div>");
 					else
-						$('#detail3').html("<img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'>");
+						$('#detail3').html("<img src='" + rst.target.result+"' alt='Third slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'>");
     		}
     	}
     	reader.readAsDataURL(file[0]);
     }
-	   
+
 </script>
 <style type="text/css">
 .ui-menu {
@@ -331,7 +338,7 @@ var second = 0;
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
 							<h3 class="font-bold m-b-none m-t-none">[${item.storeName}] 상품 등록</h3>
-							<br /> <br />
+							<br /><br /><br /><br />
 							<form action="${ pageContext.request.contextPath }/item/registerDetail"
 								method="post" enctype="multipart/form-data" id="registerItem">
 								<div style="background-color: #E0DFDF; height: 30px; padding: 5px;"
@@ -339,20 +346,14 @@ var second = 0;
 									<i class="fa fa-angle-double-right" aria-hidden="true"></i> <span
 										style="font-size: 10pt; font-weight: bold;  margin-top:50px;">상품 이미지 등록 </span>
 								</div>
-								<table style="margin-left: 100px; id="images">
+								<table style="margin-left: 100px;" id="images">
 									<tr style="height: 100px;">
-										<td style="width: 200px;">상세 이미지 등록</td>
+										<td style="width: 200px;">상세 이미지 등록</td>										
 										<td><input type="file" value="파일 찾기" id="uploadLogo1" accept="image/*" onchange="fileInfo(this, '0')"></td>
 										<!-- 이미지 -->
+										<td rowspan="3" style="width: 50px;">
 										<td rowspan="3" style="width: 300px;">
 											<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-											  <!-- Indicators -->
-											  <ol class="carousel-indicators">
-											    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-											    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-											    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-											  </ol>
-											
 											  <!-- Wrapper for slides -->
 											  <div class="carousel-inner" role="listbox" id="itemImg" >										   
 											  </div>
@@ -392,12 +393,11 @@ var second = 0;
 									<tr>
 										<td style="width: 50px;" align="right">SIZE</td>
 										<td style="width: 10px;"></td>
-										<td style="width: 50px;"><input type="text" name="size" id="size"></td>
+										<td style="width: 50px;"><input type="text" id="size"></td>
 										<td style="width: 20px;"></td>
 										<td style="width: 50px;" align="right">COUNT</td>
 										<td style="width: 10px;"></td>
-										<td style="width: 50px;"><input type="number"
-											name="count" id="count"></td>
+										<td style="width: 50px;"><input type="number" id="count"></td>
 										<td style="width: 20px;"></td>
 										<td style="width: 50px;"><input type="button"
 											name="addItem" id="addItem" value="추가"></td>
@@ -408,7 +408,7 @@ var second = 0;
 								<br/>
 								<div>
 									<p style="font-weight: bold; margin-left: 25px;">[추가 상품 현황]</p>
-									<table style="width: 100%; margin-left: 50px;  margin-top: 20px;" id="AddList">
+									<table style="width: 900px; margin-left: 50px;  margin-top: 20px;" id="AddList">
 										<tr>
 											<th style="width: 20%; text-align: center;">상품 이름</th>
 											<th style="width: 20%; text-align: center;">상품 코드</th>
@@ -421,7 +421,7 @@ var second = 0;
 								<div>
 									<p style="font-weight: bold; margin-left: 25px;">[상품 상세 정보]</p>
 									<div style="margin-left: 110px;  margin-top: 20px;">
-										<textarea rows="3" cols="100" name="detail"></textarea>
+										<textarea rows="3" cols="110" name="detail" style="resize: none;"></textarea>
 									</div>
 								</div>
 								<br/><br/>

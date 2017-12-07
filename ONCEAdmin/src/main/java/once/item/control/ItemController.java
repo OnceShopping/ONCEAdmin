@@ -147,10 +147,9 @@ public class ItemController {
 			ItemDetailVO itemDetail = new ItemDetailVO();
 			
 			itemDetail.setSize(size[i]);
+			int itemCount = Integer.parseInt(counts[i]);
 			
-			int count = Integer.parseInt(counts[i]);
-			itemDetail.setCount(count);
-			
+			itemDetail.setCount(itemCount);
 			itemDetail.setItemNo(itemVO.getItemNo());
 		
 			service.addItemDetail(itemDetail);
