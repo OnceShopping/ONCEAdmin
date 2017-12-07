@@ -44,9 +44,11 @@
 <script type="text/javascript">
 
 var index = 0; //추가된 size와 count에 해당하는 index
+var img = 0; //상세 이미지를 등록했는지 여부
 
+var second = 0;
+	
 	$(document).ready(function(){
-
 		
 		var add = false;
 			
@@ -83,7 +85,7 @@ var index = 0; //추가된 size와 count에 해당하는 index
 		});
 		
 		//다이얼로그 format 정의 - alert창
-		$( "#dialog" ).dialog({
+		$('#dialog').dialog({
 			 autoOpen: false,
 		      modal: true,
 		      width: '300',
@@ -95,6 +97,18 @@ var index = 0; //추가된 size와 count에 해당하는 index
 		    	 }
 		      }
 		 });
+		
+		$('#uploadLogo1').click(function(){
+			first = $('#uploadLogo1').val();
+		});
+		
+		$('#uploadLogo2').click(function(){
+			second = $('#uploadLogo2').val();
+		});
+		
+		$('#uploadLogo3').click(function(){
+			third = $('#uploadLogo3').val();
+		});
 	});
 
 	//리스트에 추가한 상품의 size와 갯수를 표시
@@ -138,12 +152,37 @@ var index = 0; //추가된 size와 count에 해당하는 index
 	}
 	
 	//이미지 미리 보기
-    function fileInfo(f){
-    	var file = f.files;
+    function fileInfo(f, imgIndex){
+				
+		var file = f.files;
     	var reader = new FileReader();
     	reader.onload = function(rst){
-    		$('.carousel-inner').prepend("<div class='item active'><img src='" + rst.target.result+"</div>");
-    		$('.item').prepend('<div class="carousel-caption">AAA</div>');
+    		
+    		if(img==0){ //상세 이미지를 등록했는지 여부 - 처음 이미지를 등록하는 경우
+	   			++img;
+    			if(imgIndex=='0')
+    				$('#itemImg').prepend("<div class='item active' id='detail1'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200' style='margin-left: auto; margin-right: auto;'></div>");
+    			else if(imgIndex=='1')
+    				$('#itemImg').prepend("<div class='item active' id='detail2'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200' style='margin-left: auto; margin-right: auto;'></div>");
+    			else
+    				$('#itemImg').prepend("<div class='item active' id='detail3'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200' style='margin-left: auto; margin-right: auto;'></div>");
+    		}else{
+				if(imgIndex=='0'){
+					if(first=="")
+						$('#itemImg').append("<div class='item' id='detail1'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'></div>");
+					else
+						$('#detail1').html("<img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'>");
+				}else if(imgIndex=='1'){
+					if(second=="")
+						$('#itemImg').append("<div class='item' id='detail2'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'></div>");
+					else
+						$('#detail2').html("<img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'>");
+				}else
+					if(third=="")
+						$('#itemImg').append("<div class='item' id='detail3'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'></div>");
+					else
+						$('#detail3').html("<img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'>");
+    		}
     	}
     	reader.readAsDataURL(file[0]);
     }
@@ -300,10 +339,10 @@ var index = 0; //추가된 size와 count에 해당하는 index
 									<i class="fa fa-angle-double-right" aria-hidden="true"></i> <span
 										style="font-size: 10pt; font-weight: bold;  margin-top:50px;">상품 이미지 등록 </span>
 								</div>
-								<table style="margin-left: 100px;" id="images">
+								<table style="margin-left: 100px; id="images">
 									<tr style="height: 100px;">
 										<td style="width: 200px;">상세 이미지 등록</td>
-										<td><input type="file" value="파일 찾기" id="uploadLogo1" accept="image/*" onchange="javascript:document.getElementById('file_route').value=this.value; fileInfo(this);"><input type="hidden" readonly="readonly" title="File Route" id="file_route"></td>
+										<td><input type="file" value="파일 찾기" id="uploadLogo1" accept="image/*" onchange="fileInfo(this, '0')"></td>
 										<!-- 이미지 -->
 										<td rowspan="3" style="width: 300px;">
 											<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
@@ -315,7 +354,7 @@ var index = 0; //추가된 size와 count에 해당하는 index
 											  </ol>
 											
 											  <!-- Wrapper for slides -->
-											  <div class="carousel-inner" role="listbox">
+											  <div class="carousel-inner" role="listbox" id="itemImg" >										   
 											  </div>
 											
 											  <!-- Controls -->
@@ -332,11 +371,11 @@ var index = 0; //추가된 size와 count에 해당하는 index
 									</tr>
 									<tr style="height: 100px;">
 										<td>상세 이미지 등록</td>
-										<td><input type="file" value="파일 찾기" id="uploadLogo2" accept="image/*" onchange="javascript:document.getElementById('file_route').value=this.value; fileInfo(this);"><input type="hidden" readonly="readonly" title="File Route" id="file_route"></td>
+										<td><input type="file" value="파일 찾기" id="uploadLogo2" accept="image/*" onchange="fileInfo(this, '1')"></td>
 									</tr>
 									<tr style="height: 100px;">
 										<td>상세 이미지 등록</td>
-										<td><input type="file" value="파일 찾기" id="uploadLogo3" accept="image/*" onchange="javascript:document.getElementById('file_route').value=this.value; fileInfo(this);"><input type="hidden" readonly="readonly" title="File Route" id="file_route"></td>
+										<td><input type="file" value="파일 찾기" id="uploadLogo3" accept="image/*" onchange="fileInfo(this, '2')"></td>
 									</tr>
 								</table>
 								<br /> <br />
@@ -364,7 +403,7 @@ var index = 0; //추가된 size와 count에 해당하는 index
 											name="addItem" id="addItem" value="추가"></td>
 									</tr>
 								</table>
-								<br/>
+								<br/><br/>
 								</div>
 								<br/>
 								<div>
