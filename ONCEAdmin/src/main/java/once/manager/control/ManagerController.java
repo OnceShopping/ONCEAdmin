@@ -107,7 +107,7 @@ public class ManagerController {
 				return "infoManager/itemManage/addItem";
 			}else if(loginVO.getType().equals("storeManager")) {
 				
-				return "storeManager/itemManage/register";
+				return "storeManager/boardQA/test";
 			}else {
 				model.addAttribute("message", "type이 이상합니다");
 				

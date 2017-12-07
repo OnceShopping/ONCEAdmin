@@ -319,7 +319,6 @@ ul {
 					<div class="col-sm-6 text-center-xs" style="margin-left: 150px">
 					<br/>
 					<!-- 검색 -->
-							
 								<select name="searchC" class="form-control m-b" style="margin-top: 15px" id="searchC">
 									<option value="t">제목</option>
 									<option value="w">작성자</option>
@@ -335,6 +334,8 @@ ul {
 					</section>
 					<a href="#" class="hide nav-off-screen-block"
 						data-toggle="class:nav-off-screen,open" data-target="#nav,html"></a>
+						
+						
 				</section>
 				<!-- 메뉴 사이즈 조정 끝-->
 

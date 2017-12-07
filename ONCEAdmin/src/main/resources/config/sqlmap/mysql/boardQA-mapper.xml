@@ -78,6 +78,8 @@
  	
  	<!-- 모든 조건 검색 -->
  	<select id="selectSearch" resultMap="MapBoardVO" parameterType="hashMap">
+ 		
+ 		
  		<include refid="selectAll" />
  		<where>
 			<if test="date1 != null and date2 != null">

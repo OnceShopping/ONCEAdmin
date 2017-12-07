@@ -27,7 +27,6 @@ import once.manager.vo.ManagerVO;
 @RequestMapping("/boardQA")
 @Controller
 public class BoardQAController {
-	
 	@Autowired
 	private BoardQAService service;
 	
@@ -35,8 +34,11 @@ public class BoardQAController {
 	private ManagerService mService;
 	
 	@RequestMapping("/list")
-	public ModelAndView list(HttpServletRequest request) {
-
+	public ModelAndView list(HttpServletRequest request, HttpSession session) {
+		
+		ManagerVO loginVO = (ManagerVO)session.getAttribute("loginVO");
+		
+		String type = checkType(loginVO);
 		// 현재 페이지 번호 저장 변수
 		int pageNo = 1;
 		if (request.getParameter("pageNo") != null) {
@@ -126,13 +128,12 @@ public class BoardQAController {
 		List<BoardQAVO> Searchlist = service.selectSearch(boardQAMap);
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("BoardList", Searchlist);
-		mav.setViewName("admin/boardQA/list");
-		
+		mav.setViewName(type+"/boardQA/list");
 		return mav;
 	}
 
 	@RequestMapping(value = "/detail/{boardNo}", method = RequestMethod.GET)
-	public String selectOne(@PathVariable int boardNo, Model mod, HttpServletRequest request, HttpServletResponse response) {
+	public String selectOne(@PathVariable int boardNo, Model mod, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		BoardQAVO boardQAVO = service.selectOneBoard(boardNo);
 		Cookie[] Cookies = request.getCookies(); //모든 쿠키의 값을 가져옴
 		System.out.println(Cookies.length);
@@ -149,16 +150,20 @@ public class BoardQAController {
 	}
 		mod.addAttribute("boardQAVO", boardQAVO);
 		
-		return "admin/boardQA/detail";
+		ManagerVO loginVO = (ManagerVO)session.getAttribute("loginVO");
+		String type = checkType(loginVO);
+		return type + "/boardQA/detail";
 	}
 	
 	@RequestMapping(value = "/write/{boardNo}", method = RequestMethod.GET)
-	public String writeForm(Model model, @PathVariable int boardNo) {
+	public String writeForm(Model model, @PathVariable int boardNo, HttpSession session) {
 		BoardQAVO boardQAVO = new BoardQAVO();
 		
 		model.addAttribute("boardQAVO", boardQAVO);
 		
-		return "admin/boardQA/write";
+		ManagerVO loginVO = (ManagerVO)session.getAttribute("loginVO");
+		String type = checkType(loginVO);
+		return type + "/boardQA/write";
 	}
 	
 	@RequestMapping(value = "/write/{boardNo}", method = RequestMethod.POST)
@@ -200,7 +205,8 @@ public class BoardQAController {
 		
 		model.addAttribute("boardQAVO", boardQAVO);
 		
-		return "admin/boardQA/modify";
+		/*return "admin/boardQA/modify";*/
+		return "storeManager/boardQA/modify";
 	}
 	
 	@RequestMapping(value = "/{boardNo}", method = RequestMethod.PUT)
@@ -209,4 +215,19 @@ public class BoardQAController {
 		return "redirect:/boardQA/detail/" + boardNo;
 	}
 	
+	public String checkType(ManagerVO loginVO) {
+		String type=null;
+		
+		if(loginVO.getType().equals("admin")) {
+			type="admin";
+		} else if(loginVO.getType().equals("infoManger")) {
+			type="infoManger";
+		}else if(loginVO.getType().equals("storeManager")) {
+			type="storeManager";
+		}
+		
+		return type;
+	}
 }
+
+// 
