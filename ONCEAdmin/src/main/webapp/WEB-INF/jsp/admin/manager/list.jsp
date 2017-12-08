@@ -606,11 +606,11 @@
 										<tr>
 											<th width="10%" style="text-align: right;">이름</th>
 											<td width="5%" />
-											<td width="40%"><input type="text" id="name" name="name" pattern="([^A-Za-z0-9]+$|[A-Za-z]+$)" title="한글 또는 영어로 입력해주세요."></td>
+											<td width="40%"><input type="text" id="name" name="name" pattern="(^[a-zA-Z0-9]*$)" title="한글 또는 영어로 입력해주세요."></td>
 											<th width="20%" style="text-align: right;">연락처</th>
 											<td width="5%" />
 											<td width="25%"><input type="tel" id="telephone"
-												name="telephone" pattern="(010)-\d{3,4}-\d{4}" title="010-xxx-xxxx 또는  010-xxxx-xxxx 형식으로   작성해주세요." ></td>
+												name="telephone" pattern="\d{3}-\d{3,4}-\d{4}" title="xxx-xxx(3자리/4자리)-xxxx 형식으로   작성해주세요." ></td>
 										</tr>
 										<tr height="20px" />
 										<tr>
