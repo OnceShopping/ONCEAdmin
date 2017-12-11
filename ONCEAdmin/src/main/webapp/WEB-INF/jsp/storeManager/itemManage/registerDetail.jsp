@@ -273,7 +273,7 @@ var third = 0;
 													관리</span>
 										</a>
 											<ul class="nav dk">
-												<li><a href="${pageContext.request.contextPath}/item/register"
+												<li class="active"><a href="${pageContext.request.contextPath}/item/register"
 													class="auto"> <i class="i i-dot"></i> <span>상품
 															등록</span>
 												</a></li>
@@ -344,7 +344,7 @@ var third = 0;
 								<div style="background-color: #E0DFDF; height: 30px; padding: 5px;"
 									id="registerImg">
 									<i class="fa fa-angle-double-right" aria-hidden="true"></i> <span
-										style="font-size: 10pt; font-weight: bold;  margin-top:50px;">상품 이미지 등록 </span>
+										style="font-size: 10pt; font-weight: bold;  margin-top:50px;">&nbsp;&nbsp;&nbsp;상품 이미지 등록 </span>
 								</div>
 								<table style="margin-left: 100px;" id="images">
 									<tr style="height: 100px;">
@@ -388,7 +388,7 @@ var third = 0;
 										정보 등록 </span>
 								</div>
 								<div>
-								<p style="padding-top: 50px; font-weight: bold; margin-left: 25px; margin-bottom: 10px;">[SIZE 및 COUNT 등록]</p>
+								<p style="padding-top: 50px; font-weight: bold; margin-left: 25px; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;[SIZE 및 COUNT 등록]</p>
 								<table id="itemDetail" style="margin-left: 90px; margin-top: 20px;">
 									<tr>
 										<td style="width: 50px;" align="right">SIZE</td>

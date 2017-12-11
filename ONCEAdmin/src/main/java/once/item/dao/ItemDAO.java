@@ -2,6 +2,7 @@ package once.item.dao;
 
 
 import java.util.List;
+import java.util.Map;
 
 import once.item.vo.ItemContentsVO;
 import once.item.vo.ItemDetailVO;
@@ -43,5 +44,14 @@ public interface ItemDAO {
 	public List<ItemContentsVO> search(ItemContentsVO item);
 	
 	//item list 페이징
-	public List<ItemContentsVO> selectPage(List page);
+	public List<ItemContentsVO> selectPage(Map<String, Object> ItemContentsVOMap);
+	
+	//item 삭제
+	public void deleteItem(int detailNo);
+	
+	//item count 수정을 위해 item 찾기
+	public ItemContentsVO findItem(int detailNo);
+	
+	//item count 수정
+	public void updateItem(ItemContentsVO item);
 }

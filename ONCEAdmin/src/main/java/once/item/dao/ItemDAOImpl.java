@@ -2,11 +2,13 @@ package once.item.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import once.boardQA.vo.BoardQAVO;
 import once.item.vo.ItemContentsVO;
 import once.item.vo.ItemDetailVO;
 import once.item.vo.ItemImgVO;
@@ -39,7 +41,18 @@ public class ItemDAOImpl implements ItemDAO {
 	//itemColor, imgTable을 위한 F.K(item 테이블의 num) 찾기
 	@Override
 	public int findNum() {
-		return sqlSession.selectOne("once.item.dao.ItemDAO.findNum");
+		
+		String StringNum = sqlSession.selectOne("once.item.dao.ItemDAO.findNum");
+		int num=0;		
+		
+		if(StringNum == null) {
+			num = 1;
+		}else {
+			num = Integer.parseInt(StringNum);
+			num += 1;
+		}
+					
+		return num; 		
 	}
 	
 	//itemColor 테이블에 상품 등록
@@ -118,11 +131,30 @@ public class ItemDAOImpl implements ItemDAO {
 	
 	//itemList 페이징
 	@Override
-	public List<ItemContentsVO> selectPage(List page) {
+	public List<ItemContentsVO> selectPage(Map<String, Object> ItemContentsVOMap) {
 		
-		List<ItemContentsVO> list = sqlSession.selectList("once.item.dao.ItemDAO.selectPage", page);
+		List<ItemContentsVO> list = sqlSession.selectList("once.item.dao.ItemDAO.selectPage", ItemContentsVOMap);
 		
 		return list;
 	}
-
+	
+	//item 삭제
+	@Override
+	public void deleteItem(int detailNo) {
+		sqlSession.delete("once.item.dao.ItemDAO.deleteItem", detailNo);
+	}
+	
+	//item count 수정을 위해 item 찾기
+	@Override
+	public ItemContentsVO findItem(int detailNo) {
+		ItemContentsVO item = sqlSession.selectOne("once.item.dao.ItemDAO.findItem", detailNo);
+		return item;
+	}
+	
+	//item 수량 수정
+	@Override
+	public void updateItem(ItemContentsVO item) {
+		sqlSession.update("once.item.dao.ItemDAO.updateItem", item);
+	}
+	
 }

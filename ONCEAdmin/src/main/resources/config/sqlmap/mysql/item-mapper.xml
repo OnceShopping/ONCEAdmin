@@ -6,7 +6,7 @@
      
     <!-- ref) 공통  select -->
      <sql id="refItem">
-     	select storeNo, storeName, managerId, itemName, price, itemCategory1, num, itemCategory2, itemCategory3, color, itemNo, size, count, detailNo
+     	select storeNo, storeName, itemName, price, itemCategory1, num, itemCategory2, itemCategory3, color, itemNo, size, count, detailNo
      	from itemList
      </sql>
      
@@ -29,7 +29,7 @@
     
     <!-- store 검색 -->
     <select id="findStore" parameterType="String" resultType="ItemContentsVO">
-    	select Store.storeName, Store.storeNo
+    	select Store.storeName, StoreMember.storeNo, StoreMember.managerId 
     	from Store 
     	inner join StoreMember on Store.storeNo=StoreMember.storeNo
     	where StoreMember.managerId=#{ managerId }
@@ -37,8 +37,8 @@
     
     <!-- item 등록 -->
     <insert id="addItem" parameterType="ItemContentsVO">
-    	insert into Item (storeNo, itemName, itemCategory1, itemCategory2, itemCategory3, price)
-    	values (#{storeNo}, #{itemName}, #{itemCategory1}, #{itemCategory2}, #{itemCategory3}, #{price})
+    	insert into Item (storeNo, itemName, itemCategory1, itemCategory2, itemCategory3, price, regDate)
+    	values (#{storeNo}, #{itemName}, #{itemCategory1}, #{itemCategory2}, #{itemCategory3}, #{price}, curDate())
     </insert>
     
     <!-- item 테이블에 item의 detail 추가 등록 -->
@@ -49,7 +49,7 @@
     </update>
     
   	<!-- Item 테이블에서 ItemColor 테이블과 ImgTable의 F.K가 되는 num 값 가져오기 -->
-    <select id="findNum" resultType="INT">
+    <select id="findNum" resultType="String">
     	select Max(num)
     	from Item
     </select>
@@ -85,13 +85,6 @@
     	where itemNo = #{itemNo}
     </select>
     
-    <!-- 상품 추가 page에서 선택한 사이즈 삭제 -->
-    <delete id="deleteSize" parameterType="String">
-    	delete from itemDetail
- 		where 
- 		size = #{size}
-    </delete>
-    
     <!-- size가 동일한 상품의 중복 추가 여부 확인 -->
     <select id="checkSize" parameterType="ItemContentsVO" resultType="ItemContentsVO">
     	<include refid="refItem"/>
@@ -113,10 +106,45 @@
  		</choose>
  	</select>
  	
- 	<!-- item list 페이징 -->
- 	<select id="selectPage" parameterType="java.util.List" resultType="ItemContentsVO">
+ 	<!-- item list 페이징 /sorting -->
+ 	<select id="selectPage" parameterType="hashMap" resultType="ItemContentsVO">
  		<include refid="refItem"/>
- 		order by detailNo DESC
- 		limit #{list[0]}, #{list[1]}
+ 		where storeName = #{storeName}
+ 		<choose>
+ 			<when test="filterType == 'itemCategory1'">
+ 				order by itemCategory1 ASC
+ 			</when>
+ 			<when test="filterType == 'itemCategory2'">
+ 				order by itemCategory2 ASC
+ 			</when>
+ 			<when test="filterType == 'itemCategory3'">
+ 				order by itemCategory3 ASC
+ 			</when>
+ 			<otherwise>
+ 				order by detailNo ASC
+ 			</otherwise>
+ 		</choose>		
+ 		<if test="startPage != null and count != null">
+ 			limit #{startPage}, #{count}
+ 		</if>	
  	</select>
+ 	
+ 	<!-- item 삭제 -->
+ 	<delete id="deleteItem" parameterType="INT">
+ 		delete from itemDetail
+ 		where detailNo = #{detailNo}
+ 	</delete>
+ 	
+ 	<!-- item count 수정을 위해 item 찾기 -->
+ 	<select id="findItem" parameterType="INT" resultType="ItemContentsVO">
+ 	<include refid="refItem"/>
+ 		where detailNo = #{detailNo}
+ 	</select>
+ 	
+ 	<!-- item 수량 수정 -->
+ 	<update id="updateItem" parameterType="ItemContentsVO">
+ 		update ItemDetail
+    	set count = #{count}
+    	where detailNo = #{detailNo}
+ 	</update>
 </mapper>

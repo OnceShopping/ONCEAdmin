@@ -5,8 +5,10 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,7 +44,7 @@ public class ItemController {
 	
 	private ItemContentsVO itemVO;
 	private ItemImgVO itemImg;
-
+	private String category = null;
 	
 	@RequestMapping(value="/register", method=RequestMethod.GET)
 	public ModelAndView register(HttpSession session) {
@@ -67,6 +70,7 @@ public class ItemController {
 		String id = mRequest.getParameter("id");
 		itemVO = service.findStore(id); //storeName, storeNo 설정
 		
+		
 		itemVO.setItemName(mRequest.getParameter("itemName"));
 		itemVO.setPrice(Integer.parseInt(mRequest.getParameter("price")));
 		itemVO.setItemCategory1(mRequest.getParameter("itemCategory1"));
@@ -74,7 +78,7 @@ public class ItemController {
 		itemVO.setItemCategory3(mRequest.getParameter("itemCategory3"));		
 	
 	
-		int num = service.findNum() + 1; //item을 추가하지 않은 상황에서는 num은 +1
+		int num = service.findNum(); //item을 추가하지 않은 상황
 		
 		itemVO.setColor(mRequest.getParameter("color"));
 		itemVO.setItemNo(mRequest.getParameter("itemNo"));
@@ -110,7 +114,7 @@ public class ItemController {
 		        long fileSize = mFile.getSize();
 			            
 		        // 고유한 파일명 만들기   
-		        String saveFileName = "mlec-" + UUID.randomUUID().toString() + ext;
+		        String saveFileName = "once-" + UUID.randomUUID().toString() + ext;
 		         
 		        // 임시저장된 파일을 원하는 경로에 저장
 		        mFile.transferTo(new File(uploadDir + saveFileName));
@@ -170,7 +174,6 @@ public class ItemController {
 		
 		// 실행되는 웹어플리케이션의 실제 경로 가져오기
 	    String uploadDir = servletContext.getRealPath("/upload/");
-	    System.out.println(uploadDir);
     
 	    Iterator<String> iter = mRequest.getFileNames();
 	    
@@ -197,7 +200,7 @@ public class ItemController {
 		            
 		        long fileSize = mFile.getSize();
 		               
-		        String saveFileName = "mlec-" + UUID.randomUUID().toString() + ext;
+		        String saveFileName = "once-" + UUID.randomUUID().toString() + ext;
 		         
 		        mFile.transferTo(new File(uploadDir + saveFileName));
 		        
@@ -226,27 +229,54 @@ public class ItemController {
 	//매장의 등록된 상품 리스트 출력
 	@RequestMapping(value = "/list", method=RequestMethod.GET)
 	public ModelAndView itemList(HttpSession session, HttpServletRequest request) {
-				
+			
 		ManagerVO manager = (ManagerVO)session.getAttribute("loginVO");
+		
+		Map<String, Object> ItemContentsVOMap = new HashMap<>();
 		
 		String storeName = service.findStore(manager.getManagerId()).getStoreName();
 		
+		ItemContentsVOMap.put("storeName", storeName);
+		
+		if(category == null)
+			ItemContentsVOMap.put("filterType", null);
+		else
+			ItemContentsVOMap.put("filterType", category);
+		
+
+		// 현재 페이지 번호 저장 변수
 		int pageNo = 1;
 		if (request.getParameter("pageNo") != null) {
+			// 페이지 파라미터가 있는 경우 현재 페이지 번호를 설정
 			pageNo = Integer.parseInt(request.getParameter("pageNo"));
 		} 
-
-		int listSize = 10;
+		// 한페이지에 보여질 목록 수
+		int listSize = 15;
 		
-		int totalCount = service.selectAll(storeName).size();
-
+		ItemContentsVOMap.put("startPage", null);
+		ItemContentsVOMap.put("count", null );	
+		// storeName이 일치하는 전체 게시글 카운트
+		int totalCount = service.selectPage(ItemContentsVOMap).size();
+		
+		ItemContentsVOMap.put("startPage", (pageNo -1 ) * listSize);
+		ItemContentsVOMap.put("count", listSize );	
+		
+		List<ItemContentsVO> itemList = service.selectPage(ItemContentsVOMap);
+		
+		// 마지막 페이지 구하기
 		int lastPage = (totalCount % listSize == 0) ? totalCount / listSize 
 				                                    : totalCount / listSize + 1;	
+
 		request.setAttribute("pageNo"  , pageNo);
 		request.setAttribute("lastPage", lastPage);
-		
+
+
+		// ======================================================================
+		// 탭 관련 작업 추가 파트
+		// ======================================================================
+		// 목록에 보여질 탭 사이즈
 		int tabSize  = 5;
-		 
+		// 현재 페이지에 해당하는 탭 위치 
 		int currTab   = (pageNo  -1) / tabSize + 1;
 		int beginPage = (currTab -1) * tabSize + 1;
 		int endPage   = (currTab * tabSize < lastPage) ? currTab * tabSize 
@@ -254,23 +284,26 @@ public class ItemController {
 		
 		request.setAttribute("beginPage", beginPage);
 		request.setAttribute("endPage"  , endPage);
-		
-		
-		List<Integer> page = new ArrayList<>();
-		page.add( (pageNo - 1) * listSize );
-		page.add( listSize );
-		List<ItemContentsVO> itemList = service.selectPage(page);
+		// ======================================================================
 	
 		
 		ModelAndView mav = new ModelAndView();
-	
-		mav.addObject("itemList", itemList);
+		
 		mav.addObject("storeName", storeName);
-		
-		mav.setViewName("storeManager/itemManage/list");
-		
+		mav.addObject("itemList", itemList);
+		mav.setViewName("storeManager/itemManage/list");		
+				
 		return mav;
 
+	}
+	
+	//Sorting item
+	@RequestMapping(value="/list", method=RequestMethod.POST)
+	public String sortItem(HttpServletRequest request){
+	
+		category = request.getParameter("category");
+		
+		return "redirect:/item/list";
 	}
 	
 	//item 검색
@@ -302,5 +335,114 @@ public class ItemController {
 			e.printStackTrace();
 		}
 		return itemList;
+	}
+	
+	//재고 관리
+	@RequestMapping(value="/manage")
+	public 	ModelAndView manageItem(HttpSession session, HttpServletRequest request) {
+		
+		ManagerVO manager = (ManagerVO)session.getAttribute("loginVO");
+
+		Map<String, Object> ItemContentsVOMap = new HashMap<>();		
+		String storeName = service.findStore(manager.getManagerId()).getStoreName();
+		ItemContentsVOMap.put("storeName", storeName);
+		
+		
+		ItemContentsVOMap.put("filterType", null); //category를 선택하는 것이 없음
+		
+
+		// 현재 페이지 번호 저장 변수
+		int pageNo = 1;
+		if (request.getParameter("pageNo") != null) {
+			// 페이지 파라미터가 있는 경우 현재 페이지 번호를 설정
+			pageNo = Integer.parseInt(request.getParameter("pageNo"));
+		} 
+		// 한페이지에 보여질 목록 수
+		int listSize = 15;
+		
+		ItemContentsVOMap.put("startPage", null);
+		ItemContentsVOMap.put("count", null );	
+		// storeName이 일치하는 전체 게시글 카운트
+		int totalCount = service.selectPage(ItemContentsVOMap).size();
+		
+		ItemContentsVOMap.put("startPage", (pageNo -1 ) * listSize);
+		ItemContentsVOMap.put("count", listSize );	
+		
+		List<ItemContentsVO> itemList = service.selectPage(ItemContentsVOMap);
+		
+		// 마지막 페이지 구하기
+		int lastPage = (totalCount % listSize == 0) ? totalCount / listSize 
+				                                    : totalCount / listSize + 1;	
+
+		request.setAttribute("pageNo"  , pageNo);
+		request.setAttribute("lastPage", lastPage);
+
+
+		// ======================================================================
+		// 탭 관련 작업 추가 파트
+		// ======================================================================
+		// 목록에 보여질 탭 사이즈
+		int tabSize  = 5;
+		// 현재 페이지에 해당하는 탭 위치 
+		int currTab   = (pageNo  -1) / tabSize + 1;
+		int beginPage = (currTab -1) * tabSize + 1;
+		int endPage   = (currTab * tabSize < lastPage) ? currTab * tabSize 
+				                                       : lastPage;
+		
+		request.setAttribute("beginPage", beginPage);
+		request.setAttribute("endPage"  , endPage);
+		// ======================================================================
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("itemList", itemList);
+		mav.addObject("storeName", storeName);
+		mav.setViewName("storeManager/itemManage/manage");
+		
+		return mav;
+	}
+	
+	//item 삭제
+	@RequestMapping(value="/manage", method=RequestMethod.DELETE)
+	public String deleteItem(HttpServletRequest request) {
+		
+		String [] itemNos = request.getParameterValues("detailNo");
+		
+		for(int i=0; i<itemNos.length; i++) {
+			int itemNo = Integer.parseInt(itemNos[i]);
+			service.deleteItem(itemNo);
+		}
+		
+		return "redirect:/item/manage";
+	}
+	
+	//item count 수정을 위해 item 찾기
+	@RequestMapping(value="/modify/{detailNo}")
+	public ModelAndView modifyItem(@PathVariable(value="detailNo") int detailNo) {
+	
+		ItemContentsVO item = new ItemContentsVO();
+		
+		item = service.findItem(detailNo);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("item", item);
+		mav.setViewName("storeManager/itemManage/modify");
+		return mav;
+	}
+	
+	//item 수량 수정
+	@RequestMapping(value="/update/{detailNo}", method=RequestMethod.PUT)
+	public String updateItem(@PathVariable(value="detailNo") int detailNo, HttpServletRequest request) {
+		
+		ItemContentsVO item = new ItemContentsVO();
+		
+		String Scount = request.getParameter("count");
+		int count = Integer.parseInt(Scount);
+		
+		item.setDetailNo(detailNo);
+		item.setCount(count);
+		
+		service.updateItem(item);
+		
+		return "redirect:/item/manage";
 	}
 }

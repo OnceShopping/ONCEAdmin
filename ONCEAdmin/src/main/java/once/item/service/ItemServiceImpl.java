@@ -1,6 +1,7 @@
 package once.item.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,7 +86,24 @@ public class ItemServiceImpl implements ItemService {
 	
 	//itemList 페이징
 	@Override
-	public List<ItemContentsVO> selectPage(List page) {
-		return dao.selectPage(page);
+	public List<ItemContentsVO> selectPage(Map<String, Object> ItemContentsVOMap) {
+		return dao.selectPage(ItemContentsVOMap);
+	}
+	
+	//item 삭제
+	@Override
+	public void deleteItem(int detailNo) {
+		dao.deleteItem(detailNo);
+	}
+	
+	//item count 수정을 위해 item 찾기
+	@Override
+	public ItemContentsVO findItem(int detailNo) {
+		return dao.findItem(detailNo);
+	}
+	
+	@Override
+	public void updateItem(ItemContentsVO item) {
+		dao.updateItem(item);
 	}
 }
