@@ -120,24 +120,30 @@ var third = 0;
 
 	//리스트에 추가한 상품의 size와 갯수를 표시
 	function addList(size, count){
+		++index;
+		var indexItem = index;
 		
-		var contents = "<tr>";
+		var contents = "<tr id="+indexItem+">";
 		contents += "<td style='text-align:center;'>"+$('#itemName').val()+"</td>";
 		contents += "<td style='text-align:center;'>"+$('#itemNo').val()+"</td>";
 		contents += "<td style='text-align:center;'>"+size+"<input type='hidden' class='addSize' value='"+size+"' name='size'></td>";
 		contents += "<td style='text-align:center;'>"+count+"<input type='hidden' value='"+count+"' name='count'></td>";
-		contents += "<td style='width: 20%; text-align:center;'><a class='delete' id="+size+" onclick=deleteItem('"+(++index)+"') style='color:red;'><i class='fa fa-times' aria-hidden='true'></i></a></td>";
+		contents += "<td style='width: 20%; text-align:center;'><a class='delete' id="+size+" onclick=deleteItem('"+(index)+"') style='color:red;'><i class='fa fa-times' aria-hidden='true'></i></a></td>";
 		contents += "</tr>";
 		
 		$('#AddList').append(contents);
 		
 	}
 
+	//추가한 size와 수량 삭제
 	function deleteItem(index){
-		var item = document.getElementsByClassName('delete')[index-1].id;
-		var list = document.getElementById('AddList');
 		
-		list.deleteRow(index);
+		$('tr').each(function(){
+			var check = $(this).attr('id');
+			if(check==index){
+				$(this).remove();
+			}
+		});
 	}
 	
 	//추가한 사이즈가 존재하는지 여부 확인

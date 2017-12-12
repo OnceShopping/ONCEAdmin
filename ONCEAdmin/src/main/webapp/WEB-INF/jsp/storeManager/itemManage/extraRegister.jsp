@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>	
 <!DOCTYPE html>
 <html class="app">
 <head>
@@ -43,61 +44,75 @@
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
-	$(document).ready(function() {
 
-		//상품 코드가 기존에 존재하는지 여부 확인
-		$("#itemNo").change(function() {
-								
-			$.ajax({
-				url : "${ pageContext.request.contextPath }/item/checkItem",
-				dataType : 'JSON',
-				data : ({
-					'itemNo' : $('#itemNo').val()
-					}),
-				type : "get",
-				cache : false,
-				contentType : "application/json; charset=UTF-8",
-				success : function(data) {
-					if (data == true){ // 존재하지 않은 경우
-						$('#checkItemNo').html("<span></span>");
-						infoAlert("해당 상품코드로 상품이 등록되어 있습니다.<br/>상품을 추가 등록 하시겠습니까?<br/><br/><span style='font-weight:bold;'><span style='color:red;'><i class='fa fa-exclamation' aria-hidden='true'></i>&nbsp;)</span>&nbsp;&nbsp;취소를 누르실 경우, <br/>해당 상품 코드 외 다른 상품 코드로 상품을 등록시켜주시기 바랍니다.</span>");
-					}else
-						$('#checkItemNo').html("<span style='color:green;'><i class='fa fa-check' aria-hidden='true'></i>&nbsp;&nbsp;&nbsp;해당 상품 코드로 등록이 가능합니다.</span>");
-				},
-					error : function(request,status, error) {
-						alert("에러 발생! : "+ request.status+ "message : "+ request.responseText+ "\n"+ "error : "+ error);
-					}
-				});
-			});
+var index = 0; //[SIZE 및 COUNT 추가 등록] 테이블에 해당하는 index
+var addIndex = 0; //새로 추가된 size와 count에 해당하는 index
+
+	$(document).ready(function(){
+		index = $('#index').val();
 		
-		//중분류 선택에 따른 소분류 표시 변경
-		$("#middle").change(function(){
-			var middleType = $(this).val();
+		var add = false;
 			
-			if(middleType=="cloths")
-				$('.stuff').hide();
-			else
-				$('.cloths').hide();
+		//상품의 size와 갯수를 추가하는 로직
+		$('#addItem').click(function(){
+			
+			alert('index : ' + index);
+			var size = $('#size').val();
+			var count = $('#count').val();
+			
+			if(size==""&&count=="")
+				infoAlert('추가하려는 상품의 size와 count를 입력해주세요.');
+			else if(size=="")
+				infoAlert('추가하려는 상품의  size를 입력해주세요.');
+			else if(count=="")
+				infoAlert('추가하려는 상품의  count를 입력해주세요.');
+			else{
+				if(!checkSize(size)) {//기존에 추가된 size가 없는 경우
+					addList(size, count);
+					add = true;
+					++addIndex;
+				}else
+					infoAlert('추가한 사이즈가 바로 아래 리스트에 존재합니다.<br/>다시 작성해주세요.');
+
+				$('#size').val('');
+				$('#count').val('');
+			}	
 		});
-		
-		//소분류 선택에 따른 중분류 자동 선택
-		$("#small").change(function(){
-			
-			var middleType = $("#middle").val();
-			var smallType = $(this).val();
-			
-			if((smallType=="shoes")||(smallType=="bag")||(smallType=="accessory"))
-				$("#middle").val('stuff').prop("selected", true);
-			else
-				$("#middle").val('cloths').prop("selected", true);
-		});	
 		
 		//다이얼로그 format 정의 - alert창
 		$('#dialog').dialog({
 			 autoOpen: false,
 		      modal: true,
 		      width: '300',
-		      height: '250',
+		      height: '245',
+		      padding : '10px',
+		      buttons : {
+		    	 OK : function(){	  
+		    	  	$(this).dialog("close");
+		    	 }
+		      }
+		 });
+				
+		//상품의 size와 수량을 추가하지 않은 경우를 위한 예외 처리
+		$('#finish').click(function() {	
+			if(add==false) 
+				infoAlert("<span style='text-align:left;'><strong>[필수 입력]</strong></span><br/><br/>상품의 size와 count를 입력해주세요.");
+			else if(addIndex==0)
+				askAlert("현재 상품의 size와 count를 추가하지 않으시겠습니까?<br/>[OK] 버튼 클릭 시 상품 리스트 페이지로 이동합니다.");
+			else
+				document.getElementById("registerItem").submit();
+		});
+		
+		$('#registerItem').submit(function(){
+			return false;	
+		});
+		
+		//다이얼로그 format 정의 - alert창
+		$('#dialog2').dialog({
+			 autoOpen: false,
+		      modal: true,
+		      width: '300',
+		      height: '220',
 		      padding : '10px',
 		      buttons : [{
 			    	id : "cancel", //취소 버튼
@@ -115,31 +130,77 @@
 			      }]
 		 });
 		
-		$('#cancel').click(function(){
-			$('#itemNo').val('');
-			$('#itemNo').focus();
+		//확인&취소 알림창의 [OK] 버튼을 클릭했을 경우
+		$('#OK').click(function(){
+			location.href="${pageContext.request.contextPath}/item/list";
 		});
 		
-		$('#OK').click(function(){
-			var itemNo = $('#itemNo').val();
-			location.href="${ pageContext.request.contextPath }/item/register/"+itemNo;
+		//확인&취소 알림창의 [CANCEL] 버튼을 클릭했을 경우		
+		$('#cancel').click(function(){
+			infoAlert("size와 count를 추가해주세요.");
 		});
 	});
+
+	//리스트에 추가한 상품의 size와 갯수를 표시
+	function addList(size, count){
+		index++;
+		var indexItem = index;
+		
+		var contents = "<tr id="+indexItem+">";
+		contents += "<td style='text-align:center;'>"+$('#itemName').val()+"</td>";
+		contents += "<td style='text-align:center;'>"+$('#itemNo').val()+"</td>";
+		contents += "<td style='text-align:center;'>"+size+"<input type='hidden' class='addSize' value='"+size+"' name='size'></td>";
+		contents += "<td style='text-align:center;'>"+count+"<input type='hidden' value='"+count+"' name='count'></td>";
+		contents += "<td style='width: 20%; text-align:center;'><a class='delete' id="+size+" onclick=deleteItem('"+(index)+"') style='color:red;'><i class='fa fa-times' aria-hidden='true'></i></a></td>";
+		contents += "</tr>";
+		
+		$('#AddList').append(contents);
+		
+	}
+
+	//추가한 size와 수량 삭제
+	function deleteItem(index){
+
+		--addIndex;
+		
+		$('tr').each(function(){
+			var check = $(this).attr('id');
+			if(check==index){
+				$(this).remove();
+			}
+		});
+	}
 	
-	//이미지 미리 보기
-    function fileInfo(f){
-    	var file = f.files;
-    	var reader = new FileReader();
-    	reader.onload = function(rst){
-    		$('#storeLogoImg').html('<img src="' + rst.target.result + '"height="250" width="200">');
-    	}
-    	reader.readAsDataURL(file[0]);
-    }
+	//추가한 사이즈가 존재하는지 여부 확인
+	function checkSize(size){
+		var result=false;
+		var sizeList = 	document.getElementsByClassName('addSize');
+		
+		for(var i=0; i<sizeList.length; i++){
+			if(sizeList[i].value==size)
+				result=true;
+		}
+		return result;
+	}
+	
 	//알림 모달 다이얼로그 태그 설정
 	function infoAlert(str){
 		$('#dialog').html("<div><p>"+str+"</p></div>");
 		$("#dialog").dialog("open");
 	}
+	
+	//확인&취소 모달 다이얼로그 태그 설정
+	function askAlert(str){
+		$('#dialog2').html("<div><p>"+str+"</p></div>");
+		$("#dialog2").dialog("open");
+	}
+	
+	//기존에 추가한 size와 수량은 삭제가 불가능하도록 설정
+	function impossible(){
+		++index;
+		infoAlert("<br/>죄송하지만 해당 상품은 현재 페이지에서 삭제할 수 없습니다.<br/><span style='font-weight:bold;'>상품의 수량을 변경/삭제를 원하시는 경우, </span>상품 제고 관리 페이지에서 원하시는 상품을 삭제하시기 바랍니다.");
+	}
+
 </script>
 <style type="text/css">
 .ui-menu {
@@ -157,6 +218,7 @@
 </head>
 <body>
 <div id="dialog" title="ALERT DIALOG"></div>
+<div id="dialog2" title="ALERT DIALOG"></div>
 	<section class="vbox">
 		<!-- 상단바 -->
 		<header
@@ -286,112 +348,64 @@
 					<section class="vbox">
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
-							<h3 class="font-bold m-b-none m-t-none">[${ storeName}] 상품 등록</h3>
-							<br /> <br />
-							<form action="${ pageContext.request.contextPath }/item/register"
-								method="post" enctype="multipart/form-data">
-									<div
-										style="background-color: #E0DFDF; height: 30px; padding: 5px; margin-top:50px;"
-										id="category">
-										<i class="fa fa-angle-double-right" aria-hidden="true"></i>
-										<span style="font-size: 10pt; font-weight: bold;">&nbsp;&nbsp;&nbsp;카테고리
-											선택</span>
-									</div>
-									<table id="categoryTable"
-										style="margin-left: 100px;">
-										<tr style="height: 50px;"></tr>
-										<tr>
-											<td><div style="font-weight: bold; font-size: 10pt;">[
-													대분류 ]</div></td>
-											<td style="width: 10px;"></td>
-											<td><div style="font-weight: bold; font-size: 10pt;">[
-													중분류 ]</div></td>
-											<td style="width: 10px;"></td>
-											<td><div style="font-weight: bold; font-size: 10pt;">[
-													소분류 ]</div></td>
-										</tr>
-										<tr style="height: 10px;"></tr>
-										<tr>
-											<td>
-												<div class="col-lg-4 m-l-n" style="width: 220px;">
-													<select multiple class="form-control" id="big"
-														name="itemCategory1" required="required">
-														<option value="men">남성</option>
-														<option value="woman">여성</option>
-													</select>
-												</div>
-											</td>
-											<td style="width: 10px;"></td>
-											<td>
-												<div class="col-lg-4 m-l-n" style="width: 220px;">
-													<select multiple class="form-control" id="middle"
-														name="itemCategory2" required="required">
-														<option value="cloths" id="cloths">의류</option>
-														<option value="stuff" id="stuff">잡화</option>
-													</select>
-												</div>
-											</td>
-											<td style="width: 10px;"></td>
-											<td>
-												<div class="col-lg-4 m-l-n" style="width: 220px;">
-													<select multiple class="form-control" id="small"
-														name="itemCategory3" required="required">
-														<option value="top" id="top" class="cloths">상의</option>
-														<option value="pants" id="pants" class="cloths">하의</option>
-														<option value="shoes" id="shoes" class="stuff">신발</option>
-														<option value="bag" id="bag" class="stuff">가방</option>
-														<option value="accessory" id="accessory" class="stuff">악세서리</option>
-													</select>
-												</div>
-											</td>
-										</tr>
-										<tr style="height: 50px;"></tr>
-									</table>
-								<br />
-								<div style="background-color: #E0DFDF; height: 30px; padding: 5px;" id="category">
-									<i class="fa fa-angle-double-right" aria-hidden="true"></i>
-									<span style="font-size: 10pt; font-weight: bold;">&nbsp;&nbsp;&nbsp;상품 등록</span>
-								</div>
+							<h3 class="font-bold m-b-none m-t-none">[${ itemOne.storeName}] 상품 추가 등록</h3>
+							<br /><br /><br /><br />
+							<form action="${ pageContext.request.contextPath }/item/extraAdd" method="post" id="registerItem">
 								<br /> <br />
-								<table style="margin-left: 100px;">
-									<tr style="height: 60px;">
-										<td style="width: 150px; text-align: left;">상품 이름</td>
-										<td style="width: 30px;"></td>
-										<td style="width: 300px;"><input type="text" name="itemName"
-											required="required"></td>
-										<td style="width: 100px;"/>	
-										<td rowspan="5" style="width: 300px;"><div class="storeLogoImg" id="storeLogoImg"></div></td>	
-									</tr>
-									<tr style="height: 60px;">
-										<td style="text-align: left;">상품 코드</td>
-										<td style="width: 30px;"></td>
-										<td colspan="2"><input type="text" name="itemNo" id="itemNo" required="required"><span style="padding-left: 20px;" id="checkItemNo"></span>
-										</td>
-									</tr>
-									<tr style="height: 60px;">
-										<td style="text-align: left;">색상</td>
-										<td style="width: 30px;"></td>
-										<td><input type="text" name="color" required="required"></td>
-										<td rowspan="3" style="width: 200px;"/>
-									</tr>
-									<tr style="height: 60px;">
-										<td style="text-align: left;">가격</td>
-										<td style="width: 30px;"></td>
-										<td><input type="number"
-											name="price" required="required"></td>
-									</tr>
-									<tr style="height: 70px;">
-										<td style="text-align: left: ;">상품 대표 이미지</td>
-										<td style="width: 30px;"></td>
-										<td style="text-align: center;"><input type="file" value="파일 찾기" name="attachFile" required="required"onchange="javascript:document.getElementById('file_route').value=this.value; fileInfo(this);"><input type="hidden" readonly="readonly" title="File Route" id="file_route"></td>
+								<div
+									style="background-color: #E0DFDF; height: 30px; padding: 5px;"
+									id="registerDetail">
+									<i class="fa fa-angle-double-right" aria-hidden="true"></i>
+									<span style="font-size: 10pt; font-weight: bold;">&nbsp;&nbsp;&nbsp;SIZE 및 COUNT 추가 등록 </span>
+								</div>
+								<div>
+								<p style="padding-top: 50px; font-weight: bold; margin-left: 25px; margin-bottom: 10px;">[SIZE 및 COUNT 추가 등록]</p>
+								<table id="itemDetail" style="margin-left: 90px; margin-top: 20px;">
+									<tr>
+										<td style="width: 50px;" align="right">SIZE</td>
+										<td style="width: 10px;"></td>
+										<td style="width: 50px;"><input type="text" id="size"></td>
+										<td style="width: 20px;"></td>
+										<td style="width: 50px;" align="right">COUNT</td>
+										<td style="width: 10px;"></td>
+										<td style="width: 50px;"><input type="number" id="count"></td>
+										<td style="width: 20px;"></td>
+										<td style="width: 50px;"><input type="button"
+											name="addItem" id="addItem" value="추가"></td>
 									</tr>
 								</table>
-								<br /> <br />
+								<br/><br/>
+								</div>
+								<br/>
+								<div>
+									<p style="font-weight: bold; margin-left: 25px;">[추가 상품 현황]</p>
+									<table style="width: 900px; margin-left: 50px;  margin-top: 20px;" id="AddList">
+										<tr>
+											<th style="width: 20%; text-align: center;">상품 이름</th>
+											<th style="width: 20%; text-align: center;">상품 코드</th>
+											<th style="width: 20%; text-align: center;">SIZE</th>
+											<th style="width: 20%; text-align: center;">COUNT</th>
+											<th style="width: 20%; text-align: center;">삭제</th>
+										</tr>
+										<c:forEach var="item" items="${itemList}" varStatus="status">
+										<tr>
+											<td style='text-align:center;'><c:out value="${item.itemName}"></c:out></td>
+											<td style='text-align:center;'><c:out value="${item.itemNo}"></c:out></td>
+											<td style='text-align:center;'><c:out value="${item.size}"></c:out><input type="hidden" value="${item.size}" class="addSize"></td>
+											<td style='text-align:center;'><c:out value="${item.count}"></c:out></td>
+											<td style='text-align:center;'><a class='delete' onclick="impossible()" style="color:gray;" id="${item.size}"><i class="fa fa-minus" aria-hidden="true"></i></a></td>
+										</tr>
+										</c:forEach>
+									</table>
+								</div>
+								<br/><br/>
 								<div align="right">
-									<input type="hidden" name="_method" value="post"> <input
-										type="submit" value="Next" class="btn btn-s-md btn-primary"
-										id="add"> <input type="hidden"
-										value="${loginVO.managerId }" name="id">
+									<input type="hidden" name="_method" value="post"> 
+									<input type="submit" value="등록" class="btn btn-s-md btn-primary" id="finish">
+									<input type="hidden" value="${ itemOne.storeName }" name="storeName">
+									<input type="hidden" value="${ itemOne.itemName }" name="itemName" id="itemName">
+									<input type="hidden" value="${ itemOne.itemNo }" name="itemNo" id="itemNo">
+									<input type="hidden" value="${fn:length(itemList)}" id="index">
 								</div>
 							</form>
 						</section>
