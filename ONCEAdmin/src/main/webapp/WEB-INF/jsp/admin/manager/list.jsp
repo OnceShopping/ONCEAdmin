@@ -75,14 +75,14 @@
 							++count;
 					}
 
-					if (count != 1) //선택한 사원이 1명 이상일 때
-						alert('사원 한명만 선택해 정보 수정을 해주시기 바랍니다.');
-						else { //선택한 사원이 1명일 경우
-							for (var i = 0; i < checkVal.length; i++) {
-								if (checkVal[i].checked)
-									location.href = "${ pageContext.request.contextPath }/manager/modify/"+ checkVal[i].value;
-							}
+					if (count != 1){ //선택한 사원이 1명 이상일 때
+						infoAlert("사원 한명만 선택해 정보 수정을 해주시기 바랍니다.");
+					}else { //선택한 사원이 1명일 경우
+						for (var i = 0; i < checkVal.length; i++) {
+							if (checkVal[i].checked)
+								location.href = "${ pageContext.request.contextPath }/manager/modify/"+ checkVal[i].value;
 						}
+					}
 			});
 			
 			//매장 선택 - 첫 번째 콤보박스 선택 시 두 번째 콤보박스에 표시되는 option 제어 
@@ -606,7 +606,7 @@
 										<tr>
 											<th width="10%" style="text-align: right;">이름</th>
 											<td width="5%" />
-											<td width="40%"><input type="text" id="name" name="name"></td>
+											<td width="40%"><input type="text" id="name" name="name" pattern="([^A-Za-z0-9]+$|[A-Za-z]+$)" title="한글 또는 영어로 입력해주세요."></td>
 											<th width="20%" style="text-align: right;">연락처</th>
 											<td width="5%" />
 											<td width="25%"><input type="tel" id="telephone"

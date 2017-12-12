@@ -11,6 +11,7 @@
   		<typeAlias type="once.item.vo.ItemVO" alias="ItemVO"/>
   		<typeAlias type="once.item.vo.ItemImgVO" alias="ItemImgVO"/>
   		<typeAlias type="once.item.vo.ItemDetailVO" alias="ItemDetailVO"/>
+  		<typeAlias type="once.item.vo.ItemContentsVO" alias="ItemContentsVO"/>
   		<typeAlias type="once.like.vo.LikeItemVO" alias="LikeItemVO"/>
   		<typeAlias type="once.like.vo.LikeStoreVO" alias="LikeStoreVO"/>
   		<typeAlias type="once.manager.vo.ManagerVO" alias="ManagerVO"/>
