@@ -92,8 +92,8 @@ public class ItemServiceImpl implements ItemService {
 	
 	//item 삭제
 	@Override
-	public void deleteItem(int detailNo) {
-		dao.deleteItem(detailNo);
+	public void deleteDetail(int detailNo) {
+		dao.deleteDetail(detailNo);
 	}
 	
 	//item count 수정을 위해 item 찾기
@@ -102,8 +102,52 @@ public class ItemServiceImpl implements ItemService {
 		return dao.findItem(detailNo);
 	}
 	
+	//item count 수정
 	@Override
 	public void updateItem(ItemContentsVO item) {
 		dao.updateItem(item);
+	}
+	
+	//item 추가 등록과 관련한 item 찾기
+	@Override
+	public List<ItemContentsVO> searchItem(String itemNo) {
+		List<ItemContentsVO> list = dao.searchItem(itemNo);
+		return list;
+	}
+	
+	//itemDetail테이블에 삭제한 item에 대한 정보가 존재하는지 확인
+	@Override
+	public boolean searchDetail(String itemNo) {
+		return dao.searchDetail(itemNo);
+	}
+	
+	//itemColor테이블에서 Item 삭제
+	@Override
+	public void deleteColor(String itemNo) {
+		dao.deleteColor(itemNo);
+	}
+	
+	//itemColor애서 삭제할 Item에 대한 num 찾기
+	@Override
+	public int searchNum(String itemNo) {
+		return dao.searchNum(itemNo);
+	}
+	
+	//itemColor테이블에서 현재 삭제한 num에 대한 정보가 있는지 여부 확인
+	@Override
+	public boolean checkNum(int num) {
+		return dao.checkNum(num);
+	}
+	
+	//itemImg테이블에서 num에 대한 정보 삭제
+	@Override
+	public void deleteImg(int num) {
+		dao.deleteImg(num);
+	}
+	
+	//item테이블에서 num에 대한 정보 삭제
+	@Override
+	public void deleteItem(int num) {
+		dao.deleteItem(num);
 	}
 }

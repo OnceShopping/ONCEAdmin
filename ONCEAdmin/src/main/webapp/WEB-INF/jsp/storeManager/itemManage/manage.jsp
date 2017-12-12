@@ -85,7 +85,7 @@
 		    height: '200',
 		    buttons : [{
 		    	id : "cancelPwd", //취소 버튼
-		    	text : "cancel",
+		    	text : "CANCEL",
 		    	click : function(){
 		    		$(this).dialog("close");
 		    	}
@@ -133,7 +133,7 @@
 	//삭제 시 비밀번호를 확인하는 다이얼로그를 통해 비밀번호를 비교
 	function clickBtn(CheckPwd, loginPwd){
 		if(CheckPwd != loginPwd)
-			infoAlert("죄송합니다. 비밀 번호가 일치하지 않아 해당 정보를 삭제를 할 수 없습니다.");
+			infoAlert("죄송합니다.<br/>비밀 번호가 일치하지 않아 해당 정보를 삭제를 할 수 없습니다.");
 		else
 			document.getElementById("listForm").submit();
 	}

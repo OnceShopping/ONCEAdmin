@@ -81,7 +81,8 @@
     
     <!-- 상품 코드 존재 여부 확인 -->
     <select id="checkItemNo" parameterType="String" resultType="ItemContentsVO">
-    	<include refid="refItem"/>
+    	select num, color, itemNo
+    	from itemColor
     	where itemNo = #{itemNo}
     </select>
     
@@ -130,7 +131,7 @@
  	</select>
  	
  	<!-- item 삭제 -->
- 	<delete id="deleteItem" parameterType="INT">
+ 	<delete id="deleteDetail" parameterType="INT">
  		delete from itemDetail
  		where detailNo = #{detailNo}
  	</delete>
@@ -147,4 +148,47 @@
     	set count = #{count}
     	where detailNo = #{detailNo}
  	</update>
+ 	
+ 	<!-- item 추가 등록과 관련한 item 찾기 -->
+ 	<select id="searchItem" parameterType="String" resultType="ItemContentsVO">
+ 		<include refid="refItem"/>
+ 		where itemNo = #{itemNo}
+ 	</select>
+ 	
+ 	<!-- itemDetail테이블에 삭제한 item에 대한 정보가 존재하는지 확인 -->
+ 	<select id="searchDetail" parameterType="String" resultType="ItemContentsVO">
+ 		select size, count, itemNo, detailNo
+ 		from itemDetail
+ 		where itemNo = #{itemNo}
+ 	</select>
+ 	
+ 	<!-- itemColor테이블에서 Item 삭제 -->
+ 	<delete id="deleteColor" parameterType="String">
+ 		delete from itemColor
+ 		where itemNo = #{itemNo}
+ 	</delete>
+ 	
+ 	<!-- itemColor애서 삭제할 Item에 대한 num 찾기 -->
+ 	<select id="searchNum" parameterType="String" resultType="INT">
+ 		select num
+ 		from itemColor
+ 		where itemNo = #{itemNo}
+ 	</select>
+ 	
+ 	<!-- itemColor테이블에서 현재 삭제한 num에 대한 정보가 있는지 여부 확인 -->
+ 	<select id="checkNum" parameterType="INT" resultType="ItemContentsVO">
+ 		select *
+ 		from itemColor
+ 		where num = #{num}
+ 	</select>
+ 	
+ 	<delete id="deleteImg" parameterType="INT">
+ 		delete from ImageTable
+ 		where num = #{num}
+ 	</delete>
+ 	
+ 	<delete id="deleteItem" parameterType="INT">
+ 		delete from Item
+ 		where num = #{num}
+ 	</delete>
 </mapper>

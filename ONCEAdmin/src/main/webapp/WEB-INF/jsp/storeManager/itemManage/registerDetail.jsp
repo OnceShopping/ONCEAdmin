@@ -430,7 +430,7 @@ var third = 0;
 									<input type="submit" value="등록" class="btn btn-s-md btn-primary" id="finish">
 									<input type="hidden" value="${ item.itemNo }" name="itemNo" id="itemNo">
 									<input type="hidden" value="${ item.itemName }" name="itemName" id="itemName">
-									<input type="hidden" value="${ loginVO.managerId }" name="id">
+									<input type="hidden" value="${ item.managerId }" name="id">
 								</div>
 							</form>
 						</section>

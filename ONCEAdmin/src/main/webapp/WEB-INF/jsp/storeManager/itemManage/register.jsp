@@ -58,14 +58,11 @@
 				cache : false,
 				contentType : "application/json; charset=UTF-8",
 				success : function(data) {
-					if (data == false)
+					if (data == true){ // 존재하지 않은 경우
+						$('#checkItemNo').html("<span></span>");
+						infoAlert("해당 상품코드로 상품이 등록되어 있습니다.<br/>상품을 추가등록 하시겠습니까?<br/><br/><span style='font-weight:bold;'><span style='color:red;'><i class='fa fa-exclamation' aria-hidden='true'></i>&nbsp;)</span>&nbsp;&nbsp;취소를 누르실 경우, <br/>해당 상품 코드 외 다른 상품 코드로 상품을 등록시켜주시기 바랍니다.</span>");
+					}else
 						$('#checkItemNo').html("<span style='color:green;'><i class='fa fa-check' aria-hidden='true'></i>&nbsp;&nbsp;&nbsp;해당 상품코드로 등록이 가능합니다.</span>");
-					else {
-						$('#checkItemNo').html("<span style='color:red;'><i class='fa fa-times' aria-hidden='true'></i>&nbsp;&nbsp;&nbsp;해당 상품코드가 이미 등록이 되어 있습니다.</span>");
-						$('#itemNo').val('');
-						$('#itemNo').focus();
-					}
-
 				},
 					error : function(request,status, error) {
 						alert("에러 발생! : "+ request.status+ "message : "+ request.responseText+ "\n"+ "error : "+ error);
@@ -93,8 +90,40 @@
 				$("#middle").val('stuff').prop("selected", true);
 			else
 				$("#middle").val('cloths').prop("selected", true);
-		});		
+		});	
 		
+		//다이얼로그 format 정의 - alert창
+		$('#dialog').dialog({
+			 autoOpen: false,
+		      modal: true,
+		      width: '300',
+		      height: '250',
+		      padding : '10px',
+		      buttons : [{
+			    	id : "cancel", //취소 버튼
+			    	text : "CANCEL",
+			    	click : function(){
+			    		$(this).dialog("close");
+			    	}
+			     },
+			     {
+			      	id : "OK",  //OK 버튼
+			      	text : "OK",
+			      	click : function(){
+				    	$(this).dialog("close");
+				   		}
+			      }]
+		 });
+		
+		$('#cancel').click(function(){
+			$('#itemNo').val('');
+			$('#itemNo').focus();
+		});
+		
+		$('#OK').click(function(){
+			var itemNo = $('#itemNo').val();
+			location.href="${ pageContext.request.contextPath }/item/register/"+itemNo;
+		});
 	});
 	
 	//이미지 미리 보기
@@ -106,6 +135,11 @@
     	}
     	reader.readAsDataURL(file[0]);
     }
+	//알림 모달 다이얼로그 태그 설정
+	function infoAlert(str){
+		$('#dialog').html("<div><p>"+str+"</p></div>");
+		$("#dialog").dialog("open");
+	}
 </script>
 <style type="text/css">
 .ui-menu {
@@ -122,6 +156,7 @@
 </style>
 </head>
 <body>
+<div id="dialog" title="ALERT DIALOG"></div>
 	<section class="vbox">
 		<!-- 상단바 -->
 		<header

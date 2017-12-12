@@ -140,8 +140,8 @@ public class ItemDAOImpl implements ItemDAO {
 	
 	//item 삭제
 	@Override
-	public void deleteItem(int detailNo) {
-		sqlSession.delete("once.item.dao.ItemDAO.deleteItem", detailNo);
+	public void deleteDetail(int detailNo) {
+		sqlSession.delete("once.item.dao.ItemDAO.deleteDetail", detailNo);
 	}
 	
 	//item count 수정을 위해 item 찾기
@@ -157,4 +157,59 @@ public class ItemDAOImpl implements ItemDAO {
 		sqlSession.update("once.item.dao.ItemDAO.updateItem", item);
 	}
 	
+	//item 추가 등록과 관련한 item 찾기
+	@Override
+	public List<ItemContentsVO> searchItem(String itemNo) {
+		List<ItemContentsVO> list = sqlSession.selectList("once.item.dao.ItemDAO.searchItem", itemNo);
+		return list;
+	}
+	
+	//itemDetail테이블에 삭제한 item에 대한 정보가 존재하는지 확인
+	@Override
+	public boolean searchDetail(String itemNo) {
+				
+		List<ItemContentsVO> list = sqlSession.selectList("once.item.dao.ItemDAO.searchDetail", itemNo);
+		
+		if(list.size() == 0) //itemDetail테이블에 데이터가 모두 삭제된 경우 
+			return true;
+		else 
+			return false;
+	}
+	
+	//itemColor테이블에서 Item 삭제
+	@Override
+	public void deleteColor(String itemNo) {
+		sqlSession.selectList("once.item.dao.ItemDAO.deleteColor", itemNo);
+	}
+	
+	//itemColor애서 삭제할 Item에 대한 num 찾기
+	@Override
+	public int searchNum(String itemNo) {
+		return sqlSession.selectOne("once.item.dao.ItemDAO.searchNum", itemNo);
+	}
+	
+	//itemColor테이블에서 현재 삭제한 num에 대한 정보가 있는지 여부 확인
+	@Override
+	public boolean checkNum(int num) {
+		
+		List<ItemContentsVO> list = sqlSession.selectList("once.item.dao.ItemDAO.checkNum", num);
+		
+		if(list.size() == 0) //itemColor테이블에 해당 num과 관련된 데이터가 존재하지 않을 경우 
+			return true;
+		else 
+			return false;
+		
+	}
+	
+	//itemImg테이블에서 num에 대한 정보 삭제
+	@Override
+	public void deleteImg(int num) {
+		sqlSession.delete("once.item.dao.ItemDAO.deleteImg", num);
+	}
+	
+	//item테이블에서 num에 대한 정보 삭제
+	@Override
+	public void deleteItem(int num) {
+		sqlSession.delete("once.item.dao.ItemDAO.deleteItem", num);
+	}
 }

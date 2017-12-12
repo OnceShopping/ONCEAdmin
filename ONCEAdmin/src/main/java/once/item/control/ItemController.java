@@ -136,8 +136,6 @@ public class ItemController {
 	// 상품 이미지, 상품 상세 정보 등록
 	@RequestMapping(value="/registerDetail", method=RequestMethod.POST)
 	public ModelAndView registerItemDetail(MultipartHttpServletRequest mRequest) throws Exception {
-
-		String id = mRequest.getParameter("id");
 	
 		service.addItem(itemVO); //Item 테이블에 데이터 추가
 		service.addItemColor(itemVO); //ItemColor 테이블에 데이터 추가
@@ -214,7 +212,7 @@ public class ItemController {
 	    }
 
 	    ModelAndView mav = new ModelAndView("storeManager/itemManage/again");
-		mav.addObject("storeName", service.findStore(id).getStoreName()); 
+		mav.addObject("storeName", itemVO.getStoreName()); 
 	    
 		return mav;
 	}
@@ -338,15 +336,16 @@ public class ItemController {
 	}
 	
 	//재고 관리
-	@RequestMapping(value="/manage")
+	@RequestMapping(value="/manage", method=RequestMethod.GET)
 	public 	ModelAndView manageItem(HttpSession session, HttpServletRequest request) {
 		
 		ManagerVO manager = (ManagerVO)session.getAttribute("loginVO");
-
-		Map<String, Object> ItemContentsVOMap = new HashMap<>();		
-		String storeName = service.findStore(manager.getManagerId()).getStoreName();
-		ItemContentsVOMap.put("storeName", storeName);
+		String id =  manager.getManagerId();
+		String storeName = service.findStore(id).getStoreName();
 		
+		Map<String, Object> ItemContentsVOMap = new HashMap<>();
+		
+		ItemContentsVOMap.put("storeName", storeName);
 		
 		ItemContentsVOMap.put("filterType", null); //category를 선택하는 것이 없음
 		
@@ -405,11 +404,39 @@ public class ItemController {
 	@RequestMapping(value="/manage", method=RequestMethod.DELETE)
 	public String deleteItem(HttpServletRequest request) {
 		
-		String [] itemNos = request.getParameterValues("detailNo");
+		String [] detailNos = request.getParameterValues("detailNo");
+		int [] detailNo = new int[detailNos.length];
+		String [] itemNo = new String[detailNos.length];
 		
-		for(int i=0; i<itemNos.length; i++) {
-			int itemNo = Integer.parseInt(itemNos[i]);
-			service.deleteItem(itemNo);
+		
+		for(int i=0; i<detailNos.length; i++) {
+			
+			detailNo[i] = Integer.parseInt(detailNos[i]);
+			
+			//detailNo에 해당하는 itemNo 찾기
+			itemNo[i] = (service.findItem(detailNo[i])).getItemNo();
+			
+			//itemDetail 테이블에서 해당 item 삭제
+			service.deleteDetail(detailNo[i]);
+			
+			//itemDetail테이블에 삭제한 item에 대한 정보가 존재하는지 확인
+			boolean check = service.searchDetail(itemNo[i]);
+			
+			if(check==true) { //itemDetail테이블에 데이터가 모두 삭제된 경우
+				
+				int num = service.searchNum(itemNo[i]); //itemColor애서 삭제할 Item에 대한 num 찾기
+				
+				service.deleteColor(itemNo[i]); //itemColor테이블에서 Item 삭제
+				
+				//itemColor테이블에서 현재 삭제한 num에 대한 정보가 있는지 여부 확인
+				boolean checkNum = service.checkNum(num);
+				
+				if(checkNum==true) {
+					service.deleteImg(num); //ImageTable테이블에서 삭제한 item만 존재할 경우 해당 item 정보를 삭제
+					service.deleteItem(num); //Item테이블에서 삭제한 item만 존재할 경우  해당 item 정보를  삭제					
+				}
+			}
+			
 		}
 		
 		return "redirect:/item/manage";
@@ -445,4 +472,63 @@ public class ItemController {
 		
 		return "redirect:/item/manage";
 	}
+	
+	//기존에 존재하는 item 추가 등록
+	@RequestMapping(value="/register/{itemNo}")
+	public ModelAndView extraItem(@PathVariable(value="itemNo") String itemNo, HttpSession session) {
+		
+		List<ItemContentsVO> itemList= service.searchItem(itemNo);
+		
+		
+		ItemContentsVO itemOne = null;
+		
+		//itemName, itemNo, storeName sample 1개를 받기 위함
+		for(int i=0; i<1; i++) {
+			itemOne = new ItemContentsVO();
+			itemOne = itemList.get(i);
+		}
+		
+		
+		ModelAndView mav = new ModelAndView();
+		
+		mav.setViewName("storeManager/itemManage/extraRegister");
+		mav.addObject("itemList", itemList);
+		mav.addObject("itemOne", itemOne);
+		
+		
+		return mav;
+	}
+	
+	//상품 추가 등록
+	@RequestMapping(value="/extraAdd", method=RequestMethod.POST)
+	public ModelAndView extraAdd(HttpServletRequest request) {
+		
+		String storeName = request.getParameter("storeName");
+		String itemNo = request.getParameter("itemNo");
+		
+		//size와 count 값 가져옴
+		String [] size = request.getParameterValues("size");
+		String [] counts = request.getParameterValues("count");
+		
+		
+		//ItemDetail 테이블에 데이터 추가
+		for(int i=0; i<size.length; i++) {
+			ItemDetailVO itemDetail = new ItemDetailVO();
+			
+			itemDetail.setSize(size[i]);
+			int itemCount = Integer.parseInt(counts[i]);
+			
+			itemDetail.setCount(itemCount);
+			itemDetail.setItemNo(itemNo);
+		
+			service.addItemDetail(itemDetail);
+		}
+		
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("storeManager/itemManage/again");
+		mav.addObject("storeName", storeName); 
+	    
+		return mav;
+	}
+	
 }

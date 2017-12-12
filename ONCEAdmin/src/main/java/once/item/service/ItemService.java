@@ -46,11 +46,32 @@ public interface ItemService {
 	public List<ItemContentsVO> selectPage(Map<String, Object> ItemContentsVOMap);
 		
 	//item 삭제
-	public void deleteItem(int detailNo);
+	public void deleteDetail(int detailNo);
 	
 	//item count 수정을 위해 item 찾기
 	public ItemContentsVO findItem(int detailNo);
 	
 	//item count 수정
 	public void updateItem(ItemContentsVO item);
+	
+	//item 추가 등록과 관련한 item 찾기
+	public List<ItemContentsVO> searchItem(String itemNo);
+	
+	//itemDetail테이블에 삭제한 item에 대한 정보가 존재하는지 확인
+	public boolean searchDetail(String itemNo);
+	
+	//itemColor테이블에서 Item 삭제
+	public void deleteColor(String itemNo);
+	
+	//itemColor애서 삭제할 Item에 대한 num 찾기
+	public int searchNum(String itemNo);
+	
+	//itemColor테이블에서 현재 삭제한 num에 대한 정보가 있는지 여부 확인
+	public boolean checkNum(int num);
+	
+	//itemImg테이블에서 num에 대한 정보 삭제
+	public void deleteImg(int num);
+	
+	//item테이블에서 num에 대한 정보 삭제
+	public void deleteItem(int num);
 }
