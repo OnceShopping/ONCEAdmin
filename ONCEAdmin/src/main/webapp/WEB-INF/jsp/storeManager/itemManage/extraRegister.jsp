@@ -56,7 +56,6 @@ var addIndex = 0; //새로 추가된 size와 count에 해당하는 index
 		//상품의 size와 갯수를 추가하는 로직
 		$('#addItem').click(function(){
 			
-			alert('index : ' + index);
 			var size = $('#size').val();
 			var count = $('#count').val();
 			
@@ -364,7 +363,22 @@ var addIndex = 0; //새로 추가된 size와 count에 해당하는 index
 									<tr>
 										<td style="width: 50px;" align="right">SIZE</td>
 										<td style="width: 10px;"></td>
-										<td style="width: 50px;"><input type="text" id="size"></td>
+										<td style="width: 50px;">
+											<select id="size" style="width: 150px; height: 25px;">
+												<option value="Free">Free</option>
+												<option value="S">S</option>
+												<option value="M">M</option>
+												<option value="L">L</option>
+												<option value="XS">XS</option>
+												<option value="XL">XL</option>
+												<option value="XXL">XXL</option>
+												<option value="44">44</option>
+												<option value="55">55</option>
+												<option value="66">66</option>
+												<option value="77">77</option>
+												<option value="88">88</option>
+											</select>
+										</td>
 										<td style="width: 20px;"></td>
 										<td style="width: 50px;" align="right">COUNT</td>
 										<td style="width: 10px;"></td>
