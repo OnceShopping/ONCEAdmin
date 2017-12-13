@@ -200,19 +200,32 @@ var third = 0;
     	reader.readAsDataURL(file[0]);
     }
 
+	//숫자만 입력 받을 수 있도록 설정
+	function numberCheck(e){
+		var keyValue = event.keyCode;
+
+		if((keyValue>=48) && (keyValue<=57))
+			return true;	
+		else if(keyValue==8)
+			return true;
+		else if((keyValue>=96) && (keyValue<=105))
+			return true;
+		else
+			return false;
+	}
 </script>
 <style type="text/css">
-.ui-menu {
-	width: 200px;
-}
-
-.ui-widget-header {
-	padding: 0.2em;
-}
-
-.select {
-	background-color: #F3F2F2;
-}
+	.ui-menu {
+		width: 200px;
+	}
+	
+	.ui-widget-header {
+		padding: 0.2em;
+	}
+	
+	.select {
+		background-color: #F3F2F2;
+	}
 </style>
 </head>
 <body>
@@ -349,8 +362,8 @@ var third = 0;
 								method="post" enctype="multipart/form-data" id="registerItem">
 								<div style="background-color: #E0DFDF; height: 30px; padding: 5px;"
 									id="registerImg">
-									<i class="fa fa-angle-double-right" aria-hidden="true"></i> <span
-										style="font-size: 10pt; font-weight: bold;  margin-top:50px;">&nbsp;&nbsp;&nbsp;상품 이미지 등록 </span>
+									<i class="fa fa-angle-double-right" aria-hidden="true" style="margin-right: 10px;"></i> <span
+										style="font-size: 11pt; font-weight: bold; display:inline-block; vertical-align:middle;">상품 이미지 등록 </span>
 								</div>
 								<table style="margin-left: 100px;" id="images">
 									<tr style="height: 100px;">
@@ -389,12 +402,12 @@ var third = 0;
 								<div
 									style="background-color: #E0DFDF; height: 30px; padding: 5px;"
 									id="registerDetail">
-									<i class="fa fa-angle-double-right" aria-hidden="true"></i>
-									<span style="font-size: 10pt; font-weight: bold;">&nbsp;&nbsp;&nbsp;상세
+									<i class="fa fa-angle-double-right" aria-hidden="true" style="margin-right:5px;"></i>
+									<span style="font-size: 11pt; font-weight: bold; display:inline-block; vertical-align:middle;">상세
 										정보 등록 </span>
 								</div>
 								<div>
-								<p style="padding-top: 50px; font-weight: bold; margin-left: 25px; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;[SIZE 및 COUNT 등록]</p>
+								<p style="padding-top: 50px; font-weight: bold; font-size: 11pt; margin-left: 26px; margin-bottom: 10px;">[SIZE 및 COUNT 등록]</p>
 								<table id="itemDetail" style="margin-left: 90px; margin-top: 20px;">
 									<tr>
 										<td style="width: 50px;" align="right">SIZE</td>
@@ -418,7 +431,7 @@ var third = 0;
 										<td style="width: 20px;"></td>
 										<td style="width: 50px;" align="right">COUNT</td>
 										<td style="width: 10px;"></td>
-										<td style="width: 50px;"><input type="number" id="count"></td>
+										<td style="width: 50px;"><input type="number" id="count" min="0" onkeypress="return numberCheck(event)"></td>
 										<td style="width: 20px;"></td>
 										<td style="width: 50px;"><input type="button"
 											name="addItem" id="addItem" value="추가"></td>
@@ -428,8 +441,8 @@ var third = 0;
 								</div>
 								<br/>
 								<div>
-									<p style="font-weight: bold; margin-left: 25px;">[추가 상품 현황]</p>
-									<table style="width: 900px; margin-left: 50px;  margin-top: 20px;" id="AddList">
+									<p style="font-size: 11pt; font-weight: bold; margin-left: 25px;">[추가 상품 현황]</p>
+									<table style="width: 900px; margin-left: 51px;  margin-top: 20px;" id="AddList">
 										<tr>
 											<th style="width: 20%; text-align: center;">상품 이름</th>
 											<th style="width: 20%; text-align: center;">상품 코드</th>
@@ -440,8 +453,8 @@ var third = 0;
 									</table>
 								</div><br/><br/><br/><br/>
 								<div>
-									<p style="font-weight: bold; margin-left: 25px;">[상품 상세 정보]</p>
-									<div style="margin-left: 110px;  margin-top: 20px;">
+									<p style="font-size: 11pt; font-weight: bold; margin-left: 25px;">[상품 상세 정보]</p>
+									<div style="margin-left: 114px;  margin-top: 20px;">
 										<textarea rows="3" cols="110" name="detail" style="resize: none;"></textarea>
 									</div>
 								</div>

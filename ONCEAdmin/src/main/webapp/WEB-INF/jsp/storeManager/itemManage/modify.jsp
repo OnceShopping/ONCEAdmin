@@ -60,6 +60,7 @@ td {
 th{
 	text-align: right;
 	height: 50px;
+	font-size: 12px;
 }
 
 input[type=text]{
@@ -255,7 +256,7 @@ input[type=text]{
 					<section class="vbox">
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
-							<h3 class="font-bold m-b-none m-t-none">상품 수량 수정</h3>
+							<h3 class="font-bold m-b-none m-t-none">${item.itemName} 상품 수량 수정</h3>
 							<br /> <br />
 							<form action="${pageContext.request.contextPath}/item/update/${item.detailNo}"
 								method="post" id="ModifyList">

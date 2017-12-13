@@ -132,11 +132,9 @@ function printResult(data) {
 	
 	//sorting
 	function sort(category){
-		alert(category);
-		
 		document.getElementById('sortTable').submit();
-		
 	}
+	
 </script>
 <style type="text/css">
 		.itemList {
@@ -145,9 +143,21 @@ function printResult(data) {
 			border: 1 solid;
 			border-color: #bcbcbc;
 		}
-	
+		
+		.itemList th, .selector span{
+			text-align: center;
+			font-size: 13pt;
+			font-weight: bold;
+			color: #788288;
+		}
+		
 		.itemList td {
 			text-align: center;
+			padding: 5px;
+		}
+		
+		tr:hover {
+			background-color: #FBFCFD;
 		}
 		
 		.selector:hover{
@@ -156,8 +166,8 @@ function printResult(data) {
 		
 </style>
 </head>
-<body>
-	<!-- Modal --> 						
+<body class="">
+<!-- Modal -->
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
@@ -193,8 +203,7 @@ function printResult(data) {
 			</div>
 		</header>
 		<!-- 상단바 끝 -->
-
-				<section>
+		<section>
 			<section class="hbox stretch">
 				<!-- 메뉴 위 프로필 -->
 				<aside class="bg-black aside-md hidden-print hidden-xs" id="nav">
@@ -224,8 +233,7 @@ function printResult(data) {
 									</div>
 								</div>
 								<!-- 프로필 클릭시 나오는 메뉴 끝 -->
-								<!-- 메뉴 위 프로필 끝 -->
-
+								
 								<!-- 사이드 메뉴 -->
 								<nav class="nav-primary hidden-xs" id="sidemenu">
 									<div
@@ -308,7 +316,7 @@ function printResult(data) {
 							<br />
 							<h3 class="font-bold m-b-none m-t-none">[${storeName}] 상품 리스트</h3>
 							<form id = "searchForm">
-							<div align="right" style="margin-top:100px; margin-bottom:30px;">
+							<div align="right" style="margin-top:20px; margin-bottom:30px;">
 								<select  id="searchType" name="searchType" style="height: 27px">
 									<option value="itemName" id="itemName">상품이름</option>
 									<option value="itemNo" id="itemNo">상품코드</option>
@@ -320,17 +328,17 @@ function printResult(data) {
 							</form>
 							<form action="${ pageContext.request.contextPath }/item/list" method="post" id="sortTable">
 							<table class="itemList" style="width: 100%">
-								<tr style="text-align: center; background-color: #E7E7E7;" >
-									<td style="width: 5%;">NO</td>
-									<td style="width: 10%;">상품 이름</td>
-									<td style="width: 10%;">상품 코드</td>
-									<td style="width: 10%;">색상</td>
-									<td style="width: 10%;" class="selector"><a onclick="javascript:document.getElementById('category').value='itemCategory1'; sort();">남성/여성&nbsp;&nbsp;<i class="fa fa-caret-down" aria-hidden="true"></i></a></td>
-									<td style="width: 10%;" class="selector"><a onclick="javascript:document.getElementById('category').value='itemCategory2'; sort();">의류/잡화&nbsp;&nbsp;<i class="fa fa-caret-down" aria-hidden="true"></i></a></td>
-									<td style="width: 10%;" class="selector"><a onclick="javascript:document.getElementById('category').value='itemCategory3'; sort();">Category&nbsp;&nbsp;<i class="fa fa-caret-down" aria-hidden="true"></i></a></td>
-									<td style="width: 5%;">SIZE</td>
-									<td style="width: 10%;">수량</td>
-									<td style="width: 10%;">가격</td>
+								<tr style="text-align: center; background-color: #E7E7E7; height: 30px; padding: 5px;" >
+									<th style="width: 5%;">No.</th>
+									<th style="width: 10%;">상품 이름</th>
+									<th style="width: 10%;">상품 코드</th>
+									<th style="width: 7%;">색상</th>
+									<th style="width: 12%;"><a onclick="javascript:document.getElementById('category').value='itemCategory1'; sort();" class="selector"><span style="margin-right: 10px;">남성/여성</span><i class="fa fa-caret-down" aria-hidden="true"></i></a></th>
+									<th style="width: 13%;"><a onclick="javascript:document.getElementById('category').value='itemCategory2'; sort();" class="selector"><span style="margin-right: 10px;">의류/잡화</span><i class="fa fa-caret-down" aria-hidden="true"></i></a></th>
+									<th style="width: 13%;"><a onclick="javascript:document.getElementById('category').value='itemCategory3'; sort();" class="selector"><span style="margin-right: 10px;">Category</span><i class="fa fa-caret-down" aria-hidden="true"></i></a></th>
+									<th style="width: 5%;">SIZE</th>
+									<th style="width: 10%;">수량</th>
+									<th style="width: 10%;">가격</th>
 								</tr>
 								<c:forEach var="item" items="${itemList}" varStatus="index">
 									<tr>

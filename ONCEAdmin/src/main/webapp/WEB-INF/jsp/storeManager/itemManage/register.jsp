@@ -74,10 +74,14 @@
 		$("#middle").change(function(){
 			var middleType = $(this).val();
 			
-			if(middleType=="cloths")
+			if(middleType=="cloths"){
 				$('.stuff').hide();
-			else
+				$('.cloths').show();
+			}
+			else{
 				$('.cloths').hide();
+				$('.stuff').show();
+			}
 		});
 		
 		//소분류 선택에 따른 중분류 자동 선택
@@ -135,27 +139,44 @@
     	}
     	reader.readAsDataURL(file[0]);
     }
+	
 	//알림 모달 다이얼로그 태그 설정
 	function infoAlert(str){
 		$('#dialog').html("<div><p>"+str+"</p></div>");
 		$("#dialog").dialog("open");
 	}
+	
+	//특수문자를 입력받지 않도록 설정
+	function charCheck(e){
+		var keyValue = event.keyCode;
+
+		if((keyValue>=33) && (keyValue<=47))
+			return false;	
+		else if((keyValue>=58) && (keyValue<=64))
+			return false;	
+		else if((keyValue>=91) && (keyValue<=96))
+			return false;
+		else if((keyValue>=123) && (keyValue<=126))
+			return false;
+		else
+			return true;
+	}
 </script>
 <style type="text/css">
-.ui-menu {
-	width: 200px;
-}
-
-.ui-widget-header {
-	padding: 0.2em;
-}
-
-.select {
-	background-color: #F3F2F2;
-}
+	.ui-menu {
+		width: 200px;
+	}
+	
+	.ui-widget-header {
+		padding: 0.2em;
+	}
+	
+	.select {
+		background-color: #F3F2F2;
+	}
 </style>
 </head>
-<body>
+<body class="">
 <div id="dialog" title="ALERT DIALOG"></div>
 	<section class="vbox">
 		<!-- 상단바 -->
@@ -290,11 +311,48 @@
 							<br /> <br />
 							<form action="${ pageContext.request.contextPath }/item/register"
 								method="post" enctype="multipart/form-data">
-									<div
-										style="background-color: #E0DFDF; height: 30px; padding: 5px; margin-top:50px;"
+								<div style="background-color: #E0DFDF; height: 30px; padding: 5px; margin-top: 40px;" id="category">
+									<i class="fa fa-angle-double-right" aria-hidden="true" style="margin-right:5px;"></i>
+									<span style="font-size: 11pt; font-weight: bold; display:inline-block; vertical-align:middle;">상품 등록</span>
+								</div>
+								<br /> <br />
+								<table style="margin-left: 100px;">
+									<tr style="height: 60px;">
+										<td style="width: 150px; text-align: left;">상품 이름</td>
+										<td style="width: 30px;"></td>
+										<td style="width: 300px;"><input type="text" name="itemName" required="required" pattern="[^0-9]+$" alt="숫자 또는 특수문자를 제외한 한글 또는 알파벳으로 작성해주세요." onkeypress="return charCheck(event)"></td>
+										<td style="width: 100px;"/>	
+										<td rowspan="5" style="width: 300px;"><div class="storeLogoImg" id="storeLogoImg"></div></td>	
+									</tr>
+									<tr style="height: 60px;">
+										<td style="text-align: left;">상품 코드</td>
+										<td style="width: 30px;"></td>
+										<td colspan="2"><input type="text" name="itemNo" id="itemNo" required="required" pattern="[A-Z0-9]+$" alt="알파벳(대문자)와 숫자로 표시된 상품 코드를 확인해주시고 작성해주세요."  onkeypress="return charCheck(event)"><span style="padding-left: 20px;" id="checkItemNo"></span>
+										</td>
+									</tr>
+									<tr style="height: 60px;">
+										<td style="text-align: left;">색상</td>
+										<td style="width: 30px;"></td>
+										<td><input type="text" name="color" required="required"></td>
+										<td rowspan="3" style="width: 200px;"/>
+									</tr>
+									<tr style="height: 60px;">
+										<td style="text-align: left;">가격</td>
+										<td style="width: 30px;"></td>
+										<td><input type="number"
+											name="price" required="required" min="0" onkeypress="return charCheck(event)" onkeyup=""></td>
+									</tr>
+									<tr style="height: 70px;">
+										<td style="text-align: left: ;">상품 대표 이미지</td>
+										<td style="width: 30px;"></td>
+										<td style="text-align: center;"><input type="file" value="파일 찾기" name="attachFile" required="required"onchange="javascript:document.getElementById('file_route').value=this.value; fileInfo(this);"><input type="hidden" readonly="readonly" title="File Route" id="file_route"></td>
+									</tr>
+								</table>
+								<br />
+								<div style="background-color: #E0DFDF; height: 30px; padding: 5px; margin-top:50px;"
 										id="category">
-										<i class="fa fa-angle-double-right" aria-hidden="true"></i>
-										<span style="font-size: 10pt; font-weight: bold;">&nbsp;&nbsp;&nbsp;카테고리
+										<i class="fa fa-angle-double-right" aria-hidden="true" style="margin-right:5px;"></i>
+										<span style="font-size: 11pt; font-weight: bold; display:inline-block; vertical-align:middle;">카테고리
 											선택</span>
 									</div>
 									<table id="categoryTable"
@@ -348,45 +406,6 @@
 										<tr style="height: 50px;"></tr>
 									</table>
 								<br />
-								<div style="background-color: #E0DFDF; height: 30px; padding: 5px;" id="category">
-									<i class="fa fa-angle-double-right" aria-hidden="true"></i>
-									<span style="font-size: 10pt; font-weight: bold;">&nbsp;&nbsp;&nbsp;상품 등록</span>
-								</div>
-								<br /> <br />
-								<table style="margin-left: 100px;">
-									<tr style="height: 60px;">
-										<td style="width: 150px; text-align: left;">상품 이름</td>
-										<td style="width: 30px;"></td>
-										<td style="width: 300px;"><input type="text" name="itemName"
-											required="required"></td>
-										<td style="width: 100px;"/>	
-										<td rowspan="5" style="width: 300px;"><div class="storeLogoImg" id="storeLogoImg"></div></td>	
-									</tr>
-									<tr style="height: 60px;">
-										<td style="text-align: left;">상품 코드</td>
-										<td style="width: 30px;"></td>
-										<td colspan="2"><input type="text" name="itemNo" id="itemNo" required="required"><span style="padding-left: 20px;" id="checkItemNo"></span>
-										</td>
-									</tr>
-									<tr style="height: 60px;">
-										<td style="text-align: left;">색상</td>
-										<td style="width: 30px;"></td>
-										<td><input type="text" name="color" required="required"></td>
-										<td rowspan="3" style="width: 200px;"/>
-									</tr>
-									<tr style="height: 60px;">
-										<td style="text-align: left;">가격</td>
-										<td style="width: 30px;"></td>
-										<td><input type="number"
-											name="price" required="required"></td>
-									</tr>
-									<tr style="height: 70px;">
-										<td style="text-align: left: ;">상품 대표 이미지</td>
-										<td style="width: 30px;"></td>
-										<td style="text-align: center;"><input type="file" value="파일 찾기" name="attachFile" required="required"onchange="javascript:document.getElementById('file_route').value=this.value; fileInfo(this);"><input type="hidden" readonly="readonly" title="File Route" id="file_route"></td>
-									</tr>
-								</table>
-								<br /> <br />
 								<div align="right">
 									<input type="hidden" name="_method" value="post"> <input
 										type="submit" value="Next" class="btn btn-s-md btn-primary"

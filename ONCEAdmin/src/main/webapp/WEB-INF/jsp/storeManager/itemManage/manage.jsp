@@ -140,9 +140,25 @@
 
 </script>
 <style type="text/css">
-.list {
-	text-align: center;
-}
+	.list {
+		text-align: center;
+	}
+	
+	th {
+		text-align: center;
+		font-size: 13pt;
+		font-weight: bold;
+		color: #788288;
+	}
+	td {
+		text-align: center;
+		padding: 5px;
+	}
+
+	tr:hover {
+		background-color: #FBFCFD;
+	}
+		
 </style>
 </head>
 <body class="">
@@ -291,15 +307,15 @@
 								관리</h3>
 							<form action="${pageContext.request.contextPath}/item/manage"
 								method="post" id="listForm" name="listForm">
-								<table class="itemList" style="width: 100%; margin-top: 150px;">
+								<table class="itemList" style="width: 100%; margin-top: 80px;">
 									<tr style="text-align: center; background-color: #E7E7E7;">
-										<td style="width: 5%;"><input type="checkbox"
-											id="checkAll"></td>
-										<td style="width: 10%;">상품 이름</td>
-										<td style="width: 10%;">상품 코드</td>
-										<td style="width: 10%;">색상</td>
-										<td style="width: 5%;">SIZE</td>
-										<td style="width: 10%;">수량</td>
+										<th style="width: 5%;"><input type="checkbox"
+											id="checkAll"></th>
+										<th style="width: 10%;">상품 이름</th>
+										<th style="width: 10%;">상품 코드</th>
+										<th style="width: 10%;">색상</th>
+										<th style="width: 5%;">SIZE</th>
+										<th style="width: 10%;">수량</th>
 									</tr>
 									<c:forEach var="item" items="${itemList}" varStatus="index">
 										<tr>

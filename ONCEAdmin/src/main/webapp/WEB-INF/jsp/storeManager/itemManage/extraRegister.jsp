@@ -146,11 +146,11 @@ var addIndex = 0; //새로 추가된 size와 count에 해당하는 index
 		var indexItem = index;
 		
 		var contents = "<tr id="+indexItem+">";
-		contents += "<td style='text-align:center;'>"+$('#itemName').val()+"</td>";
-		contents += "<td style='text-align:center;'>"+$('#itemNo').val()+"</td>";
-		contents += "<td style='text-align:center;'>"+size+"<input type='hidden' class='addSize' value='"+size+"' name='size'></td>";
-		contents += "<td style='text-align:center;'>"+count+"<input type='hidden' value='"+count+"' name='count'></td>";
-		contents += "<td style='width: 20%; text-align:center;'><a class='delete' id="+size+" onclick=deleteItem('"+(index)+"') style='color:red;'><i class='fa fa-times' aria-hidden='true'></i></a></td>";
+		contents += "<td>"+$('#itemName').val()+"</td>";
+		contents += "<td>"+$('#itemNo').val()+"</td>";
+		contents += "<td>"+size+"<input type='hidden' class='addSize' value='"+size+"' name='size'></td>";
+		contents += "<td>"+count+"<input type='hidden' value='"+count+"' name='count'></td>";
+		contents += "<td><a class='delete' id="+size+" onclick=deleteItem('"+(index)+"') style='color:red;'><i class='fa fa-times' aria-hidden='true'></i></a></td>";
 		contents += "</tr>";
 		
 		$('#AddList').append(contents);
@@ -199,6 +199,20 @@ var addIndex = 0; //새로 추가된 size와 count에 해당하는 index
 		++index;
 		infoAlert("<br/>죄송하지만 해당 상품은 현재 페이지에서 삭제할 수 없습니다.<br/><span style='font-weight:bold;'>상품의 수량을 변경/삭제를 원하시는 경우, </span>상품 제고 관리 페이지에서 원하시는 상품을 삭제하시기 바랍니다.");
 	}
+	
+	//숫자만 입력 받을 수 있도록 설정
+	function numberCheck(e){
+		var keyValue = event.keyCode;
+
+		if((keyValue>=48) && (keyValue<=57))
+			return true;	
+		else if(keyValue==8)
+			return true;
+		else if((keyValue>=96) && (keyValue<=105))
+			return true;
+		else
+			return false;
+	}
 
 </script>
 <style type="text/css">
@@ -213,6 +227,15 @@ var addIndex = 0; //새로 추가된 size와 count에 해당하는 index
 .select {
 	background-color: #F3F2F2;
 }
+
+th{
+	text-align: center;
+}
+
+td{
+ 	text-align: center; 
+ 	padding: 5px;
+ }
 </style>
 </head>
 <body>
@@ -348,18 +371,17 @@ var addIndex = 0; //새로 추가된 size와 count에 해당하는 index
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
 							<h3 class="font-bold m-b-none m-t-none">[${ itemOne.storeName}] 상품 추가 등록</h3>
-							<br /><br /><br /><br />
+							<br /><br />
 							<form action="${ pageContext.request.contextPath }/item/extraAdd" method="post" id="registerItem">
-								<br /> <br />
 								<div
-									style="background-color: #E0DFDF; height: 30px; padding: 5px;"
+									style="background-color: #E0DFDF; height: 30px; padding: 5px; margin-top: 40px;"
 									id="registerDetail">
-									<i class="fa fa-angle-double-right" aria-hidden="true"></i>
-									<span style="font-size: 10pt; font-weight: bold;">&nbsp;&nbsp;&nbsp;SIZE 및 COUNT 추가 등록 </span>
+									<i class="fa fa-angle-double-right" aria-hidden="true" style="margin-right:5px;"></i>
+									<span style="font-size: 11pt; font-weight: bold; display:inline-block; vertical-align:middle;">SIZE 및 COUNT 추가 등록 </span>
 								</div>
 								<div>
-								<p style="padding-top: 50px; font-weight: bold; margin-left: 25px; margin-bottom: 10px;">[SIZE 및 COUNT 추가 등록]</p>
-								<table id="itemDetail" style="margin-left: 90px; margin-top: 20px;">
+								<p style="padding-top: 50px; font-size: 11pt; font-weight: bold; margin-left: 26px; margin-bottom: 10px;">[SIZE 및 COUNT]</p>
+								<table id="itemDetail" style="margin-left: 90px; margin-top: 20px; margin-bottom: 50px;">
 									<tr>
 										<td style="width: 50px;" align="right">SIZE</td>
 										<td style="width: 10px;"></td>
@@ -382,24 +404,23 @@ var addIndex = 0; //새로 추가된 size와 count에 해당하는 index
 										<td style="width: 20px;"></td>
 										<td style="width: 50px;" align="right">COUNT</td>
 										<td style="width: 10px;"></td>
-										<td style="width: 50px;"><input type="number" id="count"></td>
+										<td style="width: 50px;"><input type="number" id="count" min="0" onkeypress="return numberCheck(event)"></td>
 										<td style="width: 20px;"></td>
 										<td style="width: 50px;"><input type="button"
 											name="addItem" id="addItem" value="추가"></td>
 									</tr>
 								</table>
-								<br/><br/>
 								</div>
 								<br/>
 								<div>
-									<p style="font-weight: bold; margin-left: 25px;">[추가 상품 현황]</p>
-									<table style="width: 900px; margin-left: 50px;  margin-top: 20px;" id="AddList">
+									<p style="font-size: 11pt; font-weight: bold; margin-left: 25px;">[추가 상품 현황]</p>
+									<table style="width: 900px; margin-left: 51px;  margin-top: 20px; margin-bottom: 50px;" id="AddList">
 										<tr>
-											<th style="width: 20%; text-align: center;">상품 이름</th>
-											<th style="width: 20%; text-align: center;">상품 코드</th>
-											<th style="width: 20%; text-align: center;">SIZE</th>
-											<th style="width: 20%; text-align: center;">COUNT</th>
-											<th style="width: 20%; text-align: center;">삭제</th>
+											<th style="width: 20%;">상품 이름</th>
+											<th style="width: 20%;">상품 코드</th>
+											<th style="width: 20%;">SIZE</th>
+											<th style="width: 20%;">COUNT</th>
+											<th style="width: 20%;">삭제</th>
 										</tr>
 										<c:forEach var="item" items="${itemList}" varStatus="status">
 										<tr>
