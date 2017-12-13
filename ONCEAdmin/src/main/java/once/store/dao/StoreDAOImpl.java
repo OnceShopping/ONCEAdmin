@@ -1,8 +1,6 @@
  package once.store.dao;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -16,14 +14,12 @@ import once.store.vo.StoreVO;
 public class StoreDAOImpl implements StoreDAO {
 
 	@Autowired
-	private SqlSessionTemplate sqlSesssion;
+	private SqlSessionTemplate sqlSession;
 
 	@Override
 	public StoreVO checkStoreName(String storeNo) {
-		return sqlSesssion.selectOne("once.store.dao.StoreDAO.checkStoreName",storeNo);
+		return sqlSession.selectOne("once.store.dao.StoreDAO.checkStoreName",storeNo);
 	}
-
-	private SqlSessionTemplate sqlSession;
 
 	@Override
 	public List<StoreVO> selectFirst() {

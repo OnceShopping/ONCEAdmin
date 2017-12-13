@@ -41,20 +41,22 @@ public class ManagerController {
 	private NoticeService nService;
 	
 	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public String login(@RequestParam("id")String id, @RequestParam("password")String password, Model model, HttpServletRequest request) {
+	public ModelAndView login(@RequestParam("id")String id, @RequestParam("password")String password, Model model, HttpServletRequest request) {
 		
 		ManagerVO manager = new ManagerVO();
 		manager.setManagerId(id);
 		manager.setPassword(password);
 		
+		ModelAndView mav = new ModelAndView();
+		
 		ManagerVO loginVO = service.login(manager);
 				
 		if(loginVO==null) {
-			model.addAttribute("message", "Please check your ID or Password");
+			mav.addObject("message", "Please check your ID or Password");
+			mav.setViewName("login/loginFail");
 			
-			return "login/loginFail";
 		}else {
-			model.addAttribute("loginVO", loginVO);
+			mav.addObject("loginVO", loginVO);
 			System.out.println(loginVO);
 			if(loginVO.getType().equals("admin")) {
 				
@@ -99,19 +101,22 @@ public class ManagerController {
 				page.add( listSize );
 				List<NoticeVO> list = nService.selectPage(page);
 				
-				model.addAttribute("list", list);
-				return "admin/notice/list";
-			}else if(loginVO.getType().equals("infoManger")) {
-				return "infoManager/itemManage/addItem";
-			}else if(loginVO.getType().equals("storeManager")) {
-				model.addAttribute("storeName", service.selectById(id).getStoreName());
-				return "storeManager/itemManage/register";
-			}else {
-				model.addAttribute("message", "type이 이상합니다");
+				mav.addObject("list", list);
+				mav.setViewName("admin/notice/list");
 				
-				return "login/loginFail";
+			}else if(loginVO.getType().equals("infoManger")) {			
+				mav.setViewName("infoManager/itemManage/addItem");
+
+			}else if(loginVO.getType().equals("storeManager")) {
+				mav.addObject("storeName", service.selectById(id).getStoreName());
+				mav.setViewName("storeManager/itemManage/register");
+				
+			}else {
+				mav.addObject("message", "type이 이상합니다");
+				mav.setViewName("login/loginFail");
 			}
 		}
+		return mav;
 	}
 	
 	//패스워드 체크 페이지

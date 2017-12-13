@@ -123,28 +123,51 @@ function printResult(data) {
 
 	return row;
 }
-//검색 모달 다이얼로그 정보 출력 태그 설정 
-function showModal(ModalTest){
-	$("#searchResult").html(ModalTest);
-	$("#exampleModal").modal();
-}
 
+	//검색 모달 다이얼로그 정보 출력 태그 설정 
+	function showModal(ModalTest){
+		$("#searchResult").html(ModalTest);
+		$("#exampleModal").modal();
+	}
+	
+	//sorting
+	function sort(category){
+		document.getElementById('sortTable').submit();
+	}
+	
 </script>
 <style type="text/css">
-	.itemList {
-		border-collapse: collapse;
-		width: 100%;
-		border: 1 solid;
-		border-color: #bcbcbc;
-	}
-
-	.itemList td {
-		text-align: center;
-	}
+		.itemList {
+			border-collapse: collapse;
+			width: 100%;
+			border: 1 solid;
+			border-color: #bcbcbc;
+		}
+		
+		.itemList th, .selector span{
+			text-align: center;
+			font-size: 13pt;
+			font-weight: bold;
+			color: #788288;
+		}
+		
+		.itemList td {
+			text-align: center;
+			padding: 5px;
+		}
+		
+		tr:hover {
+			background-color: #FBFCFD;
+		}
+		
+		.selector:hover{
+			text-decoration: underline;
+		}
+		
 </style>
 </head>
-<body>
-	<!-- Modal --> 						
+<body class="">
+<!-- Modal -->
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
@@ -180,8 +203,7 @@ function showModal(ModalTest){
 			</div>
 		</header>
 		<!-- 상단바 끝 -->
-
-				<section>
+		<section>
 			<section class="hbox stretch">
 				<!-- 메뉴 위 프로필 -->
 				<aside class="bg-black aside-md hidden-print hidden-xs" id="nav">
@@ -211,8 +233,7 @@ function showModal(ModalTest){
 									</div>
 								</div>
 								<!-- 프로필 클릭시 나오는 메뉴 끝 -->
-								<!-- 메뉴 위 프로필 끝 -->
-
+								
 								<!-- 사이드 메뉴 -->
 								<nav class="nav-primary hidden-xs" id="sidemenu">
 									<div
@@ -232,12 +253,12 @@ function showModal(ModalTest){
 													class="auto"> <i class="i i-dot"></i> <span>상품
 															등록</span>
 												</a></li>
-												<li><a
+												<li class="active"><a
 													href="${pageContext.request.contextPath}/item/list"
 													class="auto"> <i class="i i-dot"></i> <span>상품
 															리스트</span>
 												</a></li>
-												<li><a href="icons.html" class="auto"> <i
+												<li><a href="${pageContext.request.contextPath}/item/manage" class="auto"> <i
 														class="i i-dot"></i> <span>상품 재고 관리</span>
 												</a></li>
 											</ul>
@@ -293,17 +314,9 @@ function showModal(ModalTest){
 					<section class="vbox">
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
-							<h3 class="font-bold m-b-none m-t-none">${storeName} 상품 리스트</h3>
-							<div align="left"  style="margin-top:50px;">
-								<span style="text-align: left;"><span>대분류</span>
-									<select>
-										<option value="men">남성</option>
-										<option value="woman">여성</option>
-									</select>
-								</span>
-							</div>
+							<h3 class="font-bold m-b-none m-t-none">[${storeName}] 상품 리스트</h3>
 							<form id = "searchForm">
-							<div align="right" style=" margin-bottom:30px;">
+							<div align="right" style="margin-top:20px; margin-bottom:30px;">
 								<select  id="searchType" name="searchType" style="height: 27px">
 									<option value="itemName" id="itemName">상품이름</option>
 									<option value="itemNo" id="itemNo">상품코드</option>
@@ -313,22 +326,29 @@ function showModal(ModalTest){
 								<input type="submit" value="검색" data-toggle="modal" data-target="#exampleModal"/>
 							</div>
 							</form>
-							<table class="itemList" >
-								<tr style="text-align: center; background-color: #E7E7E7;" >
-									<td style="width: 5%;">NO</td>
-									<td style="width: 20%;">상품 이름</td>
-									<td style="width: 20%;">상품 코드</td>
-									<td style="width: 15%;">색상</td>
-									<td style="width: 15%;">SIZE</td>
-									<td style="width: 10%;">수량</td>
-									<td style="width: 15%;">가격</td>
+							<form action="${ pageContext.request.contextPath }/item/list" method="post" id="sortTable">
+							<table class="itemList" style="width: 100%">
+								<tr style="text-align: center; background-color: #E7E7E7; height: 30px; padding: 5px;" >
+									<th style="width: 5%;">No.</th>
+									<th style="width: 10%;">상품 이름</th>
+									<th style="width: 10%;">상품 코드</th>
+									<th style="width: 7%;">색상</th>
+									<th style="width: 12%;"><a onclick="javascript:document.getElementById('category').value='itemCategory1'; sort();" class="selector"><span style="margin-right: 10px;">남성/여성</span><i class="fa fa-caret-down" aria-hidden="true"></i></a></th>
+									<th style="width: 13%;"><a onclick="javascript:document.getElementById('category').value='itemCategory2'; sort();" class="selector"><span style="margin-right: 10px;">의류/잡화</span><i class="fa fa-caret-down" aria-hidden="true"></i></a></th>
+									<th style="width: 13%;"><a onclick="javascript:document.getElementById('category').value='itemCategory3'; sort();" class="selector"><span style="margin-right: 10px;">Category</span><i class="fa fa-caret-down" aria-hidden="true"></i></a></th>
+									<th style="width: 5%;">SIZE</th>
+									<th style="width: 10%;">수량</th>
+									<th style="width: 10%;">가격</th>
 								</tr>
 								<c:forEach var="item" items="${itemList}" varStatus="index">
 									<tr>
-										<td><c:out value="${ index.count }"/></td>
+										<td><c:out value="${ item.detailNo }"/></td>
 										<td><c:out value="${ item.itemName }"/></td>
 										<td><c:out value="${ item.itemNo }"/></td>
 										<td><c:out value="${ item.color }"/></td>
+										<td><c:out value="${ item.itemCategory1 }"/></td>
+										<td><c:out value="${ item.itemCategory2 }"/></td>
+										<td><c:out value="${ item.itemCategory3 }"/></td>
 										<td><c:out value="${ item.size }"/></td>
 										<td><c:out value="${ item.count }"/></td>
 										<td><c:out value="${ item.price }"/></td>
@@ -367,6 +387,8 @@ function showModal(ModalTest){
 			                      </ul>
 			                    </div>
                     		<br /> <br />
+                    			<input type="hidden" value="default" name="category" id="category">
+                    		</form>
 						</section>
 					</section>
 				</section>

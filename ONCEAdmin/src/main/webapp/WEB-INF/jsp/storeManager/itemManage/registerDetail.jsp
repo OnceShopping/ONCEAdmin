@@ -44,50 +44,42 @@
 <script type="text/javascript">
 
 var index = 0; //추가된 size와 count에 해당하는 index
+var img = 0; //상세 이미지를 등록했는지 여부
 
+var first = 0;
+var second = 0;
+var third = 0;	
+	
 	$(document).ready(function(){
 		
 		var add = false;
-		
+			
 		//상품의 size와 갯수를 추가하는 로직
 		$('#addItem').click(function(){
 			
-			var item = {
-					size : $('#size').val(),
-					count : $('#count').val()
-			}
+			var size = $('#size').val();
+			var count = $('#count').val();
 			
-			$.ajax({
-				url : "${ pageContext.request.contextPath }/item/add/"+$('#itemNo').val(),
-				dataType:'JSON',
-				data : item,
-				cache : false,
-				contentType : "application/json; charset=UTF-8",
-				success : function(data) {
-					
-					if(data!=null){ //새롭게 상품이 추가되는 경우
-						addList(data);
-						add = true;					
-					}else
-						//alert('아래 리스트에 추가된 상품이 존재합니다. 확인해보세요.');
-						infoAlert('아래 리스트에 추가된 상품이 존재합니다. 확인해보세요.');
-				},error : function(request,status, error) {
-					alert("에러 발생! : "+ request.status+ "message : "+ request.responseText+ "\n"+ "error : "+ error);
-				}
-			});
-			
-			$('#size').val('');
-			$('#count').val('');
-		});
-		
-		$('#addManager').submit(function() {	
-			if(add==false){ //상품의 size와 수량을 추가하지 않은 경우
-				return false;
+			if(size==""&&count=="")
+				infoAlert('추가하려는 상품의 size와 count를 입력해주세요.');
+			else if(size=="")
+				infoAlert('추가하려는 상품의  size를 입력해주세요.');
+			else if(count=="")
+				infoAlert('추가하려는 상품의  count를 입력해주세요.');
+			else{
+				if(!checkSize(size)) {//기존에 추가된 size가 없는 경우
+					addList(size, count);
+					add = true;
+				}else
+					infoAlert('추가한 사이즈가 바로 아래 리스트에 존재합니다.<br/>다시 작성해주세요.');
+
+				$('#size').val('');
+				$('#count').val('');
 			}	
 		});
 		
 		//다이얼로그 format 정의 - alert창
-		$( "#dialog" ).dialog({
+		$('#dialog').dialog({
 			 autoOpen: false,
 		      modal: true,
 		      width: '300',
@@ -99,66 +91,141 @@ var index = 0; //추가된 size와 count에 해당하는 index
 		    	 }
 		      }
 		 });
+		
+		//상품 상세 이미지의 값을 change 이벤트가 발생하기 전에 우선 체크
+		$('#uploadLogo1').click(function(){
+			first = $('#uploadLogo1').val();
+		});
+		
+		$('#uploadLogo2').click(function(){
+			second = $('#uploadLogo2').val();
+		});
+		
+		$('#uploadLogo3').click(function(){
+			third = $('#uploadLogo3').val();
+		});
+		
+		//상품의 size와 수량을 추가하지 않은 경우를 위한 예외 처리
+		$('#finish').click(function() {	
+			if(add==false) 
+				infoAlert("<span style='text-align:left;'><strong>[필수 입력]</strong></span><br/><br/>상품의 size와 count를 입력해주세요.");
+			else
+				document.getElementById("registerItem").submit();
+		});
+		
+		$('#registerItem').submit(function(){
+			return false;	
+		});
 	});
 
 	//리스트에 추가한 상품의 size와 갯수를 표시
-	function addList(data){
+	function addList(size, count){
+		++index;
+		var indexItem = index;
 		
-		var contents = "<tr>";
+		var contents = "<tr id="+indexItem+">";
 		contents += "<td style='text-align:center;'>"+$('#itemName').val()+"</td>";
 		contents += "<td style='text-align:center;'>"+$('#itemNo').val()+"</td>";
-		contents += "<td style='text-align:center;'>"+data.size+"</td>";
-		contents += "<td style='text-align:center;'>"+data.count+"</td>";
-		contents += "<td style='width: 20%; text-align:center;'><a class='delete' id="+data.size+" onclick=deleteItem('"+(++index)+"') style='color:red;'><i class='fa fa-times' aria-hidden='true'></i></a></td>";
+		contents += "<td style='text-align:center;'>"+size+"<input type='hidden' class='addSize' value='"+size+"' name='size'></td>";
+		contents += "<td style='text-align:center;'>"+count+"<input type='hidden' value='"+count+"' name='count'></td>";
+		contents += "<td style='width: 20%; text-align:center;'><a class='delete' id="+size+" onclick=deleteItem('"+(index)+"') style='color:red;'><i class='fa fa-times' aria-hidden='true'></i></a></td>";
 		contents += "</tr>";
 		
 		$('#AddList').append(contents);
 		
 	}
-	
-	//추가한 size와 갯수를 삭제
+
+	//추가한 size와 수량 삭제
 	function deleteItem(index){
 		
-		var item = document.getElementsByClassName('delete')[index-1].id;
-		var list = document.getElementById('AddList');
-		
-		$.ajax({
-			url : "${ pageContext.request.contextPath }/item/delete",
-			dataType:'JSON',
-			type:'get',
-			data : {
-				'size' : item
-			},
-			cache : false,
-			contentType : "application/json; charset=UTF-8",
-			success : function(data) {
-				alert(data);
-				list.deleteRow(index);
-			},error : function(request,status, error) {
-				alert("에러 발생! : "+ request.status+ "message : "+ request.responseText+ "\n"+ "error : "+ error);
+		$('tr').each(function(){
+			var check = $(this).attr('id');
+			if(check==index){
+				$(this).remove();
 			}
-		}); 
+		});
+	}
+	
+	//추가한 사이즈가 존재하는지 여부 확인
+	function checkSize(size){
+		var result=false;
+		var sizeList = 	document.getElementsByClassName('addSize');
+		
+		for(var i=0; i<sizeList.length; i++){
+			if(sizeList[i].value==size)
+				result=true;
+		}
+		return result;
 	}
 	
 	//알림 모달 다이얼로그 태그 설정
 	function infoAlert(str){
-		$('#dialog').html("<div style='text-align:center;'><p>"+str+"</p></div>");
+		$('#dialog').html("<div><p>"+str+"</p></div>");
 		$("#dialog").dialog("open");
 	}
 	
+	//이미지 미리 보기
+    function fileInfo(f, imgIndex){
+				
+		var file = f.files;
+    	var reader = new FileReader();
+    	reader.onload = function(rst){
+    		
+    		if(img==0){ //상세 이미지를 등록했는지 여부 - 처음 이미지를 등록하는 경우
+	   			++img;
+    			if(imgIndex=='0')
+    				$('#itemImg').prepend("<div class='item active' id='detail1'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200' style='margin-left: auto; margin-right: auto;'></div>");
+    			else if(imgIndex=='1')
+    				$('#itemImg').prepend("<div class='item active' id='detail2'><img src='" + rst.target.result+"' alt='Second slide' height='250' width='200' style='margin-left: auto; margin-right: auto;'></div>");
+    			else
+    				$('#itemImg').prepend("<div class='item active' id='detail3'><img src='" + rst.target.result+"' alt='Third slide' height='250' width='200' style='margin-left: auto; margin-right: auto;'></div>");
+    		}else{
+				if(imgIndex=='0'){
+					if(first=="")
+						$('#itemImg').append("<div class='item' id='detail1'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'></div>");
+					else
+						$('#detail1').html("<img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'>");
+				}else if(imgIndex=='1'){
+					if(second=="")
+						$('#itemImg').append("<div class='item' id='detail2'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'></div>");
+					else
+						$('#detail2').html("<img src='" + rst.target.result+"' alt='Second slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'>");
+				}else
+					if(third=="")
+						$('#itemImg').append("<div class='item' id='detail3'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'></div>");
+					else
+						$('#detail3').html("<img src='" + rst.target.result+"' alt='Third slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'>");
+    		}
+    	}
+    	reader.readAsDataURL(file[0]);
+    }
+
+	//숫자만 입력 받을 수 있도록 설정
+	function numberCheck(e){
+		var keyValue = event.keyCode;
+
+		if((keyValue>=48) && (keyValue<=57))
+			return true;	
+		else if(keyValue==8)
+			return true;
+		else if((keyValue>=96) && (keyValue<=105))
+			return true;
+		else
+			return false;
+	}
 </script>
 <style type="text/css">
-.ui-menu {
-	width: 200px;
-}
-
-.ui-widget-header {
-	padding: 0.2em;
-}
-
-.select {
-	background-color: #F3F2F2;
-}
+	.ui-menu {
+		width: 200px;
+	}
+	
+	.ui-widget-header {
+		padding: 0.2em;
+	}
+	
+	.select {
+		background-color: #F3F2F2;
+	}
 </style>
 </head>
 <body>
@@ -225,7 +292,7 @@ var index = 0; //추가된 size와 count에 해당하는 index
 													관리</span>
 										</a>
 											<ul class="nav dk">
-												<li><a href="${pageContext.request.contextPath}/item/register"
+												<li class="active"><a href="${pageContext.request.contextPath}/item/register"
 													class="auto"> <i class="i i-dot"></i> <span>상품
 															등록</span>
 												</a></li>
@@ -289,60 +356,93 @@ var index = 0; //추가된 size와 count에 해당하는 index
 					<section class="vbox">
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
-							<h3 class="font-bold m-b-none m-t-none">${storeName}상품 등록</h3>
-							<br /> <br />
+							<h3 class="font-bold m-b-none m-t-none">[${item.storeName}] 상품 등록</h3>
+							<br /><br /><br /><br />
 							<form action="${ pageContext.request.contextPath }/item/registerDetail"
-								method="post" enctype="multipart/form-data">
+								method="post" enctype="multipart/form-data" id="registerItem">
 								<div style="background-color: #E0DFDF; height: 30px; padding: 5px;"
 									id="registerImg">
-									<i class="fa fa-angle-double-right" aria-hidden="true"></i> <span
-										style="font-size: 10pt; font-weight: bold;">&nbsp;&nbsp;&nbsp;상품 이미지 등록 </span>
+									<i class="fa fa-angle-double-right" aria-hidden="true" style="margin-right: 10px;"></i> <span
+										style="font-size: 11pt; font-weight: bold; display:inline-block; vertical-align:middle;">상품 이미지 등록 </span>
 								</div>
 								<table style="margin-left: 100px;" id="images">
 									<tr style="height: 100px;">
-										<td style="width: 200px;">상세 이미지 등록</td>
-										<td><input type="file" value="파일 찾기"></td>
+										<td style="width: 200px;">상세 이미지 등록</td>										
+										<td><input type="file" value="파일 찾기" id="uploadLogo1" accept="image/*" onchange="fileInfo(this, '0')"></td>
+										<!-- 이미지 -->
+										<td rowspan="3" style="width: 50px;">
+										<td rowspan="3" style="width: 300px;">
+											<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+											  <!-- Wrapper for slides -->
+											  <div class="carousel-inner" role="listbox" id="itemImg" >										   
+											  </div>
+											
+											  <!-- Controls -->
+											  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+											    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+											    <span class="sr-only">Previous</span>
+											  </a>
+											  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+											    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+											    <span class="sr-only">Next</span>
+											  </a>
+											</div>
+										</td>
 									</tr>
 									<tr style="height: 100px;">
 										<td>상세 이미지 등록</td>
-										<td><input type="file" value="파일 찾기"></td>
+										<td><input type="file" value="파일 찾기" id="uploadLogo2" accept="image/*" onchange="fileInfo(this, '1')"></td>
 									</tr>
 									<tr style="height: 100px;">
 										<td>상세 이미지 등록</td>
-										<td><input type="file" value="파일 찾기"></td>
+										<td><input type="file" value="파일 찾기" id="uploadLogo3" accept="image/*" onchange="fileInfo(this, '2')"></td>
 									</tr>
 								</table>
 								<br /> <br />
 								<div
 									style="background-color: #E0DFDF; height: 30px; padding: 5px;"
 									id="registerDetail">
-									<i class="fa fa-angle-double-right" aria-hidden="true"></i>
-									<span style="font-size: 10pt; font-weight: bold;">&nbsp;&nbsp;&nbsp;상세
+									<i class="fa fa-angle-double-right" aria-hidden="true" style="margin-right:5px;"></i>
+									<span style="font-size: 11pt; font-weight: bold; display:inline-block; vertical-align:middle;">상세
 										정보 등록 </span>
 								</div>
 								<div>
-								<p style="padding-top: 50px; font-weight: bold; margin-left: 25px;">[SIZE및 수량 등록]</p>
+								<p style="padding-top: 50px; font-weight: bold; font-size: 11pt; margin-left: 26px; margin-bottom: 10px;">[SIZE 및 COUNT 등록]</p>
 								<table id="itemDetail" style="margin-left: 90px; margin-top: 20px;">
 									<tr>
 										<td style="width: 50px;" align="right">SIZE</td>
 										<td style="width: 10px;"></td>
-										<td style="width: 50px;"><input type="text" name="size" id="size"></td>
+										<td style="width: 50px;">
+											<select id="size" style="width: 150px; height: 25px;">
+												<option value="Free">Free</option>
+												<option value="S">S</option>
+												<option value="M">M</option>
+												<option value="L">L</option>
+												<option value="XS">XS</option>
+												<option value="XL">XL</option>
+												<option value="XXL">XXL</option>
+												<option value="44">44</option>
+												<option value="55">55</option>
+												<option value="66">66</option>
+												<option value="77">77</option>
+												<option value="88">88</option>
+											</select>
+										</td>
 										<td style="width: 20px;"></td>
-										<td style="width: 50px;" align="right">수량</td>
+										<td style="width: 50px;" align="right">COUNT</td>
 										<td style="width: 10px;"></td>
-										<td style="width: 50px;"><input type="number"
-											name="count" id="count"></td>
+										<td style="width: 50px;"><input type="number" id="count" min="0" onkeypress="return numberCheck(event)"></td>
 										<td style="width: 20px;"></td>
 										<td style="width: 50px;"><input type="button"
 											name="addItem" id="addItem" value="추가"></td>
 									</tr>
 								</table>
-								<br/>
+								<br/><br/>
 								</div>
 								<br/>
 								<div>
-									<p style="font-weight: bold; margin-left: 25px;">[추가 상품 현황]</p>
-									<table style="width: 100%; margin-left: 50px;  margin-top: 20px;" id="AddList">
+									<p style="font-size: 11pt; font-weight: bold; margin-left: 25px;">[추가 상품 현황]</p>
+									<table style="width: 900px; margin-left: 51px;  margin-top: 20px;" id="AddList">
 										<tr>
 											<th style="width: 20%; text-align: center;">상품 이름</th>
 											<th style="width: 20%; text-align: center;">상품 코드</th>
@@ -353,11 +453,10 @@ var index = 0; //추가된 size와 count에 해당하는 index
 									</table>
 								</div><br/><br/><br/><br/>
 								<div>
-									<p style="font-weight: bold; margin-left: 25px;">[상품 상세 정보]</p>
-										<div style="margin-left: 110px;  margin-top: 20px;">
-											<textarea rows="3" cols="100" name="detail"></textarea>
-											<!-- <pre id="detail" name="detail" conenteditable="true"></pre> -->
-										</div>
+									<p style="font-size: 11pt; font-weight: bold; margin-left: 25px;">[상품 상세 정보]</p>
+									<div style="margin-left: 114px;  margin-top: 20px;">
+										<textarea rows="3" cols="110" name="detail" style="resize: none;"></textarea>
+									</div>
 								</div>
 								<br/><br/>
 								<div align="right">
@@ -365,8 +464,7 @@ var index = 0; //추가된 size와 count에 해당하는 index
 									<input type="submit" value="등록" class="btn btn-s-md btn-primary" id="finish">
 									<input type="hidden" value="${ item.itemNo }" name="itemNo" id="itemNo">
 									<input type="hidden" value="${ item.itemName }" name="itemName" id="itemName">
-									<input type="hidden" value="${ item.num }" name="num">
-									<input type="hidden" value="${ loginVO.managerId }" name="id">
+									<input type="hidden" value="${ item.managerId }" name="id">
 								</div>
 							</form>
 						</section>
