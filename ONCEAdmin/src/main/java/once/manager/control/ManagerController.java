@@ -57,7 +57,7 @@ public class ManagerController {
 			
 		}else {
 			mav.addObject("loginVO", loginVO);
-			System.out.println(loginVO);
+			
 			if(loginVO.getType().equals("admin")) {
 				
 				// 현재 페이지 번호 저장 변수
@@ -283,8 +283,6 @@ public class ManagerController {
 	@ResponseBody
 	public ManagerVO addManager(@RequestParam(value="managerId") String managerId, @RequestParam(value="password") String password, @RequestParam(value="name") String name, @RequestParam(value="telephone") String telephone,@RequestParam(value="type") String type,@RequestParam(value="storeNo") String storeNo) {
 				
-		System.out.println(managerId);
-		
 		ManagerVO manager = new ManagerVO();
 		
 		manager.setManagerId(managerId);

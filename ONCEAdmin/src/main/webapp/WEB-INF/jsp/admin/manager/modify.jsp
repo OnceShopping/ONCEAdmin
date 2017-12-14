@@ -222,7 +222,7 @@ input[type=text]{
 									<tr>
 										<th>연락처</th>
 										<td/>
-										<td><input type="text" value="${managerVO.telephone}" name="telephone"  pattern="\d{3}-\d{3,4}-\d{4}" title="xxx-xxx(3자리/4자리)-xxxx 형식으로   작성해주세요." ></td>
+										<td><input type="tel" value="${managerVO.telephone}" name="telephone"  pattern="(011|010|017|018|019)-\d{3,4}-\d{4}" title="xxx-xxx-xxxx 형식으로   작성해주세요." ></td>
 									</tr>
 									<tr>
 										<th>가입일</th>

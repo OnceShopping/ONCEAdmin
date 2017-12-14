@@ -285,7 +285,7 @@ input[type=text]{
 									<tr>
 										<th>수량</th>
 										<td/>
-										<td><input type="number" value="${item.count}" name="count" id="count"></td>
+										<td><input type="number" value="${item.count}" name="count" id="count"> 개</td>
 									</tr>
 								</table>
 								</div>

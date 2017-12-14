@@ -44,6 +44,13 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+		
+		
+		<c:forEach var="item" items="${itemList}" varStatus="index">
+		settingComma($('#itemIndex_'+${index.count}).text(), ${index.count});
+		</c:forEach> 
+		
+		
 		//체크박스 전체 선택, 선택 해제
 		$('#checkAll').click(function() {
 			var checkVal = document.getElementsByClassName("check");
@@ -138,6 +145,65 @@
 			document.getElementById("listForm").submit();
 	}
 
+	//수량에 comma를 설정하는 로직
+	function comma(obj){
+		
+		var num = obj.toString(); 
+		var array=[];
+		var replay = parseInt((num.length)%3);
+		var routine = parseInt((num.length+2)/3);
+				
+		if(replay==1){
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,1);
+				else if(i==1)
+					sample = num.substr(1,3);
+				else
+					sample = num.substr(((i-1)*3)+1, 3);
+				
+				array.push(sample);
+			}
+		}		
+		else if(replay==2){
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,2);
+				else if(i==1)
+					sample = num.substr(2,3);
+				else
+					sample = num.substr(((i-1)*3)+2, 3);
+				
+				array.push(sample);
+			}
+		}
+		else{
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,3);
+				else
+					sample = num.substr((i*3), 3);
+				
+				array.push(sample);
+			}
+		}	
+		return array.join(",");
+	}
+	
+	
+	//리스트에 존재하는 수량에 comma 설정 
+	function settingComma(obj, count){
+		
+		var val = comma(obj);
+	
+		$('#itemIndex_'+count).html(val);
+	}
 </script>
 <style type="text/css">
 	.list {
@@ -311,21 +377,23 @@
 									<tr style="text-align: center; background-color: #E7E7E7;">
 										<th style="width: 5%;"><input type="checkbox"
 											id="checkAll"></th>
+										<th style="width: 5%;">No.</th>
 										<th style="width: 10%;">상품 이름</th>
 										<th style="width: 10%;">상품 코드</th>
 										<th style="width: 10%;">색상</th>
 										<th style="width: 5%;">SIZE</th>
-										<th style="width: 10%;">수량</th>
+										<th style="width: 10%;">수량 (개)</th>
 									</tr>
 									<c:forEach var="item" items="${itemList}" varStatus="index">
 										<tr>
 											<td class="list"><input type="checkbox" class="check"
 												name="detailNo" value="${item.detailNo}"></td>
+											<td class="list"><c:out value="${ index.count + startPage }"/></td>
 											<td class="list"><c:out value="${ item.itemName }" /></td>
 											<td class="list"><c:out value="${ item.itemNo }" /></td>
 											<td class="list"><c:out value="${ item.color }" /></td>
 											<td class="list"><c:out value="${ item.size }" /></td>
-											<td class="list"><c:out value="${ item.count }" /></td>
+											<td class="list" id="itemIndex_${ index.count }"><c:out value="${ item.count }" /></td>
 										</tr>
 									</c:forEach>
 								</table>
@@ -341,36 +409,36 @@
 										<c:choose>
 											<c:when test="${ pageNo == 1 }">
 												<li><a
-													href="${ pageContext.request.contextPath }/item/list?pageNo=1"><i
+													href="${ pageContext.request.contextPath }/item/manage?pageNo=1"><i
 														class="fa fa-chevron-left"></i></a></li>
 											</c:when>
 											<c:otherwise>
 												<li><a
-													href="${ pageContext.request.contextPath }/item/list?pageNo=${ pageNo - 1}"><i
+													href="${ pageContext.request.contextPath }/item/manage?pageNo=${ pageNo - 1}"><i
 														class="fa fa-chevron-left"></i></a></li>
 											</c:otherwise>
 										</c:choose>
 										<!-- 페이지번호  -->
 										<c:forEach var="i" begin="${ beginPage }" end="${ endPage }">
 											<li><a
-												href="${ pageContext.request.contextPath }/item/list?pageNo=${i}">${i}</a></li>
+												href="${ pageContext.request.contextPath }/item/manage?pageNo=${i}">${i}</a></li>
 										</c:forEach>
 										<!-- 다음페이지 -->
 										<c:choose>
 											<c:when test="${ pageNo == endPage }">
 												<li><a
-													href="${ pageContext.request.contextPath }/item/list?pageNo=${ endPage }"><i
+													href="${ pageContext.request.contextPath }/item/manage?pageNo=${ endPage }"><i
 														class="fa fa-chevron-right"></i></a></li>
 											</c:when>
 											<c:otherwise>
 												<li><a
-													href="${ pageContext.request.contextPath }/item/list?pageNo=${ pageNo + 1 }"><i
+													href="${ pageContext.request.contextPath }/item/manage?pageNo=${ pageNo + 1 }"><i
 														class="fa fa-chevron-right"></i></a></li>
 											</c:otherwise>
 										</c:choose>
 										<!-- 마지막페이지 -->
 										<li><a
-											href="${ pageContext.request.contextPath }/item/list?pageNo=${ lastPage }"><i
+											href="${ pageContext.request.contextPath }/item/manage?pageNo=${ lastPage }"><i
 												class="fa fa-chevron-right"></i><i
 												class="fa fa-chevron-right"></i></a></li>
 									</ul>
