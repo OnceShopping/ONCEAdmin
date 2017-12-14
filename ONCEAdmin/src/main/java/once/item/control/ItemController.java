@@ -48,7 +48,7 @@ public class ItemController {
 	
 	@RequestMapping(value="/register", method=RequestMethod.GET)
 	public ModelAndView register(HttpSession session) {
-		
+			
 		ManagerVO manager = (ManagerVO)session.getAttribute("loginVO");
 		
 		String storeName = service.findStore(manager.getManagerId()).getStoreName(); 		
@@ -64,20 +64,30 @@ public class ItemController {
 	//카테고리, 상품 등록
 	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public ModelAndView registerItem(MultipartHttpServletRequest mRequest) throws Exception {
-
+				
 		itemVO = new ItemContentsVO();
 		
 		String id = mRequest.getParameter("id");
 		itemVO = service.findStore(id); //storeName, storeNo 설정
-		
-		
+				
 		itemVO.setItemName(mRequest.getParameter("itemName"));
-		itemVO.setPrice(Integer.parseInt(mRequest.getParameter("price")));
 		itemVO.setItemCategory1(mRequest.getParameter("itemCategory1"));
 		itemVO.setItemCategory2(mRequest.getParameter("itemCategory2"));
 		itemVO.setItemCategory3(mRequest.getParameter("itemCategory3"));		
-	
-	
+		
+		//,로 작성된 가격을 Int형식으로 변경
+		String oriPrice=mRequest.getParameter("price");
+		String [] array;
+		String intPrice="";
+		
+		array = oriPrice.split(",");
+		
+		for(int i=0; i<array.length; i++) {
+			intPrice+=array[i];
+		}
+		
+		itemVO.setPrice(Integer.parseInt(intPrice));
+		
 		int num = service.findNum(); //item을 추가하지 않은 상황
 		
 		itemVO.setColor(mRequest.getParameter("color"));
@@ -136,7 +146,7 @@ public class ItemController {
 	// 상품 이미지, 상품 상세 정보 등록
 	@RequestMapping(value="/registerDetail", method=RequestMethod.POST)
 	public ModelAndView registerItemDetail(MultipartHttpServletRequest mRequest) throws Exception {
-	
+		
 		service.addItem(itemVO); //Item 테이블에 데이터 추가
 		service.addItemColor(itemVO); //ItemColor 테이블에 데이터 추가
 		
@@ -227,7 +237,7 @@ public class ItemController {
 	//매장의 등록된 상품 리스트 출력
 	@RequestMapping(value = "/list", method=RequestMethod.GET)
 	public ModelAndView itemList(HttpSession session, HttpServletRequest request) {
-			
+					
 		ManagerVO manager = (ManagerVO)session.getAttribute("loginVO");
 		
 		Map<String, Object> ItemContentsVOMap = new HashMap<>();
@@ -253,6 +263,7 @@ public class ItemController {
 		
 		ItemContentsVOMap.put("startPage", null);
 		ItemContentsVOMap.put("count", null );	
+		
 		// storeName이 일치하는 전체 게시글 카운트
 		int totalCount = service.selectPage(ItemContentsVOMap).size();
 		
@@ -289,7 +300,9 @@ public class ItemController {
 		
 		mav.addObject("storeName", storeName);
 		mav.addObject("itemList", itemList);
-		mav.setViewName("storeManager/itemManage/list");		
+		mav.addObject("startPage", (pageNo -1 ) * listSize);
+		mav.setViewName("storeManager/itemManage/list");
+		
 				
 		return mav;
 
@@ -393,8 +406,10 @@ public class ItemController {
 		// ======================================================================
 		
 		ModelAndView mav = new ModelAndView();
+		
 		mav.addObject("itemList", itemList);
 		mav.addObject("storeName", storeName);
+		mav.addObject("startPage", (pageNo -1 ) * listSize);
 		mav.setViewName("storeManager/itemManage/manage");
 		
 		return mav;

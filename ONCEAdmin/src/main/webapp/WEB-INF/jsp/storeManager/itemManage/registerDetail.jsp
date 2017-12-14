@@ -127,7 +127,7 @@ var third = 0;
 		contents += "<td style='text-align:center;'>"+$('#itemName').val()+"</td>";
 		contents += "<td style='text-align:center;'>"+$('#itemNo').val()+"</td>";
 		contents += "<td style='text-align:center;'>"+size+"<input type='hidden' class='addSize' value='"+size+"' name='size'></td>";
-		contents += "<td style='text-align:center;'>"+count+"<input type='hidden' value='"+count+"' name='count'></td>";
+		contents += "<td style='text-align:center;'>"+comma(count)+"<input type='hidden' value='"+count+"' name='count'></td>";
 		contents += "<td style='width: 20%; text-align:center;'><a class='delete' id="+size+" onclick=deleteItem('"+(index)+"') style='color:red;'><i class='fa fa-times' aria-hidden='true'></i></a></td>";
 		contents += "</tr>";
 		
@@ -174,27 +174,27 @@ var third = 0;
     		if(img==0){ //상세 이미지를 등록했는지 여부 - 처음 이미지를 등록하는 경우
 	   			++img;
     			if(imgIndex=='0')
-    				$('#itemImg').prepend("<div class='item active' id='detail1'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200' style='margin-left: auto; margin-right: auto;'></div>");
+    				$('#itemImg').prepend("<div class='item active' id='detail1'><img src='" + rst.target.result+"' alt='First slide' style='margin-left: auto; margin-right: auto;'></div>");
     			else if(imgIndex=='1')
-    				$('#itemImg').prepend("<div class='item active' id='detail2'><img src='" + rst.target.result+"' alt='Second slide' height='250' width='200' style='margin-left: auto; margin-right: auto;'></div>");
+    				$('#itemImg').prepend("<div class='item active' id='detail2'><img src='" + rst.target.result+"' alt='Second slide' style='margin-left: auto; margin-right: auto;'></div>");
     			else
-    				$('#itemImg').prepend("<div class='item active' id='detail3'><img src='" + rst.target.result+"' alt='Third slide' height='250' width='200' style='margin-left: auto; margin-right: auto;'></div>");
+    				$('#itemImg').prepend("<div class='item active' id='detail3'><img src='" + rst.target.result+"' alt='Third slide' style='margin-left: auto; margin-right: auto;'></div>");
     		}else{
 				if(imgIndex=='0'){
 					if(first=="")
-						$('#itemImg').append("<div class='item' id='detail1'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'></div>");
+						$('#itemImg').append("<div class='item' id='detail1'><img src='" + rst.target.result+"' alt='First slide' style='margin-left: auto; margin-right: auto;'></div>");
 					else
-						$('#detail1').html("<img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'>");
+						$('#detail1').html("<img src='" + rst.target.result+"' alt='First slide' style='margin-left: auto; margin-right: auto;'>");
 				}else if(imgIndex=='1'){
 					if(second=="")
-						$('#itemImg').append("<div class='item' id='detail2'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'></div>");
+						$('#itemImg').append("<div class='item' id='detail2'><img src='" + rst.target.result+"' alt='First slide' style='margin-left: auto; margin-right: auto;'></div>");
 					else
-						$('#detail2').html("<img src='" + rst.target.result+"' alt='Second slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'>");
+						$('#detail2').html("<img src='" + rst.target.result+"' alt='Second slide'  style='margin-left: auto; margin-right: auto;'>");
 				}else
 					if(third=="")
-						$('#itemImg').append("<div class='item' id='detail3'><img src='" + rst.target.result+"' alt='First slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'></div>");
+						$('#itemImg').append("<div class='item' id='detail3'><img src='" + rst.target.result+"' alt='First slide' style='margin-left: auto; margin-right: auto;'></div>");
 					else
-						$('#detail3').html("<img src='" + rst.target.result+"' alt='Third slide' height='250' width='200'  style='margin-left: auto; margin-right: auto;'>");
+						$('#detail3').html("<img src='" + rst.target.result+"' alt='Third slide'  style='margin-left: auto; margin-right: auto;'>");
     		}
     	}
     	reader.readAsDataURL(file[0]);
@@ -213,6 +213,58 @@ var third = 0;
 		else
 			return false;
 	}
+	
+	//comma를 설정하는 로직
+	function comma(obj){
+		
+		var num = obj.toString(); 
+		var array=[];
+		var replay = parseInt((num.length)%3);
+		var routine = parseInt((num.length+2)/3);
+				
+		if(replay==1){
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,1);
+				else if(i==1)
+					sample = num.substr(1,3);
+				else
+					sample = num.substr(((i-1)*3)+1, 3);
+				
+				array.push(sample);
+			}
+		}		
+		else if(replay==2){
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,2);
+				else if(i==1)
+					sample = num.substr(2,3);
+				else
+					sample = num.substr(((i-1)*3)+2, 3);
+				
+				array.push(sample);
+			}
+		}
+		else{
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,3);
+				else
+					sample = num.substr((i*3), 3);
+				
+				array.push(sample);
+			}
+		}	
+		return array.join(",");
+	}
+	
 </script>
 <style type="text/css">
 	.ui-menu {
@@ -226,6 +278,14 @@ var third = 0;
 	.select {
 		background-color: #F3F2F2;
 	}
+
+	.carousel-inner > .item > img {
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 300px;
+    } 
+
 </style>
 </head>
 <body>
@@ -366,6 +426,7 @@ var third = 0;
 										style="font-size: 11pt; font-weight: bold; display:inline-block; vertical-align:middle;">상품 이미지 등록 </span>
 								</div>
 								<table style="margin-left: 100px;" id="images">
+									<tr style="height: 30px;"/>
 									<tr style="height: 100px;">
 										<td style="width: 200px;">상세 이미지 등록</td>										
 										<td><input type="file" value="파일 찾기" id="uploadLogo1" accept="image/*" onchange="fileInfo(this, '0')"></td>
@@ -373,10 +434,9 @@ var third = 0;
 										<td rowspan="3" style="width: 50px;">
 										<td rowspan="3" style="width: 300px;">
 											<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-											  <!-- Wrapper for slides -->
-											  <div class="carousel-inner" role="listbox" id="itemImg" >										   
-											  </div>
-											
+												<!-- Wrapper for slides -->
+												  <div class="carousel-inner" role="listbox" id="itemImg" >										   
+												  </div>
 											  <!-- Controls -->
 											  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
 											    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
@@ -431,7 +491,7 @@ var third = 0;
 										<td style="width: 20px;"></td>
 										<td style="width: 50px;" align="right">COUNT</td>
 										<td style="width: 10px;"></td>
-										<td style="width: 50px;"><input type="number" id="count" min="0" onkeypress="return numberCheck(event)"></td>
+										<td style="width: 50px;"><input type="number" id="count" min="0" onkeypress="return numberCheck(event)" style="text-align: right;"></td>
 										<td style="width: 20px;"></td>
 										<td style="width: 50px;"><input type="button"
 											name="addItem" id="addItem" value="추가"></td>
