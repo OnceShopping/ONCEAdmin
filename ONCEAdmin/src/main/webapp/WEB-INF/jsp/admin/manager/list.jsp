@@ -173,18 +173,21 @@
 						cache : false,
 						contentType : "application/json; charset=UTF-8",
 						success : function(data) {
-								
+	
 							var result = $.parseJSON(data);
 							
 							printList(result); //리스트에 추가
 
+							$('#storeType').show(); //추가 후 select 박스에 숨긴 option을 다시 표시하기 위함
+							$('#bigType').show();
+							
 							$('#managerId').val('');
 							$('#password').val('');
 							$('#name').val('');
 							$('#typeSelect').val('');
 							$('#telephone').val('');
 							$('#storeSelect').val('');
-								
+															
 						},
 						error : function(request,status, error) {
 							alert("에러 발생! : " + request.status + "message : "+ request.responseText+ "\n"+ "error : "+ error);
@@ -413,34 +416,74 @@
 			$("#dialog").dialog("open");
 		}
 		
+		//특수문자를 입력받지 않도록 설정
+		function charCheck(e){
+			var keyValue = event.keyCode;
+
+			if((keyValue>=33) && (keyValue<=47))
+				return false;	
+			else if((keyValue>=58) && (keyValue<=64))
+				return false;	
+			else if((keyValue>=91) && (keyValue<=96))
+				return false;
+			else if((keyValue>=123) && (keyValue<=126))
+				return false;
+			else
+				return true;
+		}
+		
+		//숫자만 입력 받을 수 있도록 설정
+		function numberCheck(e){
+			var keyValue = event.keyCode;
+
+			if((keyValue>=48) && (keyValue<=57))
+				return true;	
+			else if(keyValue==8)
+				return true;
+			else if((keyValue>=96) && (keyValue<=105))
+				return true;
+			else
+				return false;
+		}
 </script>
 <style type="text/css">
-.addDiv {
-	width: 700px;
-	background: #E0DFDF;
-	border: none;
-	margin-left: auto;
-	margin-bottom: 50px;
-	margin-right: auto;
-	padding: 40px;
-	border-radius: 20px;
-}
-
-.managerList {
-	border-collapse: collapse;
-	width: 100%;
-	border: 1 solid;
-	border-color: #bcbcbc;
-}
-
-.managerList td {
-	text-align: center;
-}
- 
+	.addDiv {
+		width: 700px;
+		background: #E0DFDF;
+		border: none;
+		margin-left: auto;
+		margin-bottom: 50px;
+		margin-right: auto;
+		padding: 40px;
+		border-radius: 20px;
+	}
+	
+	.managerList {
+		border-collapse: collapse;
+		width: 100%;
+		border: 1 solid;
+		border-color: #bcbcbc;
+	}
+	
+	.managerList td {
+		text-align: center;
+		padding: 5px;
+	}
+	
+	 .managerList tr:hover{
+		 background-color: #FBFCFD;
+ 	}
+ 	
+ 	.managerList th{
+			text-align: center;
+			font-size: 12pt;
+			font-weight: bold;
+			color: #788288;
+	}
 </style>
 </head>
 <body class="">
-	<!-- Modal --> 						
+	<!-- Modal -->
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
@@ -596,7 +639,7 @@
 											<th width="10%" style="text-align: right;">ID</th>
 											<td width="5%" />
 											<td width="40%">
-												<input type="text" id="managerId" name="managerId" width="60%" pattern="\w+" title="알파벳 또는 숫자를 입력하세요.">&nbsp;&nbsp;&nbsp;<input type="button" id="IdCheck" value="중복 체크" name="IdCheck" width="40%"></td>
+												<input type="text" id="managerId" name="managerId" width="60%" pattern="[A-Za-z0-9]+$" title="알파벳 또는 숫자를 입력하세요.">&nbsp;&nbsp;&nbsp;<input type="button" id="IdCheck" value="중복 체크" name="IdCheck" width="40%"></td>
 											<th width="20%" style="text-align: right;">비밀 번호</th>
 											<td width="5%" />
 											<td width="25%"><input type="password" id="password"
@@ -606,22 +649,22 @@
 										<tr>
 											<th width="10%" style="text-align: right;">이름</th>
 											<td width="5%" />
-											<td width="40%"><input type="text" id="name" name="name" pattern="([^A-Za-z0-9]+$|[A-Za-z]+$)" title="한글 또는 영어로 입력해주세요."></td>
+											<td width="40%"><input type="text" id="name" name="name" pattern="[^0-9]+$" title="숫자 또는 특수문자를 제외한 한글 또는 알파벳으로 작성해주세요." onkeypress="return charCheck(event)"></td>
 											<th width="20%" style="text-align: right;">연락처</th>
 											<td width="5%" />
 											<td width="25%"><input type="tel" id="telephone"
-												name="telephone" pattern="(010)-\d{3,4}-\d{4}" title="010-xxx-xxxx 또는  010-xxxx-xxxx 형식으로   작성해주세요." ></td>
+												name="telephone" pattern="(011|010|017|018|019)-\d{3,4}-\d{4}" title="xxx-xxx-xxxx 형식으로   작성해주세요." ></td>
 										</tr>
 										<tr height="20px" />
 										<tr>
 											<th colspan="2" style="text-align: left;">매장 이름 &nbsp;</th>
 											<td colspan="5" style="text-align: left;"><select
 												style="height: 25px" id="typeSelect">
-													<option value="0000" id="center">통합관리자</option>
-													<option value="info" id="infoDesk">info</option>
-													<option value="F01" id="F01">1층</option>
-													<option value="F02" id="F02">2층</option>
-													<option value="F03" id="F03">3층</option>
+													<option value="0000" id="center" class="bigType">통합관리자</option>
+													<option value="info" id="infoDesk" class="bigType">info</option>
+													<option value="F01" id="F01" class="bigType">1층</option>
+													<option value="F02" id="F02" class="bigType">2층</option>
+													<option value="F03" id="F03" class="bigType">3층</option>
 											</select> <select style="height: 25px" id="storeSelect"
 												name="storeSelect">
 													<option value="INFO1F" class="storeType info">1F 안내데스크</option>
@@ -654,17 +697,16 @@
 							<br />
 							<form action="${pageContext.request.contextPath}/manager/list"
 								method="post" id="listForm" name="listForm">
-								<table class="managerList" >
-									<tr style="text-align: center; background-color: #E7E7E7"  id="addList">
-										<td width="5%"><input type="checkbox" id="checkAll"></td>
-										<td width="15%" class="tbTile">사원 번호</td>
-										<td width="10%" class="tbTile">해당 매장</td>
-										<td width="15%" class="tbTile">아이디</td>
-										<td width="15%" class="tbTile">이름</td>
-										<td width="20%" class="tbTile">연락처</td>
-										<td width="20%" class="tbTile">가입일</td>
+								<table class="managerList" style="margin-bottom: 100px;">
+									<tr style="text-align: center; background-color: #E7E7E7; height: 30px; padding: 5px;"   id="addList">
+										<th width="5%"><input type="checkbox" id="checkAll"></th>
+										<th width="15%" class="tbTile">사원 번호</th>
+										<th width="10%" class="tbTile">해당 매장</th>
+										<th width="15%" class="tbTile">아이디</th>
+										<th width="15%" class="tbTile">이름</th>
+										<th width="20%" class="tbTile">연락처</th>
+										<th width="20%" class="tbTile">가입일</th>
 									</tr>
-
 									<c:forEach items="${managerList}" var="manager"	varStatus="managerStatus">									
 										<tr>
 											<td><input type="checkbox" value=${ manager.managerId }
@@ -682,8 +724,7 @@
 											<td>${ manager.date }</td>
 										</tr>
 									</c:forEach>
-								</table>								
-								<br /> <br /> <br />
+								</table>
 								<div class="col-sm-4 text-right text-center-xs" style="margin-left: 340px;">                
 			                      <ul class="pagination pagination-sm m-t-none m-b-none">
 			         					<!-- 처음페이지 -->

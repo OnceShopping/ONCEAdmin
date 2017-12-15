@@ -156,6 +156,7 @@ ul {
                                        href="${pageContext.request.contextPath}/item/list"
                                        class="auto"> <i class="i i-dot"></i> <span>상품
                                              리스트</span>
+
                                     </a></li>
                                     <li><a href="icons.html" class="auto"> <i
                                           class="i i-dot"></i> <span>상품 재고 관리</span>

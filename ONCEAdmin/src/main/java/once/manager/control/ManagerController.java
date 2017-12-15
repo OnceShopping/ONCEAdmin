@@ -39,21 +39,23 @@ public class ManagerController {
 	private NoticeService nService;
 	
 	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public String login(@RequestParam("id")String id, @RequestParam("password")String password, Model model, HttpServletRequest request) {
+	public ModelAndView login(@RequestParam("id")String id, @RequestParam("password")String password, Model model, HttpServletRequest request) {
 		
 		ManagerVO manager = new ManagerVO();
 		manager.setManagerId(id);
 		manager.setPassword(password);
 		
+		ModelAndView mav = new ModelAndView();
+		
 		ManagerVO loginVO = service.login(manager);
 				
 		if(loginVO==null) {
-			model.addAttribute("message", "Please check your ID or Password");
+			mav.addObject("message", "Please check your ID or Password");
+			mav.setViewName("login/loginFail");
 			
-			return "login/loginFail";
 		}else {
-			model.addAttribute("loginVO", loginVO);
-			/*System.out.println(loginVO);*/
+      mav.addObject("loginVO", loginVO);
+      
 			if(loginVO.getType().equals("admin")) {
 				
 				// 현재 페이지 번호 저장 변수
@@ -96,20 +98,23 @@ public class ManagerController {
 				page.add( (pageNo - 1) * listSize );
 				page.add( listSize );
 				List<NoticeVO> list = nService.selectPage(page);
+	
+        mav.addObject("list", list);
+				mav.setViewName("admin/notice/list");
 				
-				model.addAttribute("list", list);
-				return "admin/notice/list";
-			}else if(loginVO.getType().matches(".*info.*")) {
-				return "infoManager/boardQA/list";
+			}else if(loginVO.getType().matches(".*info.*")) {			
+				mav.setViewName("infoManager/boardQA/list");
+
 			}else if(loginVO.getType().matches(".*store.*")) {
-				model.addAttribute("storeName", service.selectById(id).getStoreName());
-				return "storeManager/itemManage/register";
-			}else {
-				model.addAttribute("message", "type이 이상합니다");
+				mav.addObject("storeName", service.selectById(id).getStoreName());
+				mav.setViewName("storeManager/itemManage/register");
 				
-				return "login/loginFail";
+			}else {
+				mav.addObject("message", "type이 이상합니다");
+				mav.setViewName("login/loginFail");
 			}
 		}
+		return mav;
 	}
 	
 	//패스워드 체크 페이지
@@ -275,9 +280,7 @@ public class ManagerController {
 	@RequestMapping(value="/manager/add", method=RequestMethod.GET )
 	@ResponseBody
 	public ManagerVO addManager(@RequestParam(value="managerId") String managerId, @RequestParam(value="password") String password, @RequestParam(value="name") String name, @RequestParam(value="telephone") String telephone,@RequestParam(value="type") String type,@RequestParam(value="storeNo") String storeNo) {
-				
-		/*System.out.println(managerId);*/
-		
+
 		ManagerVO manager = new ManagerVO();
 		
 		manager.setManagerId(managerId);
