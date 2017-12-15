@@ -2,14 +2,11 @@ package once.manager.service;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import once.manager.dao.ManagerDAO;
 import once.manager.vo.ManagerVO;
-import once.notice.vo.NoticeVO;
 import once.store.vo.StoreVO;
 
 @Service
@@ -112,5 +109,27 @@ public class ManagerServiceImpl implements ManagerService{
 		return list;
 	}
 
+	//매장 직원 관리
+	@Override
+	public List<ManagerVO> selectByStore(String storeNo) {
+		List<ManagerVO> list = dao.selectByStore(storeNo);
+		return list;
+	}
+
+	@Override
+	public List<ManagerVO> selectByStorePage(List<Object> page) {
+		List<ManagerVO> list = dao.selectByStorePage(page);
+		return list;
+	}
+
+	@Override
+	public List<ManagerVO> searchByStore(ManagerVO manager) {
+		List<ManagerVO> list = dao.searchByStore(manager);
+		return list;
+	}
+	@Override
+	public void add1(ManagerVO manager) {		
+		dao.insert1(manager);
+	}
 }
  

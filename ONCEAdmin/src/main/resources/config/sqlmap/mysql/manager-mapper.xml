@@ -134,6 +134,46 @@
  		</choose>
  	</select>
 
+	<!-- 해당 매장 직원 조회 -->
+  	<select id="selectByStore" resultType="ManagerVO" parameterType="String">
+ 		<include refid="refAll" />
+ 		where storeNo = #{storeNo} and type = 'storeStaff'
+ 		order by staffNo ASC;
+ 	</select>
+ 	
+ 	<select id="selectByStorePage" parameterType="java.util.List" resultType="ManagerVO">
+ 		<include refid="refAll" />
+ 		where storeNo = #{list[2]} and type = 'storeStaff'
+ 		order by staffNo DESC
+ 		limit #{list[0]}, #{list[1]}
+ 	</select>
+  
+ 	<!-- 매장 직원 추가 -->
+ 	<insert id="insert1" parameterType="ManagerVO">
+ 		insert into StoreMember(managerId, type, password, storeNo, name, telephone, date) 
+ 		values 
+ 		(#{managerId}, #{type}, #{password}, #{storeNo}, #{name}, #{telephone}, #{date}) 
+ 	</insert>
+ 	
+ 	<!-- 모든 조건 검색 -->
+ 	<select id="searchByStore" parameterType="String" resultType="ManagerVO">
+ 		select StoreMember.staffNo, StoreMember.managerId, StoreMember.name, StoreMember.telephone, date_format(date, '%y-%m-%d') as date, StoreMember.storeNo, store.storeName
+ 		from StoreMember left join store
+		where type = 'storeStaff'
+		and
+		<!-- where StoreMember.storeNo = #{storeNo} -->
+ 		<choose>
+ 			<when test="name!=null">
+ 				name like concat('%',#{name},'%')
+ 			</when>
+ 			<when test="managerId!=null">
+ 				managerId like concat('%',#{managerId},'%')
+ 			</when>
+ 			<when test="storeName!=null">
+ 				storeName like concat('%',#{storeName},'%')
+ 			</when>
+ 		</choose>
+ 	</select>
 </mapper>
 
 

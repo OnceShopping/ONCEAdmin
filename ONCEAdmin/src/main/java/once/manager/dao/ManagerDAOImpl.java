@@ -150,4 +150,29 @@ public class ManagerDAOImpl implements ManagerDAO {
 		return list;
 	}
 
+	//해당 매장 직원 목록
+	@Override
+	public List<ManagerVO> selectByStore(String storeNo) {
+		List<ManagerVO> list = sqlSession.selectList("once.manager.dao.ManagerDAO.selectByStore", storeNo);
+		
+		return list;
+	}
+	
+	@Override
+	public List<ManagerVO> selectByStorePage(List<Object> page) {
+		List<ManagerVO> list = sqlSession.selectList("once.manager.dao.ManagerDAO.selectByStorePage", page);
+		return list;
+	}
+
+	@Override
+	public List<ManagerVO> searchByStore(ManagerVO manager) {
+		List<ManagerVO> list = sqlSession.selectList("once.manager.dao.ManagerDAO.searchByStore", manager);
+		return list;
+	}
+
+	@Override
+	public void insert1(ManagerVO manager) {
+		
+		sqlSession.insert("once.manager.dao.ManagerDAO.insert1", manager);
+	}
 }
