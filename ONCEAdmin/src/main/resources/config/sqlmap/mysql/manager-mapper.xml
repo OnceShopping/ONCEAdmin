@@ -118,7 +118,8 @@
  		select StoreMember.staffNo, StoreMember.managerId, StoreMember.name, StoreMember.telephone, date_format(date, '%y-%m-%d') as date, StoreMember.storeNo, store.storeName
  		from StoreMember left join store
 		on StoreMember.storeNo = store.storeNo
- 		where type = 'infoStaff' and
+ 		where type = 'infoStaff'
+ 		and
  		<choose>
  			<when test="name!=null">
  				name like concat('%',#{name},'%')
@@ -131,7 +132,96 @@
  			</when>
  		</choose>
  	</select>
+
+	<!-- 해당 매장 직원 조회 -->
+  	<select id="selectByStore" resultType="ManagerVO" parameterType="String">
+ 		<include refid="refAll" />
+ 		where storeNo = #{storeNo} and type = 'storeStaff'
+ 		order by staffNo ASC;
+ 	</select>
+
  	
+ 	<select id="selectByStorePage" parameterType="java.util.List" resultType="ManagerVO">
+ 		<include refid="refAll" />
+ 		where storeNo = #{list[2]} and type = 'storeStaff'
+ 		order by staffNo DESC
+ 		limit #{list[0]}, #{list[1]}
+ 	</select>
+ 	<!-- 매장 직원 추가 -->
+ 	<insert id="insert1" parameterType="ManagerVO">
+ 		insert into StoreMember(managerId, type, password, storeNo, name, telephone, date) 
+ 		values 
+ 		(#{managerId}, #{type}, #{password}, #{storeNo}, #{name}, #{telephone}, #{date}) 
+ 	</insert>
+ 	<!-- <select id="searchByStore" parameterType="String" resultType="ManagerVO">
+ 		select StoreMember.staffNo, StoreMember.managerId, StoreMember.name, StoreMember.telephone, date_format(date, '%y-%m-%d') as date, StoreMember.storeNo, store.storeName
+ 		from StoreMember left join store
+		on StoreMember.storeNo = store.storeNo
+ 		where
+ 		<choose>
+ 			<when test="name!=null">
+ 				name like concat('%',#{name},'%')
+ 			</when>
+ 			<when test="managerId!=null">
+ 				managerId like concat('%',#{managerId},'%')
+ 			</when>
+ 			<when test="storeName!=null">
+ 				storeName like concat('%',#{storeName},'%')
+ 			</when>
+ 		</choose>
+ 	</select> -->
+ 	
+ 	<!-- 모든 조건 검색 -->
+ 	<select id="searchByStore" parameterType="String" resultType="ManagerVO">
+ 		select StoreMember.staffNo, StoreMember.managerId, StoreMember.name, StoreMember.telephone, date_format(date, '%y-%m-%d') as date, StoreMember.storeNo, store.storeName
+ 		from StoreMember left join store
+		where type = 'storeStaff'
+		and
+		<!-- where StoreMember.storeNo = #{storeNo} -->
+ 		<choose>
+ 			<when test="name!=null">
+ 				name like concat('%',#{name},'%')
+ 			</when>
+ 			<when test="managerId!=null">
+ 				managerId like concat('%',#{managerId},'%')
+ 			</when>
+ 			<when test="storeName!=null">
+ 				storeName like concat('%',#{storeName},'%')
+ 			</when>
+ 		</choose>
+ 	</select>
+ 	<!-- <select id="selectSearch" resultMap="MapBoardVO" parameterType="hashMap">
+		select staffNo, managerId, password, type, storeNo, name, telephone, 
+		date_format(date, '%y-%m-%d') as date from storeMember
+		<where>
+ 			category2 = #{category2}
+			<if test="date1 != null and date2 != null">
+				and b.regdate between #{date1} and #{date2}
+ 			</if>
+ 			<if test="selectCategory3 != null and selectCategory3 != 'all' ">
+ 				and b.category3 = #{ selectCategory3 }
+ 			</if>
+ 			<choose>
+ 				<when test="title != null and content != null">
+ 					and b.title like '%${title}%' or b.content like '%${content}%'
+ 				</when>
+ 				<when test="title != null">
+ 					and b.title like '%${title}%'
+ 				</when>
+ 				<when test="writer != null">
+ 					and b.writer like '%${writer}%'
+ 				</when>
+
+ 				<when test="content != null">
+ 					and b.content like '%${content}%'
+ 				</when>
+ 			</choose>
+ 		</where>
+ 		order by b.family desc, b.depth asc 
+ 		<if test="startPage != null and count != null">
+ 			limit  #{startPage}, #{count}
+ 		</if>
+ 	</select> -->
 </mapper>
 
 

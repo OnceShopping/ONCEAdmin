@@ -2,8 +2,6 @@ package once.manager.dao;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import once.manager.vo.ManagerVO;
 import once.store.vo.StoreVO;
 
@@ -39,4 +37,12 @@ public interface ManagerDAO {
 
 	List<ManagerVO> searchInfoStaff(ManagerVO manager);
 
+	//매장 직원 관리
+	List<ManagerVO> selectByStore(String storeNo);
+	
+	List<ManagerVO> selectByStorePage(List<Object> page);
+
+	List<ManagerVO> searchByStore(ManagerVO manager);
+	
+	void insert1(ManagerVO manager);
 }
