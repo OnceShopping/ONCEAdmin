@@ -6,11 +6,10 @@ import lombok.Data;
 public class ItemImgVO {
 
 	private int imgNo;
-	
 	private int num;
 	
+	private int imageSize;
 	private String imgSaveName;
-	private String imageSize;
 	private String imgOriName;
 	
 }

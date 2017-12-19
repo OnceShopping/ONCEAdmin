@@ -143,51 +143,30 @@ ul {
                                        <i class="i i-circle-sm text-active"></i>
                                 </span> 
                                 	   <i class="i i-statistics icon"></i> 
-                               	<span class="font-bold">상품 관리</span>
+                               	<span class="font-bold">물품 관리</span>
                               </a>
                                  
                                  <ul class="nav dk">
                                     <li><a
-                                       href="${pageContext.request.contextPath}/item/register"
-                                       class="auto"> <i class="i i-dot"></i> <span>상품
-                                             등록</span>
+                                       href="${pageContext.request.contextPath}/item/list"
+                                       class="auto"> <i class="i i-dot"></i> <span>물품 추가</span>
                                     </a></li>
                                     <li><a
-                                       href="${pageContext.request.contextPath}/item/list"
-                                       class="auto"> <i class="i i-dot"></i> <span>상품
-                                             리스트</span>
-
-                                    </a></li>
-                                    <li><a href="icons.html" class="auto"> <i
-                                          class="i i-dot"></i> <span>상품 재고 관리</span>
+                                       href="${pageContext.request.contextPath}/item/register"
+                                       class="auto"> <i class="i i-dot"></i> <span>물품 전달</span>
                                     </a></li>
                                  </ul>
                               <li><a href="#" class="auto"> <span
                                     class="pull-right text-muted"> <i
                                        class="i i-circle-sm-o text"></i> <i
                                        class="i i-circle-sm text-active"></i>
-                                 </span> <i class="i i-stack icon"> </i> <span class="font-bold">프로모션</span>
+                                 </span> <i class="i i-stack icon"> </i> <span class="font-bold">직원 관리</span>
                               </a></li>
                               <li class="active"><a href="${pageContext.request.contextPath}/boardQA/list" class="auto"> <span
                                     class="pull-right text-muted"> <i
                                        class="i i-circle-sm-o text"></i> <i
                                        class="i i-circle-sm text-active"></i>
-                                 </span> <i class="i i-lab icon"> </i> <span class="font-bold">관리자
-                                       답변 게시판</span>
-                              </a></li>
-                              <li><a href="#" class="auto"> <span
-                                    class="pull-right text-muted"> <i
-                                       class="i i-circle-sm-o text"></i> <i
-                                       class="i i-circle-sm text-active"></i>
-                                 </span> <i class="i i-docs icon"> </i> <span class="font-bold">주문
-                                       내역 게시판</span>
-                              </a></li>
-                              <li><a href="${pageContext.request.contextPath}/staffManage/list" class="auto"> <span
-                                    class="pull-right text-muted"> <i
-                                       class="i i-circle-sm-o text"></i> <i
-                                       class="i i-circle-sm text-active"></i>
-                                 </span> <i class="i i-grid2 icon"> </i> <span class="font-bold">매장
-                                       직원 관리</span>
+                                 </span> <i class="i i-lab icon"> </i> <span class="font-bold">고객 답변 게시판</span>
                               </a></li>
                            </ul>
 

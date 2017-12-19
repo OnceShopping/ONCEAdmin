@@ -2,10 +2,7 @@ package once.manager.service;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import once.manager.vo.ManagerVO;
-import once.notice.vo.NoticeVO;
 import once.store.vo.StoreVO;
 
 public interface ManagerService {
@@ -39,5 +36,13 @@ public interface ManagerService {
 	List<ManagerVO> selectInfoStaffPage(List<Integer> page);
 
 	List<ManagerVO> searchInfoStaff(ManagerVO manager);
+	
+	//매장 직원 관리
+	List<ManagerVO> selectByStore(String storeNo);
 
+	List<ManagerVO> selectByStorePage(List<Object> page);
+
+	List<ManagerVO> searchByStore(ManagerVO manager);
+	
+	void add1(ManagerVO manager);
 }

@@ -27,6 +27,8 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath }/resources/css/app.css"
 	type="text/css" />
+<link rel="stylesheet"
+	href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">	
 <script
 	src="${pageContext.request.contextPath }/resources/js/jquery.min.js"></script>
 <!-- Bootstrap -->
@@ -38,9 +40,9 @@
 	src="${pageContext.request.contextPath }/resources/js/slimscroll/jquery.slimscroll.min.js"></script>
 <script
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
-
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <style type="text/css">
-.ModifyManger {
+.ModifyItem {
 	width: 500px;
 	background: #F2F2F2;
 	border: none;
@@ -58,6 +60,7 @@ td {
 th{
 	text-align: right;
 	height: 50px;
+	font-size: 12px;
 }
 
 input[type=text]{
@@ -70,14 +73,59 @@ input[type=text]{
 </style>
 <script type="text/javascript">
 	$(document).ready(function(){
+		
 		$('#goList').click(function(){
-			location.href="${pageContext.request.contextPath}/manager/list";
+			location.href="${pageContext.request.contextPath}/item/list";
 		});	
+		
+		$('#ModifyList').submit(function(){
+			return false;
+		});
+		
+		$('#complete').click(function(){
+			var itemName = $('#itemName').val();
+			var count = $('#count').val();
+			
+			infoAlert("<span style='font-weight:bold;'>"+itemName+"</span> 상품의 수량을 <span style='font-weight:bold;'>" + count + "</span>(으)로 변경하시겠습니까?");
+		});
+		
+		//다이얼로그 format 정의 - alert창
+		$('#dialog').dialog({
+			 autoOpen: false,
+		      modal: true,
+		      width: '300',
+		      height: '200',
+		      padding : '10px',
+		      buttons : [{
+			    	id : "cancel", //취소 버튼
+			    	text : "CANCEL",
+			    	click : function(){
+			    		$(this).dialog("close");
+			    	}
+			     },
+			     {
+			      	id : "OK",  //OK 버튼
+			      	text : "OK",
+			      	click : function(){
+				    	$(this).dialog("close");
+				   		}
+			      }]
+		 });
+		$('#OK').click(function(){
+			document.getElementById("ModifyList").submit();
+		});
 	});
+	
+	//알림 모달 다이얼로그 태그 설정
+	function infoAlert(str){
+		$('#dialog').html("<div style='margin-top:30px;'><p>"+str+"</p></div>");
+		$("#dialog").dialog("open");
+	}
 </script>
 </head>
 <body class="">
-	<section class="vbox">
+<div id="dialog" title="ALERT DIALOG"></div>
+<section class="vbox">
 		<!-- 상단바 -->
 		<header
 			class="bg-white header header-md navbar navbar-fixed-top-xs box-shadow">
@@ -130,46 +178,61 @@ input[type=text]{
 								<nav class="nav-primary hidden-xs" id="sidemenu">
 									<div
 										class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
-									<ul class="nav nav-main">
-										<li><a
-											href="${pageContext.request.contextPath}/notice/list"
-											class="auto"> <i class="i i-circle-sm-o text"></i> <i
-												class="i i-circle-sm text-active"></i><i
-												class="i i-statistics icon"> </i> <span class="font-bold">운영
-													공지</span>
-										</a></li>
-										<li><a
-											href="${pageContext.request.contextPath}/boardQA/list"
+									<ul class="nav nav-main" data-ride="collapse">
+										<li class="active"><a
+											href="${pageContext.request.contextPath}/item/register"
 											class="auto"> <span class="pull-right text-muted">
 													<i class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
-											</span> <i class="i i-stack icon"> </i> <span class="font-bold">QNA
-													답변</span>
+											</span> <i class="i i-statistics icon"> </i> <span class="font-bold">상품
+													관리</span>
+										</a>
+											<ul class="nav dk">
+												<li><a
+													href="${pageContext.request.contextPath}/item/register"
+													class="auto"> <i class="i i-dot"></i> <span>상품
+															등록</span>
+												</a></li>
+												<li><a
+													href="${pageContext.request.contextPath}/item/list"
+													class="auto"> <i class="i i-dot"></i> <span>상품
+															리스트</span>
+												</a></li>
+												<li class="active"><a
+													href="${pageContext.request.contextPath}/item/manage"
+													class="auto"> <i class="i i-dot"></i> <span>상품
+															재고 관리</span>
+												</a></li>
+											</ul>
+										<li><a href="#" class="auto"> <span
+												class="pull-right text-muted"> <i
+													class="i i-circle-sm-o text"></i> <i
+													class="i i-circle-sm text-active"></i>
+											</span> <i class="i i-stack icon"> </i> <span class="font-bold">프로모션</span>
 										</a></li>
 										<li><a href="#" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
-											</span> <i class="i i-lab icon"> </i> <span class="font-bold">매장
-													관리</span>
+											</span> <i class="i i-lab icon"> </i> <span class="font-bold">관리자
+													답변 게시판</span>
 										</a></li>
-										<li class="active"><a
-											href="${pageContext.request.contextPath}/manager/list"
-											class="auto"> <span class="pull-right text-muted">
-													<i class="i i-circle-sm-o text"></i> <i
+										<li><a href="#" class="auto"> <span
+												class="pull-right text-muted"> <i
+													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
-											</span> <i class="i i-docs icon"> </i> <span class="font-bold">매니저
-													관리</span>
+											</span> <i class="i i-docs icon"> </i> <span class="font-bold">주문
+													내역 게시판</span>
 										</a></li>
-										<li><a
-											href="${pageContext.request.contextPath}/customer/list"
-											class="auto"> <span class="pull-right text-muted">
-													<i class="i i-circle-sm-o text"></i> <i
+										<li><a href="#" class="auto"> <span
+												class="pull-right text-muted"> <i
+													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
-											</span> <i class="i i-grid2 icon"> </i> <span class="font-bold">고객
-													관리</span>
+											</span> <i class="i i-grid2 icon"> </i> <span class="font-bold">매장
+													직원 관리</span>
 										</a></li>
 									</ul>
+
 								</nav>
 							</div>
 						</section>
@@ -193,47 +256,42 @@ input[type=text]{
 					<section class="vbox">
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
-							<h3 class="font-bold m-b-none m-t-none">매니저 정보 수정</h3>
+							<h3 class="font-bold m-b-none m-t-none">${item.itemName} 상품 수량 수정</h3>
 							<br /> <br />
-							<form action="${pageContext.request.contextPath}/manager/update/${managerId}"
-								method="post">
-								<div class="ModifyManger">
-								<table >
+							<form action="${pageContext.request.contextPath}/item/update/${item.detailNo}"
+								method="post" id="ModifyList">
+								<div class="ModifyItem">
+								<table>
 									<tr>
-										<th width="25%">사원 번호</th>
+										<th width="25%">상품 이름</th>
 										<td width="10%"/>
-										<td width="65%"><input type="text" value="${managerVO.staffNo}" readonly="readonly" class="impossible"></td>
+										<td width="65%"><input type="text" value="${item.itemName}" readonly="readonly" class="impossible" id="itemName"></td>
 									</tr>
 									<tr>
-										<th>해당 매장</th>
+										<th>상품 코드</th>
 										<td/>
-										<td><input type="text" value="${storeVO.storeName}" readonly="readonly" class="impossible"></td>
+										<td><input type="text" value="${item.itemNo}" readonly="readonly" class="impossible"></td>
 									</tr>
 									<tr>
-										<th>아이디</th>
+										<th>색상</th>
 										<td/>
-										<td><input type="text" value="${managerVO.managerId}" readonly="readonly" class="impossible"></td>
+										<td><input type="text" value="${item.color}" readonly="readonly" class="impossible"></td>
 									</tr>
 									<tr>
-										<th>이름</th>
+										<th>SIZE</th>
 										<td/>
-										<td><input type="text" value="${managerVO.name}" name="name" class="impossible" readonly="readonly"></td>
+										<td><input type="text" value="${item.size}" name="size" class="impossible" readonly="readonly"></td>
 									</tr>
 									<tr>
-										<th>연락처</th>
+										<th>수량</th>
 										<td/>
-										<td><input type="tel" value="${managerVO.telephone}" name="telephone"  pattern="(011|010|017|018|019)-\d{3,4}-\d{4}" title="xxx-xxx-xxxx 형식으로   작성해주세요." ></td>
-									</tr>
-									<tr>
-										<th>가입일</th>
-										<td/>
-										<td><input type="text" value="${managerVO.date}" readonly="readonly" class="impossible"></td>
+										<td><input type="number" value="${item.count}" name="count" id="count"> 개</td>
 									</tr>
 								</table>
 								</div>
 								<div align="right">
 									<input type="hidden" name="_method" value="PUT" /> <input
-										type="submit" value="수정 완료" class="btn btn-s-md btn-primary"/>
+										type="submit" value="수정 완료" class="btn btn-s-md btn-primary" id="complete"/>
 									<input type="button" value="취소"  class="btn btn-s-md btn-primary" id="goList">		
 								</div>
 							</form>
