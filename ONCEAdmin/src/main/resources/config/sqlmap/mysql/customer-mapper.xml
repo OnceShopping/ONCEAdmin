@@ -43,5 +43,11 @@
 	<select id="selectPage" resultType="CustomerVO" parameterType="java.util.List">
 		<include refid="select"></include>
 			limit #{list[0]}, #{list[1]}
-	</select>	
+	</select>
+	
+	<select id="getInfo" parameterType="int" resultType="CustomerVO" >
+		<include refid="select"></include>
+		where memNo = #{memNo}
+	</select>
+	
 </mapper>

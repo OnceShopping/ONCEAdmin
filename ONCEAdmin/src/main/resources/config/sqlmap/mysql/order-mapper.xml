@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="once.order.dao.OrderDAO">
+	
+	<!-- 주문 전체 검색 -->
+	<select id="selectAllOrder" resultType="OrderVO" parameterType="String">
+		select * from orderlist where floor = #{floor}
+	</select>
+	
+	<!-- 주문 유저 한명만 검색 -->
+	<select id="memNoOrderList" resultType="OrderVO" parameterType="int">
+		select * from orderlist where memNo = #{memNo}
+	</select>
+	
+	<!-- warehouse에 들어간 주문상태 주문완료로 변경 -->
+	<update id="updateStatusFin" parameterType="int">
+		update orderList set status = '준비완료' where orderNo = #{orderNo}
+	</update>
+
+	<!-- 주문 storeNo별 검색 -->
+	<select id="storeNoOrderList"  parameterType="String" resultType="OrderVO">
+		select * from orderList where storeNo = #{storeNo}
+	</select>
+	
+	<!-- orderDetail orderNo별 검색 -->
+	<select id="orderNoDetailList"  parameterType="int" resultType="OrderDetailVO">
+		select * from orderDetail where orderNo = #{orderNo}
+	</select>
+	
+</mapper>

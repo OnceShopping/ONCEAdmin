@@ -10,4 +10,5 @@ public interface CustomerDAO {
 	void delete(int memNo);
 	List<CustomerVO> search(CustomerVO customer);
 	List<CustomerVO> selectPage(List page);
+	CustomerVO getCustomerInfo(int memNo);
 }
