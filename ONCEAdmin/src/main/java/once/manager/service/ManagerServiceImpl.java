@@ -112,5 +112,10 @@ public class ManagerServiceImpl implements ManagerService{
 		return list;
 	}
 
+	@Override
+	public ManagerVO selectOnestaffNo(int staffNo) {
+		return dao.selectOnestaffNo(staffNo);
+	}
+
 }
  

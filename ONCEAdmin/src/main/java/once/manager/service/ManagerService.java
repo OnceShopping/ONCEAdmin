@@ -40,4 +40,6 @@ public interface ManagerService {
 
 	List<ManagerVO> searchInfoStaff(ManagerVO manager);
 
+	ManagerVO selectOnestaffNo(int staffNo);
+
 }

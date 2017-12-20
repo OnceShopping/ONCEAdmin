@@ -150,4 +150,9 @@ public class ManagerDAOImpl implements ManagerDAO {
 		return list;
 	}
 
+	@Override
+	public ManagerVO selectOnestaffNo(int staffNo) {
+		return sqlSession.selectOne("once.manager.dao.ManagerDAO.selectOnestaffNo", staffNo);
+	}
+
 }

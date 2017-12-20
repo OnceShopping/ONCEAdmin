@@ -4,10 +4,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +27,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import once.customer.service.CustomerService;
+import once.customer.vo.CustomerVO;
 import once.manager.service.ManagerService;
 import once.notice.service.NoticeService;
 import once.manager.vo.ManagerVO;
 import once.notice.vo.NoticeVO;
+import once.order.service.OrderService;
+import once.order.vo.OrderVO;
 import once.store.vo.StoreVO;
+import once.warehouse.service.WarehouseService;
+import once.warehouse.vo.WarehouseVO;
 
 @SessionAttributes("loginVO")
 @Controller
@@ -39,6 +48,15 @@ public class ManagerController {
 	
 	@Autowired
 	private NoticeService nService;
+	
+	@Autowired
+	private WarehouseService wService;
+	
+	@Autowired
+	private OrderService oService;
+	
+	@Autowired
+	private CustomerService cService;
 	
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	public ModelAndView login(@RequestParam("id")String id, @RequestParam("password")String password, Model model, HttpServletRequest request) {
@@ -104,10 +122,10 @@ public class ManagerController {
 				mav.addObject("list", list);
 				mav.setViewName("admin/notice/list");
 				
-			}else if(loginVO.getType().equals("infoManger")) {			
-				mav.setViewName("infoManager/itemManage/addItem");
+			}else if(loginVO.getType().matches(".*info.*")) {			
+				mav.setViewName("redirect:/info/addItem");
 
-			}else if(loginVO.getType().equals("storeManager")) {
+			}else if(loginVO.getType().matches(".*store.*")) {
 				mav.addObject("storeName", service.selectById(id).getStoreName());
 				mav.setViewName("storeManager/itemManage/register");
 				
@@ -455,5 +473,65 @@ public class ManagerController {
 		
 		return "redirect:/info/staffList";
 	}
+	
+	//물품 추가
+	@RequestMapping("/info/addItem")
+	public ModelAndView infoAddItem(ModelAndView mav, HttpSession session) {
+		ManagerVO loginVO = (ManagerVO)session.getAttribute("loginVO");
+		List<WarehouseVO> warehouseList = wService.selectAllWarehouse(loginVO.getStoreNo().substring(4));
+		System.out.println("warehouseList : " +warehouseList);
+		
+		List<OrderVO> orderList = oService.selectAllOrder(loginVO.getStoreNo().substring(4));
+		System.out.println(orderList);
+		
+		List<Map<String, Object>> memNoList = new ArrayList<>();
+		
+		CustomerVO customerVO;
+		for (int i = 0; i < orderList.size(); i++) {
+			if(i==0) {
+				Map<String, Object> orderIdCount = new HashMap<>();
+				customerVO = cService.selectOneCustomer(orderList.get(i).getMemNo());
+				orderIdCount.put("id", customerVO.getId());
+				orderIdCount.put("memNo", orderList.get(i).getMemNo());
+				orderIdCount.put("itemCount", 1);
+				memNoList.add(orderIdCount);
+			} else  {
+				for (int j = 0; j < memNoList.size(); j++) {
+					int memNo =(int)memNoList.get(j).get("memNo");
+					if( memNo == orderList.get(i).getMemNo()  ) {
+						System.out.println("같음");
+						memNoList.get(j).put("itemCount", (int)memNoList.get(j).get("itemCount")+1);
+						break;
+					} else if(j == memNoList.size()-1) {
+						System.out.println("다름");
+						Map<String, Object> orderIdCount = new HashMap<>();
+						customerVO = cService.selectOneCustomer(orderList.get(i).getMemNo());
+						orderIdCount.put("id", customerVO.getId());
+						orderIdCount.put("memNo", orderList.get(i).getMemNo());
+						orderIdCount.put("itemCount", 1);
+						memNoList.add(orderIdCount);
+						break;
+					}
+						
+				}
+			}
+		}
+		
+		System.out.println(memNoList);
+		
+		mav.addObject("warehouseList", warehouseList);
+		mav.addObject("orderList", orderList);
+		mav.addObject("memNoList", memNoList);
+		mav.setViewName("infoManager/itemManage/addItem");
+		return mav;
+	}
+	
+	//물품 전달
+	@RequestMapping("/info/itemDelivery")
+	public ModelAndView infoItemDelivery(ModelAndView mav) {
+		mav.setViewName("infoManager/itemManage/itemDelivery");
+		return mav;
+	}
+	
 	
 }

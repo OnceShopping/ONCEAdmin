@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="once.manager.dao.ManagerDAO">
-  
+  	 
   	<sql id="refAll">
  		select staffNo, managerId, password, type, storeNo, name, telephone, date_format(date, '%y-%m-%d') as date from storeMember
  	</sql>
@@ -133,7 +133,13 @@
  			</when>
  		</choose>
  	</select>
-
+	
+	
+	<!-- staffNo로 한명 조회 -->
+	<select id="selectOnestaffNo" parameterType="int" resultType="ManagerVO">
+		<include refid="refAll" />
+		where staffNo = #{staffNo}
+	</select>
 </mapper>
 
 

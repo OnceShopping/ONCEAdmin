@@ -5,7 +5,6 @@ import lombok.Data;
 @Data
 public class OrderVO {
 
-	private String id;
 	
 	private int orderNo;
 	private String date;
@@ -19,5 +18,7 @@ public class OrderVO {
 
 	private String site;
 	
-	private String managerId;
+	
+	private int memNo;
+	private int staffNo;
 }

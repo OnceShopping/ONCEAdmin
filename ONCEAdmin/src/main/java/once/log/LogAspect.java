@@ -51,9 +51,9 @@ public class LogAspect {
 		if(loginVO.getType().equals("admin")) {
 			type = loginVO.getType();
 		} else if(loginVO.getType().matches(".*info.*")) {
-			type = loginVO.getType();
+			type = "infoManager";
 		} else if(loginVO.getType().matches(".*store.*")) {
-			type = loginVO.getType();
+			type = "storeManager";
 		}
 		request.setAttribute("type", type);
 		return joinPoint.proceed();

@@ -39,4 +39,6 @@ public interface ManagerDAO {
 
 	List<ManagerVO> searchInfoStaff(ManagerVO manager);
 
+	ManagerVO selectOnestaffNo(int staffNo);
+
 }

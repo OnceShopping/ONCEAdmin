@@ -44,4 +44,15 @@ public class CustomerDAOImpl implements CustomerDAO {
 		List<CustomerVO> list = sqlSession.selectList("once.customer.dao.CustomerDAO.selectPage", page);
 		return list;
 	}
+
+	@Override
+	public CustomerVO selectOneCustomer(int memNo) {
+		return sqlSession.selectOne("once.customer.dao.CustomerDAO.selectOneCustomer", memNo);
+	}
+
+	@Override
+	public CustomerVO selectById(String id) {
+		return sqlSession.selectOne("once.customer.dao.CustomerDAO.selectById", id);
+	}
+
 }

@@ -47,4 +47,16 @@ public class CustomerServiceImpl implements CustomerService {
 		
 		return list;
 	}
+
+	@Override
+	public CustomerVO selectOneCustomer(int memNo) {
+		return dao.selectOneCustomer(memNo);
+	}
+
+	@Override
+	public CustomerVO selectById(String id) {
+		
+		return dao.selectById(id);
+	}
+
 }
