@@ -150,4 +150,10 @@ public class ItemServiceImpl implements ItemService {
 	public void deleteItem(int num) {
 		dao.deleteItem(num);
 	}
+
+	//item 주문 확인을 위해 item 찾기
+	@Override
+	public ItemContentsVO getItemInfo(int detailNo) {
+		return dao.getItemInfo(detailNo);
+	}
 }

@@ -10,4 +10,6 @@ public interface CustomerService {
 	void deleteBoard(int memNo);
 	List<CustomerVO> searchBoard(CustomerVO customer);
 	List<CustomerVO> selectPage(List page);
+	
+	CustomerVO getCustomerInfo(int memNo);
 }

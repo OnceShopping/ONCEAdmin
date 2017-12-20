@@ -47,4 +47,10 @@ public class CustomerServiceImpl implements CustomerService {
 		
 		return list;
 	}
+
+	// customer 정보 얻기
+	@Override
+	public CustomerVO getCustomerInfo(int memNo) {
+		return dao.getCustomerInfo(memNo);
+	}
 }

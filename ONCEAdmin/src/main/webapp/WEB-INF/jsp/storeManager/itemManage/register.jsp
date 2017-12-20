@@ -297,7 +297,7 @@ var rgx2 = /(\d+)(\d{3})/;
 											</span> <i class="i i-lab icon"> </i> <span class="font-bold">관리자
 													답변 게시판</span>
 										</a></li>
-										<li><a href="#" class="auto"> <span
+										<li><a href="${pageContext.request.contextPath}/orderList/orderList" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
