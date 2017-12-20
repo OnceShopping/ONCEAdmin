@@ -149,7 +149,7 @@ var addIndex = 0; //새로 추가된 size와 count에 해당하는 index
 		contents += "<td>"+$('#itemName').val()+"</td>";
 		contents += "<td>"+$('#itemNo').val()+"</td>";
 		contents += "<td>"+size+"<input type='hidden' class='addSize' value='"+size+"' name='size'></td>";
-		contents += "<td>"+count+"<input type='hidden' value='"+count+"' name='count'></td>";
+		contents += "<td>"+count+"<input type='hidden' value='"+comma(count)+"' name='count'></td>";
 		contents += "<td><a class='delete' id="+size+" onclick=deleteItem('"+(index)+"') style='color:red;'><i class='fa fa-times' aria-hidden='true'></i></a></td>";
 		contents += "</tr>";
 		
@@ -214,6 +214,57 @@ var addIndex = 0; //새로 추가된 size와 count에 해당하는 index
 			return false;
 	}
 
+	//comma를 설정하는 로직
+	function comma(obj){
+		
+		var num = obj.toString(); 
+		var array=[];
+		var replay = parseInt((num.length)%3);
+		var routine = parseInt((num.length+2)/3);
+				
+		if(replay==1){
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,1);
+				else if(i==1)
+					sample = num.substr(1,3);
+				else
+					sample = num.substr(((i-1)*3)+1, 3);
+				
+				array.push(sample);
+			}
+		}		
+		else if(replay==2){
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,2);
+				else if(i==1)
+					sample = num.substr(2,3);
+				else
+					sample = num.substr(((i-1)*3)+2, 3);
+				
+				array.push(sample);
+			}
+		}
+		else{
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,3);
+				else
+					sample = num.substr((i*3), 3);
+				
+				array.push(sample);
+			}
+		}	
+		return array.join(",");
+	}
+	
 </script>
 <style type="text/css">
 .ui-menu {
@@ -404,7 +455,7 @@ td{
 										<td style="width: 20px;"></td>
 										<td style="width: 50px;" align="right">COUNT</td>
 										<td style="width: 10px;"></td>
-										<td style="width: 50px;"><input type="number" id="count" min="0" onkeypress="return numberCheck(event)"></td>
+										<td style="width: 50px;"><input type="number" id="count" min="0" onkeypress="return numberCheck(event)" style="text-align: right;"></td>
 										<td style="width: 20px;"></td>
 										<td style="width: 50px;"><input type="button"
 											name="addItem" id="addItem" value="추가"></td>

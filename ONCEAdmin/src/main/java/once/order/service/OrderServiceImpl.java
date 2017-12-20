@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import once.order.dao.OrderDAO;
+
+import once.order.vo.OrderDetailVO;
+
 import once.order.vo.OrderVO;
 
 @Service
@@ -31,4 +34,17 @@ public class OrderServiceImpl implements OrderService {
 		dao.updateStatusFin(orderNo);
 	}
 
+	@Override
+	public List<OrderVO> getStoreOrderList(String storeNo) {
+		List<OrderVO> storeNoOrderList = dao.getStoreOrderList(storeNo);
+		return storeNoOrderList;
+	}
+
+	@Override
+	public List<OrderDetailVO> getStoreDetailList(int orderNo) {
+		List<OrderDetailVO> orderNoDetailList = dao.getStoreDetailList(orderNo);
+		return orderNoDetailList;
+	}
+
 }
+

@@ -74,4 +74,7 @@ public interface ItemService {
 	
 	//item테이블에서 num에 대한 정보 삭제
 	public void deleteItem(int num);
+	
+	//item 주문 확인을 위해 item 찾기
+	public ItemContentsVO getItemInfo(int detailNo);
 }

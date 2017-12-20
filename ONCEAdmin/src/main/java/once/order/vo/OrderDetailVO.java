@@ -7,11 +7,25 @@ public class OrderDetailVO {
 
 	private int no;
 	
-	private int detailNo;
 	private int orderNo;
+	
+	private int detailNo;
+	
+	private String storeNo;
+	private String storeName;
+	
+	private int count;
+		
+	private String itemName;
+	private int num;
 	
 	private int price;
 	
-	private int count;
-
+	private String size;
+	private String color;
+	
+	private String imgOriName;
+	private String imgSaveName;
+	private int imgSize;
+	
 }

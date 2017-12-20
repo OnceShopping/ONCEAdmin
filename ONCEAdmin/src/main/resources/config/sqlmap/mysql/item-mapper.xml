@@ -191,4 +191,12 @@
  		delete from Item
  		where num = #{num}
  	</delete>
+
+	<!-- itemColor테이블에서 현재 삭제한 num에 대한 정보가 있는지 여부 확인 -->
+ 	<select id="getItemInfo" parameterType="INT" resultType="ItemContentsVO">
+ 		select *
+ 		from itemContents
+ 		where detailNo = #{detailNo}
+ 	</select>
+	 	
 </mapper>

@@ -55,4 +55,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 		return sqlSession.selectOne("once.customer.dao.CustomerDAO.selectById", id);
 	}
 
+	public CustomerVO getCustomerInfo(int memNo) {
+		return sqlSession.selectOne("once.customer.dao.CustomerDAO.getInfo", memNo);
+	}
+
 }

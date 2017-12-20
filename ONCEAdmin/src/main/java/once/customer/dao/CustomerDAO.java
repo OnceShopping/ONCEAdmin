@@ -12,4 +12,5 @@ public interface CustomerDAO {
 	List<CustomerVO> selectPage(List page);
 	CustomerVO selectOneCustomer(int memNo);
 	CustomerVO selectById(String id);
+	CustomerVO getCustomerInfo(int memNo);
 }

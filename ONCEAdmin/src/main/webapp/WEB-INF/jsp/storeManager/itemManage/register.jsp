@@ -43,6 +43,10 @@
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
+
+var rgx1 = /\D/g;
+var rgx2 = /(\d+)(\d{3})/; 
+
 	$(document).ready(function() {
 
 		//상품 코드가 기존에 존재하는지 여부 확인
@@ -161,6 +165,31 @@
 		else
 			return true;
 	}
+	
+	//자동으로 comma를 setting할 수를 가져옴
+	function getNumber(no){
+
+	     var num01;
+	     var num02;
+	    	 	
+	     num01 = no.value;
+	     num02 = num01.replace(rgx1,"");
+	     num01 = setComma(num02);
+	     no.value = num01;
+
+	}
+	
+	//자동으로 comma를 설정하도록 설정
+	function setComma(inNum){
+	     
+	     var outNum;
+	     outNum = inNum; 
+	     while (rgx2.test(outNum)) {
+	          outNum = outNum.replace(rgx2, '$1' + ',' + '$2');
+	      }
+	     return outNum;
+
+	}
 </script>
 <style type="text/css">
 	.ui-menu {
@@ -261,21 +290,21 @@
 													class="i i-circle-sm text-active"></i>
 											</span> <i class="i i-stack icon"> </i> <span class="font-bold">프로모션</span>
 										</a></li>
-										<li><a href="#" class="auto"> <span
+										<li><a href="${pageContext.request.contextPath}/boardQA/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
 											</span> <i class="i i-lab icon"> </i> <span class="font-bold">관리자
 													답변 게시판</span>
 										</a></li>
-										<li><a href="#" class="auto"> <span
+										<li><a href="${pageContext.request.contextPath}/orderList/orderList" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
 											</span> <i class="i i-docs icon"> </i> <span class="font-bold">주문
 													내역 게시판</span>
 										</a></li>
-										<li><a href="#" class="auto"> <span
+										<li><a href="${pageContext.request.contextPath}/staffManage/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
@@ -320,14 +349,14 @@
 									<tr style="height: 60px;">
 										<td style="width: 150px; text-align: left;">상품 이름</td>
 										<td style="width: 30px;"></td>
-										<td style="width: 300px;"><input type="text" name="itemName" required="required" pattern="[^0-9]+$" alt="숫자 또는 특수문자를 제외한 한글 또는 알파벳으로 작성해주세요." onkeypress="return charCheck(event)"></td>
+										<td style="width: 300px;"><input type="text" name="itemName" required="required" pattern="[^0-9]+$" title="숫자 또는 특수문자를 제외한 한글 또는 알파벳으로 작성해주세요." onkeypress="return charCheck(event)"></td>
 										<td style="width: 100px;"/>	
 										<td rowspan="5" style="width: 300px;"><div class="storeLogoImg" id="storeLogoImg"></div></td>	
 									</tr>
 									<tr style="height: 60px;">
 										<td style="text-align: left;">상품 코드</td>
 										<td style="width: 30px;"></td>
-										<td colspan="2"><input type="text" name="itemNo" id="itemNo" required="required" pattern="[A-Z0-9]+$" alt="알파벳(대문자)와 숫자로 표시된 상품 코드를 확인해주시고 작성해주세요."  onkeypress="return charCheck(event)"><span style="padding-left: 20px;" id="checkItemNo"></span>
+										<td colspan="2"><input type="text" name="itemNo" id="itemNo" required="required" pattern="[A-Z0-9]+$" title="알파벳(대문자)와 숫자로 표시된 상품 코드를 확인해주시고 작성해주세요."  onkeypress="return charCheck(event)"><span style="padding-left: 20px;" id="checkItemNo"></span>
 										</td>
 									</tr>
 									<tr style="height: 60px;">
@@ -339,13 +368,13 @@
 									<tr style="height: 60px;">
 										<td style="text-align: left;">가격</td>
 										<td style="width: 30px;"></td>
-										<td><input type="number"
-											name="price" required="required" min="0" onkeypress="return charCheck(event)" onkeyup=""></td>
+										<td><input type="text" style="text-align: right;"
+											name="price" required="required" onchange="getNumber(this);" onkeyup="getNumber(this);"></td>
 									</tr>
 									<tr style="height: 70px;">
 										<td style="text-align: left: ;">상품 대표 이미지</td>
 										<td style="width: 30px;"></td>
-										<td style="text-align: center;"><input type="file" value="파일 찾기" name="attachFile" required="required"onchange="javascript:document.getElementById('file_route').value=this.value; fileInfo(this);"><input type="hidden" readonly="readonly" title="File Route" id="file_route"></td>
+										<td style="text-align: center;"><input type="file" value="파일 찾기" name="attachFile" required="required"onchange="javascript:document.getElementById('file_route').value=this.value; fileInfo(this);" accept="image/*"><input type="hidden" readonly="readonly" title="File Route" id="file_route"></td>
 									</tr>
 								</table>
 								<br />

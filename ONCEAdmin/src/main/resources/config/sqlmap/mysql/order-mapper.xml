@@ -18,11 +18,16 @@
 	<update id="updateStatusFin" parameterType="int">
 		update orderList set status = '상품준비완료' where orderNo = #{orderNo}
 	</update>
+
+	<!-- 주문 storeNo별 검색 -->
+	<select id="storeNoOrderList"  parameterType="String" resultType="OrderVO">
+		select * from orderList where storeNo = #{storeNo}
+	</select>
+	
+	<!-- orderDetail orderNo별 검색 -->
+	<select id="orderNoDetailList"  parameterType="int" resultType="OrderDetailVO">
+		select * from orderDetail where orderNo = #{orderNo}
+	</select>
+	
 </mapper>
-
-
-
-
-
-
 

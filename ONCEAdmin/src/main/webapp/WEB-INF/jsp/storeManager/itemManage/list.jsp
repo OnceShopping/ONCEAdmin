@@ -45,8 +45,14 @@
 <script type="text/javascript">
 
 $(document).ready(function(){
-	
+
 	$('#searchType').val(''); // 검색 콤보 박스 초기화
+	
+	<c:forEach var="item" items="${itemList}" varStatus="index">
+	settingPrcie($('#itemIndex_'+${index.count}).text(), ${index.count});
+	settingCount($('#itemCount_'+${index.count}).text(), ${index.count});
+	</c:forEach> 
+	
 	
 	//검색
 	$('#searchForm').submit(function() {
@@ -114,7 +120,7 @@ function printResult(data) {
 		row += "<td style='text-align: center; height:30px;'>" + item.color + "</td>";
 		row += "<td style='text-align: center; height:30px;'>" + item.size + "</td>";
 		row += "<td style='text-align: center; height:30px;'>" + item.count + "</td>";
-		row += "<td style='text-align: center; height:30px;'>" + item.price + "</td>";
+		row += "<td style='text-align: right; height:30px;'>" + comma(item.price) + " 원</td>";
 		row += "</tr>";
 		
 	});
@@ -135,6 +141,73 @@ function printResult(data) {
 		document.getElementById('sortTable').submit();
 	}
 	
+	//comma를 설정하는 로직
+	function comma(obj){
+		
+		var num = obj.toString(); 
+		var array=[];
+		var replay = parseInt((num.length)%3);
+		var routine = parseInt((num.length+2)/3);
+				
+		if(replay==1){
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,1);
+				else if(i==1)
+					sample = num.substr(1,3);
+				else
+					sample = num.substr(((i-1)*3)+1, 3);
+				
+				array.push(sample);
+			}
+		}		
+		else if(replay==2){
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,2);
+				else if(i==1)
+					sample = num.substr(2,3);
+				else
+					sample = num.substr(((i-1)*3)+2, 3);
+				
+				array.push(sample);
+			}
+		}
+		else{
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,3);
+				else
+					sample = num.substr((i*3), 3);
+				
+				array.push(sample);
+			}
+		}	
+		return array.join(",");
+	}
+	
+	
+	//리스트에 존재하는 가격에 comma 설정 
+	function settingPrcie(obj, count){
+		
+		var price = comma(obj);
+	
+		$('#itemIndex_'+count).html(price);
+	}
+
+	//리스트에 존재하는 수량에 comma 설정 
+	function settingCount(obj, count){
+		
+		var itemCount = comma(obj);
+	
+		$('#itemCount_'+count).html(itemCount);
+	}
 </script>
 <style type="text/css">
 		.itemList {
@@ -327,7 +400,7 @@ function printResult(data) {
 							</div>
 							</form>
 							<form action="${ pageContext.request.contextPath }/item/list" method="post" id="sortTable">
-							<table class="itemList" style="width: 100%">
+							<table class="itemList" style="width: 100%; margin-bottom: 100px;">
 								<tr style="text-align: center; background-color: #E7E7E7; height: 30px; padding: 5px;" >
 									<th style="width: 5%;">No.</th>
 									<th style="width: 10%;">상품 이름</th>
@@ -337,12 +410,12 @@ function printResult(data) {
 									<th style="width: 13%;"><a onclick="javascript:document.getElementById('category').value='itemCategory2'; sort();" class="selector"><span style="margin-right: 10px;">의류/잡화</span><i class="fa fa-caret-down" aria-hidden="true"></i></a></th>
 									<th style="width: 13%;"><a onclick="javascript:document.getElementById('category').value='itemCategory3'; sort();" class="selector"><span style="margin-right: 10px;">Category</span><i class="fa fa-caret-down" aria-hidden="true"></i></a></th>
 									<th style="width: 5%;">SIZE</th>
-									<th style="width: 10%;">수량</th>
-									<th style="width: 10%;">가격</th>
+									<th style="width: 10%;">수량 (개)</th>
+									<th style="width: 10%;">가격 (원)</th>
 								</tr>
 								<c:forEach var="item" items="${itemList}" varStatus="index">
 									<tr>
-										<td><c:out value="${ item.detailNo }"/></td>
+										<td><c:out value="${ index.count + startPage }"/></td>
 										<td><c:out value="${ item.itemName }"/></td>
 										<td><c:out value="${ item.itemNo }"/></td>
 										<td><c:out value="${ item.color }"/></td>
@@ -350,13 +423,12 @@ function printResult(data) {
 										<td><c:out value="${ item.itemCategory2 }"/></td>
 										<td><c:out value="${ item.itemCategory3 }"/></td>
 										<td><c:out value="${ item.size }"/></td>
-										<td><c:out value="${ item.count }"/></td>
-										<td><c:out value="${ item.price }"/></td>
+										<td style="text-align: right" id="itemCount_${ index.count }"><c:out value="${ item.count }"/></td>
+										<td style="text-align: right" id="itemIndex_${ index.count }"><c:out value="${ item.price }"/></td>
 									</tr>
 								</c:forEach>
 							</table>
-							<br /> <br /> <br />
-								<div class="col-sm-4 text-right text-center-xs" style="margin-left: 340px;">                
+							<div class="col-sm-4 text-right text-center-xs" style="margin-left: 340px;">                
 			                      <ul class="pagination pagination-sm m-t-none m-b-none">
 			         					<!-- 처음페이지 -->
 			         					<li><a href="${ pageContext.request.contextPath }/item/list?pageNo=1"><i class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i></a></li>
