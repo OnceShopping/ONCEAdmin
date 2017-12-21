@@ -200,10 +200,6 @@ $(document).ready(function() {
 					var Notext;
 					var brCount ="";
 					for(var i = 0; i<tagmodal.tagList.length; i++) {
-						for(var j = 0; j<tagmodal.orderList.length; j++) {
-							
-						}
-						
 						if(i == 0) {
 							Notext = tagmodal.tagList[i].tagNo;
 						} else {

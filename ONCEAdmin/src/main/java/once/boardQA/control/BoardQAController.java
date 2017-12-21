@@ -90,8 +90,12 @@ public class BoardQAController {
 			request.setAttribute("search", request.getParameter("search"));
 		}
 		
-		System.out.println(boardQAMap);
-		boardQAMap.put("category2", storeVO.getStoreName());
+		if(storeVO.getStoreName().matches(".*안내데스크.*")) {
+			boardQAMap.put("category2", "info");
+		} else {
+			boardQAMap.put("category2", storeVO.getStoreName());
+		}
+		
 
 		
 		// 현재 페이지 번호 저장 변수
