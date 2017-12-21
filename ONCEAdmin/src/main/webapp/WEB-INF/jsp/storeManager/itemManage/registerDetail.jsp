@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>	
 <!DOCTYPE html>
 <html class="app">
 <head>
@@ -475,17 +476,19 @@ var third = 0;
 										<td style="width: 50px;">
 											<select id="size" style="width: 150px; height: 25px;">
 												<option value="Free">Free</option>
-												<option value="S">S</option>
-												<option value="M">M</option>
-												<option value="L">L</option>
-												<option value="XS">XS</option>
-												<option value="XL">XL</option>
-												<option value="XXL">XXL</option>
-												<option value="44">44</option>
-												<option value="55">55</option>
-												<option value="66">66</option>
-												<option value="77">77</option>
-												<option value="88">88</option>
+												<c:if test="${ itemVO.itemCategory2 eq '의류' }">
+													<option value="S">S</option>
+													<option value="M">M</option>
+													<option value="L">L</option>
+													<option value="XS">XS</option>
+													<option value="XL">XL</option>
+													<option value="XXL">XXL</option>
+													<option value="44">44</option>
+													<option value="55">55</option>
+													<option value="66">66</option>
+													<option value="77">77</option>
+													<option value="88">88</option>
+												</c:if>
 											</select>
 										</td>
 										<td style="width: 20px;"></td>
