@@ -164,7 +164,7 @@
 							<div class="storeList" id="div${ list.storeNo }">
 								<div class="storeListImg">
 									<a href="${pageContext.request.contextPath}/store/detail/${ list.storeNo }">
-										<img src="${pageContext.request.contextPath}/upload/admin/${list.imgSaveName}" alt="${ list.storeName }" width="100%"/>
+										<img src="/image/${list.imgSaveName}" alt="${ list.storeName }" width="100%"/>
 									</a>
 								</div>
 								${ list.storeNo }
@@ -183,7 +183,7 @@
 							<div class="storeList" id="div${ list.storeNo }">
 								<div class="storeListImg">
 									<a href="${pageContext.request.contextPath}/store/detail/${ list.storeNo }">
-										<img src="${pageContext.request.contextPath}/upload/admin/${ list.imgSaveName }" alt="${ list.storeName }" width="100%"/>
+										<img src="/image/${ list.imgSaveName }" alt="${ list.storeName }" width="100%"/>
 									</a>
 								</div>
 								${ list.storeNo }
@@ -207,7 +207,7 @@
 							<div class="storeList" id="div${ list.storeNo }">
 								<div class="storeListImg">
 									<a href="${pageContext.request.contextPath}/store/detail/${ list.storeNo }">
-										<img src="${pageContext.request.contextPath}/upload/admin/${ list.imgSaveName }" alt="${ list.storeName }" width="100%"/>
+										<img src="/image/${ list.imgSaveName }" alt="${ list.storeName }" width="100%"/>
 									</a>
 								</div>
 								${ list.storeNo }
@@ -226,7 +226,7 @@
 							<div class="storeList" id="div${ list.storeNo }">
 								<div class="storeListImg">
 									<a href="${pageContext.request.contextPath}/store/detail/${ list.storeNo }">
-										<img src="${pageContext.request.contextPath}/upload/admin/${ list.imgSaveName }" alt="${ list.storeName }" width="100%"/>
+										<img src="/image/${ list.imgSaveName }" alt="${ list.storeName }" width="100%"/>
 									</a>
 								</div>
 								${ list.storeNo }
@@ -250,7 +250,7 @@
 							<div class="storeList" id="div${ list.storeNo }">
 								<div class="storeListImg">
 									<a href="${pageContext.request.contextPath}/store/detail/${ list.storeNo }">
-										<img src="${pageContext.request.contextPath}/upload/admin/${ list.imgSaveName }" alt="${ list.storeName }" width="100%"/>
+										<img src="/image/${ list.imgSaveName }" alt="${ list.storeName }" width="100%"/>
 									</a>
 								</div>
 								${ list.storeNo }
@@ -269,7 +269,7 @@
 							<div class="storeList" id="div${ list.storeNo }">
 								<div class="storeListImg">
 									<a href="${pageContext.request.contextPath}/store/detail/${ list.storeNo }">
-										<img src="${pageContext.request.contextPath}/upload/admin/${ list.imgSaveName }" alt="${ list.storeName }" width="100%"/>
+										<img src="/image/${ list.imgSaveName }" alt="${ list.storeName }" width="100%"/>
 									</a>
 								</div>
 								${ list.storeNo }
