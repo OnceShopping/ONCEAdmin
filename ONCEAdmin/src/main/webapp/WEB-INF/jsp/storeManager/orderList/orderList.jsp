@@ -24,7 +24,27 @@
 <!-- datepicker -->
 <script src="${pageContext.request.contextPath }/resources/js/datepicker/bootstrap-datepicker.js"></script>
 <script type="text/javascript">
+	$(document).ready(function(){
+		$('#option').hide();
+	});
 	
+	function showOption(){
+		var choice = $('#choice').val();
+		
+		if(choice=='처리사항'){
+			$('#option').html('<option id="all">전체</option>'+'<option id="payFinish">결제완료</option>'+'<option id="accpetFinish">수령장소</option>');
+			$('#option').show();
+		}else if(choice=='주문번호'){
+			$('#option').html('<option id="up">오름차순</option>'+'<option id="down">내림차순</option>');
+			$('#option').show();
+		}else if(choice=='수령장소'){
+			$('#option').html('<option id="1F">1F</option>'+'<option id="B1">B1</option>');
+			$('#option').show();
+		}else if(choice=='전체'){
+			$('#option').html('');
+			$('#option').hide();
+		}
+	}
 </script>
 </head>
 <body>
@@ -162,7 +182,7 @@
 						<div style="text-align: right;">
 							<p style="float: left;">전체 주문 내역: <u>${orderCount}</u> 개</p>
 							<div style="margin-left: 30px;">
-								<select id="choice" style="width: 85px;">
+								<select id="choice" onchange="showOption()" style="width: 85px;">
 									<option>전체</option>
 									<option>처리사항</option>
 									<option>주문번호</option>
@@ -176,20 +196,20 @@
 							</div>
 						</div>
 						
-						<div style="text-align: center; width: 100%">
+						<div style="width: 100%;">
 							<table class="table table-striped m-b-none dataTable no-footer" >
-								<tr>
+								<tr style="text-align: center;">
 									<th width="7%">선택</th>
-									<th width="20">주문번호</th>
-									<th width="15">주문자</th>
-									<th width="20">상품고유번호</th>
-									<th width="50">상품명</th>
-									<th width="20">수량</th>
-									<th width="45">연락처</th>
-									<th width="45">처리사항</th>
-									<th width="20">가격</th>
-									<th width="45">주문일</th>
-									<th width="20">수령장소</th>
+									<th >주문번호</th>
+									<th >주문자</th>
+									<th >상품고유번호</th>
+									<th >상품명</th>
+									<th >수량</th>
+									<th >연락처</th>
+									<th >처리사항</th>
+									<th >가격</th>
+									<th >주문일</th>
+									<th>수령장소</th>
 								</tr>
 								<c:forEach var="order" items="${ storeNoorderList }" varStatus="loop">
 								<c:forEach var="detail" items="${ order.orderDetails }" varStatus="status">
@@ -203,7 +223,18 @@
 									</td>
 									<td id="count_${loop.index}_${status.index}">${ detail.count }</td>
 									<td id="phone_${loop.index}_${status.index}">${ order.telephone }</td>
-									<td id="status_${loop.index}_${status.index}">${ order.status }</td><!-- 혹시나, status이름 같아서 오류날 수도 -->
+									<c:choose>
+									<c:when test="${ order.status eq '결제완료' }">
+									<th id="status_${loop.index}_${status.index}" style="color: #1aae88;">${ order.status }</th>
+									</c:when>
+									<c:when test="${ order.status eq '상품승인완료' }">
+									<th id="status_${loop.index}_${status.index}" style="color: #a94442;">${ order.status }</th>
+									</c:when>
+									<c:otherwise>
+									<th id="status_${loop.index}_${status.index}">${ order.status }</th>
+									</c:otherwise>
+									</c:choose>
+									
 									<td id="price_${loop.index}_${status.index}">${ detail.price }</td>
 									<td id="date_${loop.index}_${status.index}">${ order.date }</td>
 									<td id="floor_${loop.index}_${status.index}">${ order.floor }</td>
