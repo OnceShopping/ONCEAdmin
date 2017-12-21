@@ -656,19 +656,13 @@ public class ManagerController {
 			return managerVOList;
 		}
 	
+	@RequestMapping(value="/logout")
+	public String logout(HttpSession session) {
 		
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		session.invalidate();
+		
+		return "redirect:/";
+	}
 	
 	//물품 추가
 	@RequestMapping("/info/addItem")
@@ -728,6 +722,5 @@ public class ManagerController {
 		mav.setViewName("infoManager/itemManage/itemDelivery");
 		return mav;
 	}
-	
 	
 }

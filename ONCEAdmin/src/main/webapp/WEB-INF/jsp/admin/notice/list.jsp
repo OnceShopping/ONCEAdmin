@@ -102,7 +102,7 @@ ul {
 											<li><a
 												href="${ pageContext.request.contextPath }/manager/check">Profile</a></li>
 											<li class="divider"></li>
-											<li><a href="modal.lockme.html" data-toggle="ajaxModal">Logout</a>
+											<li><a href="${ pageContext.request.contextPath }/logout">Logout</a>
 											</li>
 										</ul>
 									</div>
