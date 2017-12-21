@@ -418,136 +418,272 @@
 		    </fieldset>
 	  	</form>
 	</div>
-	
-	<section class="vbox">
-		<section class="scrollable wrapper" style="padding-left: 50px">
-			<br />
-			<h3 class="font-bold m-b-none m-t-none">인포메이션 직원 관리</h3>
-			<br />
-			<br />
-			<form action="" name="addStaff" id="addStaff">
-				<div class="addDiv" align="center">
-					<table style="width: 100%;">
-						<tr>
-							<th width="10%" style="text-align: right;">ID</th>
-							<td width="5%" />
-							<td width="40%">
-								<input type="text" id="managerId" name="managerId" width="60%" pattern="\w+" title="알파벳 또는 숫자를 입력하세요.">&nbsp;&nbsp;&nbsp;<input type="button" id="IdCheck" class="btn btn-s-md btn-primary" value="중복 체크" name="IdCheck" width="40%"></td>
-							<th width="20%" style="text-align: right;">비밀번호</th>
-							<td width="5%" />
-							<td width="25%"><input type="password" id="password"
-								name="password"></td>
-						</tr>
-						<tr height="10px" />
-						<tr>
-							<th width="10%" style="text-align: right;">이름</th>
-							<td width="5%" />
-							<td width="40%"><input type="text" id="name" name="name"></td>
-							<th width="20%" style="text-align: right;">연락처</th>
-							<td width="5%" />
-							<td width="25%"><input type="tel" id="telephone"
-								name="telephone" pattern="(010)-\d{3,4}-\d{4}" title="010-xxx-xxxx 또는  010-xxxx-xxxx 형식으로  작성해주세요." ></td>
-						</tr>
-						<tr height="20px" />
-						<tr>
-							<th colspan="2" style="text-align: right; padding-right: 33px;">해당 위치</th>
-							<td colspan="5" style="text-align: left;">
-							<select	style="height: 25px" id="typeSelect">
-									<option value="B1F" id="B1F">B1F</option>
-									<option value="1F" id="1F">1F</option>
-							</select>
-							 <select style="height: 25px" id="storeSelect" name="storeSelect">
-									<option value="INFOB1" class="storeType B1F">B1 안내데스크</option>
-									<option value="INFO1F" class="storeType 1F">1F 안내데스크</option>
-							</select>
-						</tr>
-						<tr height="5px" />
-					</table>
-					<div align="right" style="padding-right: 2px;">
-						<input type="submit" class="btn btn-s-md btn-primary" value="추가" id="Add">
-					</div>
-				</div>
-			</form>
-			<form id="searchForm">
-				<div align="right">
-					<select id="searchType" name="searchType" style="height: 27px">
-						<option value="name">이름</option>
-						<option value="storeName">해당 위치</option>
-						<option value="managerId">아이디</option>
-					</select>&nbsp; <input type="text" name="searchText" id="searchText">&nbsp;
-					<input type="submit" value="검색" class="btn btn-s-md btn-primary" data-toggle="modal" data-target="#exampleModal"/>
-				</div>
-			</form>							
-			<br />
-			<form action="${pageContext.request.contextPath}/info/staffList" method="post" id="listForm" name="listForm">
-				<table class="staffList" >
-					<tr style="text-align: center; background-color: #E7E7E7"  id="addStaffList">
-						<td width="5%"><input type="checkbox" id="checkAll"></td>
-						<td width="15%" class="tbTile">사원 번호</td>
-						<td width="10%" class="tbTile">해당 위치</td>
-						<td width="15%" class="tbTile">아이디</td>
-						<td width="15%" class="tbTile">이름</td>
-						<td width="20%" class="tbTile">연락처</td>
-						<td width="20%" class="tbTile">가입일</td>
-					</tr>
 
-					<c:forEach items="${staffList}" var="staff" varStatus="status">									
-						<tr>
-							<td><input type="checkbox" value=${ staff.managerId } name="managerId" class="check"></td>
-							<td>${ staff.staffNo }</td>
-							<c:forEach items="${storeList}" var="store"
-								varStatus="storeStatus">
-								<c:if test="${staff.storeNo eq store.storeNo}">
-									<td>${ store.storeName }</td>
-								</c:if>
+	<section class="vbox">
+		<!-- 상단바 -->
+		<header
+			class="bg-white header header-md navbar navbar-fixed-top-xs box-shadow">
+			<div class="navbar-header aside-md dk">
+				<a class="btn btn-link visible-xs"
+					data-toggle="class:nav-off-screen,open" data-target="#nav,html">
+					<i class="fa fa-bars"></i>
+				</a> <a href="index.html" class="navbar-brand"> <span
+					class="hidden-nav-xs">ONCE</span>
+				</a> <a class="btn btn-link visible-xs" data-toggle="dropdown"
+					data-target=".user"> <i class="fa fa-cog"></i>
+				</a>
+			</div>
+		</header>
+		<!-- 상단바 끝 -->
+
+		<section>
+			<section class="hbox stretch">
+				<!-- 메뉴 위 프로필 -->
+				<aside class="bg-black aside-md hidden-print hidden-xs" id="nav">
+					<section class="vbox">
+						<section class="w-f scrollable">
+							<div class="slim-scroll" data-height="auto"
+								data-disable-fade-out="true" data-distance="0" data-size="10px"
+								data-railOpacity="0.2">
+								<div class="clearfix wrapper dk nav-user hidden-xs">
+									<div class="dropdown">
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+											<span class="hidden-nav-xs clear"> <span
+												class="block m-t-xs"> <strong
+													class="font-bold text-lt">${loginVO.managerId }</strong> <b
+													class="caret"></b>
+											</span>
+										</span>
+										</a>
+										<!-- 프로필 클릭시 나오는 메뉴 -->
+										<ul class="dropdown-menu animated fadeInRight m-t-xs">
+											<li><a
+												href="${ pageContext.request.contextPath }/manager/check">Profile</a></li>
+											<li class="divider"></li>
+											<li><a href="modal.lockme.html" data-toggle="ajaxModal">Logout</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<!-- 프로필 클릭시 나오는 메뉴 끝 -->
+								<!-- 메뉴 위 프로필 끝 -->
+
+								<!-- 사이드 메뉴 -->
+								<nav class="nav-primary hidden-xs" id="sidemenu">
+									<div
+										class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
+									<ul class="nav nav-main" data-ride="collapse">
+										<li><a href="#" class="auto"> <span
+												class="pull-right text-muted"> <i
+													class="i i-circle-sm-o text"></i> <i
+													class="i i-circle-sm text-active"></i>
+											</span> <i class="i i-statistics icon"> </i> <span class="font-bold">물품
+													관리</span>
+										</a>
+											<ul class="nav dk">
+												<li class="active"><a
+													href="${ pageContext.request.contextPath }/info/addItem"
+													class="auto"> <i class="i i-dot"></i> <span>물품
+															추가</span>
+												</a></li>
+												<li><a
+													href="${ pageContext.request.contextPath }/info/itemDelivery"
+													class="auto"> <i class="i i-dot"></i> <span>물품
+															전달</span>
+												</a></li>
+
+											</ul>
+										<li class="active"><a
+											href="${ pageContext.request.contextPath }/info/staffList"
+											class="auto"> <span class="pull-right text-muted">
+													<i class="i i-circle-sm-o text"></i> <i
+													class="i i-circle-sm text-active"></i>
+											</span> <i class="i i-stack icon"> </i> <span class="font-bold">직원
+													관리</span>
+										</a></li>
+										<li><a
+											href="${ pageContext.request.contextPath }/boardQA/list"
+											class="auto"> <span class="pull-right text-muted">
+													<i class="i i-circle-sm-o text"></i> <i
+													class="i i-circle-sm text-active"></i>
+											</span> <i class="i i-lab icon"> </i> <span class="font-bold">관리자
+													답변 게시판</span>
+										</a></li>
+									</ul>
+								</nav>
+							</div>
+						</section>
+						<footer class="footer hidden-xs no-padder text-center-nav-xs">
+							<!-- 메뉴 하단 로그아웃 버튼 -->
+							<a href="modal.lockme.html" data-toggle="ajaxModal"
+								class="btn btn-icon icon-muted btn-inactive pull-right m-l-xs m-r-xs hidden-nav-xs">
+								<i class="i i-logout"></i>
+							</a>
+							<!-- 메뉴 하단 축소 버튼 -->
+							<a href="#nav" data-toggle="class:nav-xs"
+								class="btn btn-icon icon-muted btn-inactive m-l-xs m-r-xs">
+								<i class="i i-circleleft text"></i> <i
+								class="i i-circleright text-active"></i>
+							</a>
+						</footer>
+					</section>
+				</aside>
+				<!-- 사이드 메뉴 끝 -->
+
+				<section class="scrollable wrapper" style="padding-left: 50px">
+					<br />
+					<h3 class="font-bold m-b-none m-t-none">인포메이션 직원 관리</h3>
+					<br /> <br />
+					<form action="" name="addStaff" id="addStaff">
+						<div class="addDiv" align="center">
+							<table style="width: 100%;">
+								<tr>
+									<th width="10%" style="text-align: right;">ID</th>
+									<td width="5%" />
+									<td width="40%"><input type="text" id="managerId"
+										name="managerId" width="60%" pattern="\w+"
+										title="알파벳 또는 숫자를 입력하세요.">&nbsp;&nbsp;&nbsp;<input
+										type="button" id="IdCheck" class="btn btn-s-md btn-primary"
+										value="중복 체크" name="IdCheck" width="40%"></td>
+									<th width="20%" style="text-align: right;">비밀번호</th>
+									<td width="5%" />
+									<td width="25%"><input type="password" id="password"
+										name="password"></td>
+								</tr>
+								<tr height="10px" />
+								<tr>
+									<th width="10%" style="text-align: right;">이름</th>
+									<td width="5%" />
+									<td width="40%"><input type="text" id="name" name="name"></td>
+									<th width="20%" style="text-align: right;">연락처</th>
+									<td width="5%" />
+									<td width="25%"><input type="tel" id="telephone"
+										name="telephone" pattern="(010)-\d{3,4}-\d{4}"
+										title="010-xxx-xxxx 또는  010-xxxx-xxxx 형식으로  작성해주세요."></td>
+								</tr>
+								<tr height="20px" />
+								<tr>
+									<th colspan="2" style="text-align: right; padding-right: 33px;">해당
+										위치</th>
+									<td colspan="5" style="text-align: left;"><select
+										style="height: 25px" id="typeSelect">
+											<option value="B1F" id="B1F">B1F</option>
+											<option value="1F" id="1F">1F</option>
+									</select> <select style="height: 25px" id="storeSelect"
+										name="storeSelect">
+											<option value="INFOB1" class="storeType B1F">B1 안내데스크</option>
+											<option value="INFO1F" class="storeType 1F">1F 안내데스크</option>
+									</select>
+								</tr>
+								<tr height="5px" />
+							</table>
+							<div align="right" style="padding-right: 2px;">
+								<input type="submit" class="btn btn-s-md btn-primary" value="추가"
+									id="Add">
+							</div>
+						</div>
+					</form>
+					<form id="searchForm">
+						<div align="right">
+							<select id="searchType" name="searchType" style="height: 27px">
+								<option value="name">이름</option>
+								<option value="storeName">해당 위치</option>
+								<option value="managerId">아이디</option>
+							</select>&nbsp; <input type="text" name="searchText" id="searchText">&nbsp;
+							<input type="submit" value="검색" class="btn btn-s-md btn-primary"
+								data-toggle="modal" data-target="#exampleModal" />
+						</div>
+					</form>
+					<br />
+					<form action="${pageContext.request.contextPath}/info/staffList"
+						method="post" id="listForm" name="listForm">
+						<table class="staffList">
+							<tr style="text-align: center; background-color: #E7E7E7"
+								id="addStaffList">
+								<td width="5%"><input type="checkbox" id="checkAll"></td>
+								<td width="15%" class="tbTile">사원 번호</td>
+								<td width="10%" class="tbTile">해당 위치</td>
+								<td width="15%" class="tbTile">아이디</td>
+								<td width="15%" class="tbTile">이름</td>
+								<td width="20%" class="tbTile">연락처</td>
+								<td width="20%" class="tbTile">가입일</td>
+							</tr>
+
+							<c:forEach items="${staffList}" var="staff" varStatus="status">
+								<tr>
+									<td><input type="checkbox" value=${ staff.managerId }
+										name="managerId" class="check"></td>
+									<td>${ staff.staffNo }</td>
+									<c:forEach items="${storeList}" var="store"
+										varStatus="storeStatus">
+										<c:if test="${staff.storeNo eq store.storeNo}">
+											<td>${ store.storeName }</td>
+										</c:if>
+									</c:forEach>
+									<td>${ staff.managerId }</td>
+									<td>${ staff.name }</td>
+									<td>${ staff.telephone }</td>
+									<td>${ staff.date }</td>
+								</tr>
 							</c:forEach>
-							<td>${ staff.managerId }</td>
-							<td>${ staff.name }</td>
-							<td>${ staff.telephone }</td>
-							<td>${ staff.date }</td>
-						</tr>
-					</c:forEach>
-				</table>								
-				<br /> <br /> <br />
-				<div class="col-sm-4 text-right text-center-xs" style="margin-left: 340px;">                
-                     <ul class="pagination pagination-sm m-t-none m-b-none">
-        					<!-- 처음페이지 -->
-        					<li><a href="${ pageContext.request.contextPath }/info/staffList?pageNo=1"><i class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i></a></li>
-                     		<!-- 이전페이지 -->
-                     		<c:choose>
-                     			<c:when test="${ pageNo == 1 }">
-                     				<li><a href="${ pageContext.request.contextPath }/info/staffList?pageNo=1"><i class="fa fa-chevron-left"></i></a></li>
-                     			</c:when>
-                     			<c:otherwise>
-                     				<li><a href="${ pageContext.request.contextPath }/info/staffList?pageNo=${ pageNo - 1}"><i class="fa fa-chevron-left"></i></a></li>
-                     			</c:otherwise>
-                     		</c:choose>
-                     		<!-- 페이지번호  -->
-                     		<c:forEach var="i" begin="${ beginPage }" end="${ endPage }">
-								<li><a href="${ pageContext.request.contextPath }/info/staffList?pageNo=${i}">${i}</a></li>
-                     		</c:forEach>
-                     		<!-- 다음페이지 -->
-                     		<c:choose>
-                     			<c:when test="${ pageNo == endPage }">
-                     				<li><a href="${ pageContext.request.contextPath }/info/staffList?pageNo=${ endPage }"><i class="fa fa-chevron-right"></i></a></li>
-                     			</c:when>
-                     			<c:otherwise>
-                     				<li><a href="${ pageContext.request.contextPath }/info/staffList?pageNo=${ pageNo + 1 }"><i class="fa fa-chevron-right"></i></a></li>
-                     			</c:otherwise>
-                     		</c:choose>
-                     		<!-- 마지막페이지 -->
-                     		<li><a href="${ pageContext.request.contextPath }/info/staffList?pageNo=${ lastPage }"><i class="fa fa-chevron-right"></i><i class="fa fa-chevron-right"></i></a></li>	
-                     </ul>
-                   </div>
-                		<br /> <br />
-				<div align="right">
-					<c:if test="${ !empty staffList }">
-						<input type="hidden" name="_method" value="delete">
-						<input type="submit" value="삭제" class="btn btn-s-md btn-primary">
-					</c:if>
-				</div>
-			</form>
+						</table>
+						<br /> <br /> <br />
+						<div class="col-sm-4 text-right text-center-xs"
+							style="margin-left: 340px;">
+							<ul class="pagination pagination-sm m-t-none m-b-none">
+								<!-- 처음페이지 -->
+								<li><a
+									href="${ pageContext.request.contextPath }/info/staffList?pageNo=1"><i
+										class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i></a></li>
+								<!-- 이전페이지 -->
+								<c:choose>
+									<c:when test="${ pageNo == 1 }">
+										<li><a
+											href="${ pageContext.request.contextPath }/info/staffList?pageNo=1"><i
+												class="fa fa-chevron-left"></i></a></li>
+									</c:when>
+									<c:otherwise>
+										<li><a
+											href="${ pageContext.request.contextPath }/info/staffList?pageNo=${ pageNo - 1}"><i
+												class="fa fa-chevron-left"></i></a></li>
+									</c:otherwise>
+								</c:choose>
+								<!-- 페이지번호  -->
+								<c:forEach var="i" begin="${ beginPage }" end="${ endPage }">
+									<li><a
+										href="${ pageContext.request.contextPath }/info/staffList?pageNo=${i}">${i}</a></li>
+								</c:forEach>
+								<!-- 다음페이지 -->
+								<c:choose>
+									<c:when test="${ pageNo == endPage }">
+										<li><a
+											href="${ pageContext.request.contextPath }/info/staffList?pageNo=${ endPage }"><i
+												class="fa fa-chevron-right"></i></a></li>
+									</c:when>
+									<c:otherwise>
+										<li><a
+											href="${ pageContext.request.contextPath }/info/staffList?pageNo=${ pageNo + 1 }"><i
+												class="fa fa-chevron-right"></i></a></li>
+									</c:otherwise>
+								</c:choose>
+								<!-- 마지막페이지 -->
+								<li><a
+									href="${ pageContext.request.contextPath }/info/staffList?pageNo=${ lastPage }"><i
+										class="fa fa-chevron-right"></i><i class="fa fa-chevron-right"></i></a></li>
+							</ul>
+						</div>
+						<br /> <br />
+						<div align="right">
+							<c:if test="${ !empty staffList }">
+								<input type="hidden" name="_method" value="delete">
+								<input type="submit" value="삭제" class="btn btn-s-md btn-primary">
+							</c:if>
+						</div>
+					</form>
+				</section>
+			</section>
 		</section>
 	</section>
+
 </body>
 </html>

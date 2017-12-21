@@ -131,7 +131,7 @@ ul {
 													답변</span>
 										</a></li>
 										<li><a
-											href="${ pageContext.request.contextPath }/boardQA/list"
+											href="${ pageContext.request.contextPath }/store/list"
 											class="auto"> <span class="pull-right text-muted">
 													<i class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>

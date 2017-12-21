@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html class="app">
 <head>
-
 <title>ONCE</title>
 <meta name="description"
 	content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
@@ -28,7 +27,8 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath }/resources/css/app.css"
 	type="text/css" />
-
+<link rel="stylesheet"
+	href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script
 	src="${pageContext.request.contextPath }/resources/js/jquery.min.js"></script>
 <!-- Bootstrap -->
@@ -36,29 +36,16 @@
 	src="${pageContext.request.contextPath }/resources/js/bootstrap.js"></script>
 <!-- App -->
 <script src="${pageContext.request.contextPath }/resources/js/app.js"></script>
-
 <script
 	src="${pageContext.request.contextPath }/resources/js/slimscroll/jquery.slimscroll.min.js"></script>
 <script
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
- <!-- parsley -->
-<script src="${pageContext.request.contextPath }/resources/js/parsley/parsley.min.js"></script>
-<script src="${pageContext.request.contextPath }/resources/js/parsley/parsley.extend.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
-
-	function doAction() {
-		location.href = "${ pageContext.request.contextPath }/notice/list"
-
-	}
 </script>
-<style type="text/css">
-th {
-	text-align: center;
-	font-size: 13pt;
-}
-</style>
 </head>
 <body class="">
+<div id="dialog" title="ALERT DIALOG"></div>
 	<section class="vbox">
 		<!-- 상단바 -->
 		<header
@@ -67,7 +54,7 @@ th {
 				<a class="btn btn-link visible-xs"
 					data-toggle="class:nav-off-screen,open" data-target="#nav,html">
 					<i class="fa fa-bars"></i>
-				</a> <a href="${ pageContext.request.contextPath }/notice/list" class="navbar-brand"> <span
+				</a> <a href="index.html" class="navbar-brand"> <span
 					class="hidden-nav-xs">ONCE</span>
 				</a> <a class="btn btn-link visible-xs" data-toggle="dropdown"
 					data-target=".user"> <i class="fa fa-cog"></i>
@@ -112,45 +99,43 @@ th {
 								<nav class="nav-primary hidden-xs" id="sidemenu">
 									<div
 										class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
-									<ul class="nav nav-main">
+									<ul class="nav nav-main" data-ride="collapse">
 										<li class="active"><a
-											href="${ pageContext.request.contextPath }/notice/list"
+											href="#"
 											class="auto"> <span class="pull-right text-muted">
-												<i class="i i-circle-sm-o text"></i> <i
-												class="i i-circle-sm text-active"></i> 
-											</span> <i class="i i-statistics icon"> </i> <span class="font-bold">운영
-													공지</span> </a></li>
+													<i class="i i-circle-sm-o text"></i> <i
+													class="i i-circle-sm text-active"></i>
+											</span> <i class="i i-statistics icon"> </i> <span class="font-bold">물품
+													관리</span>
+										</a>
+											<ul class="nav dk">
+												<li><a
+													href="${ pageContext.request.contextPath }/info/addItem"
+													class="auto"> <i class="i i-dot"></i> <span>물품
+															추가</span>
+												</a></li>
+												<li class="active"><a
+													href="${ pageContext.request.contextPath }/info/itemDelivery"
+													class="auto"> <i class="i i-dot"></i> <span>물품
+															전달</span>
+												</a></li>
+												
+											</ul>
+										<li><a href="${ pageContext.request.contextPath }/info/staffList" class="auto"> <span
+												class="pull-right text-muted"> <i
+													class="i i-circle-sm-o text"></i> <i
+													class="i i-circle-sm text-active"></i>
+											</span> <i class="i i-stack icon"> </i> <span class="font-bold">직원 관리</span>
+										</a></li>
 										<li><a href="${ pageContext.request.contextPath }/boardQA/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
-											</span> <i class="i i-stack icon"> </i> <span class="font-bold">QNA
-													답변</span>
-										</a></li>
-										<li><a href="${ pageContext.request.contextPath }/store/list" class="auto"> <span
-												class="pull-right text-muted"> <i
-													class="i i-circle-sm-o text"></i> <i
-													class="i i-circle-sm text-active"></i>
-											</span> <i class="i i-lab icon"> </i> <span class="font-bold">매장
-													관리</span>
-										</a></li>
-										<li><a href="${pageContext.request.contextPath}/manager/list" class="auto"> <span
-												class="pull-right text-muted"> <i
-													class="i i-circle-sm-o text"></i> <i
-													class="i i-circle-sm text-active"></i>
-											</span> <i class="i i-docs icon"> </i> <span class="font-bold">매니저
-													관리</span>
-										</a></li>
-										<li><a href="${ pageContext.request.contextPath }/customer/list" class="auto"> <span
-												class="pull-right text-muted"> <i
-													class="i i-circle-sm-o text"></i> <i
-													class="i i-circle-sm text-active"></i>
-											</span> <i class="i i-grid2 icon"> </i> <span class="font-bold">고객
-													관리</span>
+											</span> <i class="i i-lab icon"> </i> <span class="font-bold">관리자
+													답변 게시판</span>
 										</a></li>
 									</ul>
 								</nav>
-
 							</div>
 						</section>
 						<footer class="footer hidden-xs no-padder text-center-nav-xs">
@@ -169,38 +154,16 @@ th {
 					</section>
 				</aside>
 				<!-- 사이드 메뉴 끝 -->
-
-				<!-- 메뉴 사이즈 조정 -->
 				<section id="content">
 					<section class="vbox">
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
-							<h3 class="font-bold m-b-none m-t-none">운영공지</h3>
-							<br />
-							<div style="text-align: right; width: 80%">
-								<form:form commandName="noticeVO" method="post" enctype="multipart/form-data" >
-									<table border="1" width="100%">
-										<tr>
-											<td><form:input type="text" path="title" class="form-control" placeholder="제목을 입력해 주세요"/></td>
-										</tr>
-										<tr>
-											<td>
-											<form:textarea class="form-control" rows="7" cols="10" path="content" />
-											</td>
-										</tr>
-									</table>
-									<br />
-									<input type="file" value="파일등록" class="btn btn-s-md btn-primary" name="file"/>
-									<input type="submit" value="등록" class="btn btn-s-md btn-primary"/>
-									<input type="button" value="취소" onclick="doAction()" class="btn btn-s-md btn-primary"/>
-								</form:form>
-							</div>
+							<h3 class="font-bold m-b-none m-t-none">물품 전달</h3>
+							<br /> <br />
+							
 						</section>
 					</section>
-					<a href="#" class="hide nav-off-screen-block"
-						data-toggle="class:nav-off-screen,open" data-target="#nav,html"></a>
 				</section>
-				<!-- 메뉴 사이즈 조정 끝-->
 			</section>
 		</section>
 	</section>

@@ -3,6 +3,7 @@ package once.order.dao;
 import java.util.List;
 
 import once.order.vo.OrderDetailVO;
+
 import once.order.vo.OrderVO;
 
 public interface OrderDAO {
@@ -16,5 +17,6 @@ public interface OrderDAO {
 	List<OrderVO> getStoreOrderList(String storeNo);
 
 	List<OrderDetailVO> getStoreDetailList(int orderNo);
+
 
 }

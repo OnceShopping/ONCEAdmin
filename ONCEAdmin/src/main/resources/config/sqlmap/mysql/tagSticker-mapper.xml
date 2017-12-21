@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="once.tagSticker.dao.TagStickerDAO">
+	
+	<!-- tagsticker 한개 검색 -->
+	<select id="selectOneTag" parameterType="int" resultType="TagStickerVO">
+		select * from TagSticker where tagNo = #{tagNo}
+	</select>
+	
+	<!-- tagsticker memNo로 검색-->
+	<select id="selectTagByMemNo" parameterType="int" resultType="TagStickerVO">
+		select * from TagSticker where memNo = #{memNo}
+	</select>
+</mapper>
+
+
+
+
+
+
+

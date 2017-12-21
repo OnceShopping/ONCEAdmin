@@ -150,6 +150,12 @@ public class ManagerDAOImpl implements ManagerDAO {
 		return list;
 	}
 
+
+	@Override
+	public ManagerVO selectOnestaffNo(int staffNo) {
+		return sqlSession.selectOne("once.manager.dao.ManagerDAO.selectOnestaffNo", staffNo);
+	}
+
 	//해당 매장 직원 목록
 	@Override
 	public List<ManagerVO> selectByStore(String storeNo) {
@@ -175,4 +181,5 @@ public class ManagerDAOImpl implements ManagerDAO {
 		
 		sqlSession.insert("once.manager.dao.ManagerDAO.insert1", manager);
 	}
+
 }

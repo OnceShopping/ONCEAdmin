@@ -16,7 +16,7 @@
 	
 	<!-- warehouse에 들어간 주문상태 주문완료로 변경 -->
 	<update id="updateStatusFin" parameterType="int">
-		update orderList set status = '준비완료' where orderNo = #{orderNo}
+		update orderList set status = '상품준비완료' where orderNo = #{orderNo}
 	</update>
 
 	<!-- 주문 storeNo별 검색 -->
@@ -30,3 +30,4 @@
 	</select>
 	
 </mapper>
+

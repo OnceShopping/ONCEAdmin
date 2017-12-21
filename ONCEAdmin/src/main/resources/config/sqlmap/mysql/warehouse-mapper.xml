@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="once.warehouse.dao.WarehouseDAO">
+	
+	<!-- warehouse 전체 검색 -->
+	<select id="selectAllWarehouse" resultType="WarehouseVO" parameterType="String">
+		select * from warehouse where floor=#{storeNo}
+	</select>
+	
+	<!-- warehouse 없는 고객번호 새로 추가 -->
+	<insert id="insertWarehouse" parameterType="WarehouseVO">
+		insert into warehouse(count, floor, memNo, floorWareNo) values (#{count}, #{floor}, #{memNo}, #{floorWareNo})
+	</insert>
+	
+	<!-- warehouse 있는 고객번호 count 변경 -->
+	<update id="updateWarehouse" parameterType="int">
+		update warehouse set count = count + 1 where memNo = #{memNo}
+	</update>
+	
+	<!-- warehouse 한명 검색 -->
+	<select id="selectOneWarehouse" resultType="WarehouseVO">
+		select * from warehouse where memNo = #{memNo}
+	</select>
+</mapper>
+
+
+
+
+
+
+

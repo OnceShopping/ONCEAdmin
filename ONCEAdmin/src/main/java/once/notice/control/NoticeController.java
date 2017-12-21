@@ -115,8 +115,8 @@ public class NoticeController {
 	throws Exception{
 		System.out.println(mRequest.getContextPath()); //상대경로
 		//로컬 경로가 아니라 서버쪽 경로에 저장됨->
-		String uploadPath = mRequest.getServletContext().getRealPath("/upload/admin/");
-		
+//		String uploadPath = mRequest.getServletContext().getRealPath("/upload/admin/");
+		String uploadPath2 = "C:\\Once\\image\\";
 		Iterator<String> iter = mRequest.getFileNames();
 		while(iter.hasNext()) {
 			
@@ -148,7 +148,7 @@ public class NoticeController {
 				System.out.println("저장할 파일명 : " + saveFileName);
 			
 				// 임시저장된 파일을 원하는 경로에 저장
-				mFile.transferTo(new File(uploadPath + saveFileName));
+				mFile.transferTo(new File(uploadPath2 + saveFileName));
 				
 				noticeVO.setImgOriName(oriFileName);
 				noticeVO.setImgSaveName(saveFileName);
@@ -172,9 +172,9 @@ public class NoticeController {
 	@RequestMapping(value = "update/{noticeNo}", method = RequestMethod.POST)
 	public String update(@PathVariable int noticeNo, @Valid NoticeVO noticeVO, MultipartHttpServletRequest mRequest) throws Exception{
 		noticeVO.setNoticeNo(noticeNo);
-		String updatePath = mRequest.getServletContext().getRealPath("/upload/admin/"); //저장된 경로
-		File file = new File(updatePath+noticeVO.getImgSaveName()); //파일객체를 생성(저장된 경로+파일저장이름)
-		
+//		String updatePath = mRequest.getServletContext().getRealPath("/upload/admin/"); //저장된 경로
+		String uploadPath2 = "C:\\Once\\image\\";
+		File file = new File(uploadPath2+noticeVO.getImgSaveName()); //파일객체를 생성(저장된 경로+파일저장이름)
 		//이미지 저장이름이 존재하면 삭제
 		if(noticeVO.getImgSaveName() != null) {
 			file.delete();
@@ -211,7 +211,7 @@ public class NoticeController {
 				System.out.println("저장할 파일명 : " + saveFileName);
 			
 				// 임시저장된 파일을 원하는 경로에 저장
-				mFile.transferTo(new File(updatePath + saveFileName));
+				mFile.transferTo(new File(uploadPath2 + saveFileName));
 				
 				noticeVO.setImgOriName(oriFileName);
 				noticeVO.setImgSaveName(saveFileName);
@@ -227,9 +227,9 @@ public class NoticeController {
 	@RequestMapping(value = "delete/{noticeNo}")
 	public String delete(@PathVariable int noticeNo, HttpServletRequest request) {
 		NoticeVO noticeVO = service.selectOneNotice(noticeNo);
-		String deletePath = request.getServletContext().getRealPath("/upload/admin/"+noticeVO.getImgSaveName()); //저장된 경로 + 파일저장이름
-		File file = new File(deletePath); //파일객체를 생성
-		
+//		String deletePath = request.getServletContext().getRealPath("/upload/admin/"+noticeVO.getImgSaveName()); //저장된 경로 + 파일저장이름
+		String uploadPath2 = "C:\\Once\\image\\"+noticeVO.getImgSaveName();
+		File file = new File(uploadPath2); //파일객체를 생성
 		//파일이 존재하면 삭제
 		if(file.exists()) {
 			file.delete();
