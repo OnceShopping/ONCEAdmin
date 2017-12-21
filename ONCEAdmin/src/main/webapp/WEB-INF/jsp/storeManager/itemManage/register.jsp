@@ -456,7 +456,7 @@ var rgx2 = /(\d+)(\d{3})/;
 												<div class="col-lg-4 m-l-n" style="width: 220px;">
 													<select multiple class="form-control" id="big"
 														name="itemCategory1" required="required">
-														<option value="님성" class="cate1">남성</option>
+														<option value="남성" class="cate1">남성</option>
 														<option value="여성" class="cate1">여성</option>
 														<option value="공용" class="cate1">공용</option>
 														<option value="남아" class="cate1">남아</option>

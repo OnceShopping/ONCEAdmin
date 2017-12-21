@@ -670,7 +670,6 @@
 												name="storeSelect">
 													<option value="INFO1F" class="storeType info">1F 안내데스크</option>
 													<option value="INFOB1" class="storeType info">B1 안내데스크</option>
-													<option value="S1F01" class="storeType F01">MLB</option>
 													<option value="S1F02" class="storeType F01">나이키</option>
 													<option value="S2F01" class="storeType F02">뱅뱅</option>
 													<option value="S2F02" class="storeType F02">팬콧</option>

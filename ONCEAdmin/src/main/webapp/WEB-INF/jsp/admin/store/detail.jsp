@@ -116,7 +116,7 @@
 		<form class="form-horizontal" action="${ pageContext.request.contextPath }/store/detail/${ storeVO.storeNo }" name="form" enctype="multipart/form-data" method="post">
 			<div class="storeLogo">
 				<div class="storeLogoImg" id="storeLogoImg">
-					<img src="${pageContext.request.contextPath}/upload/admin/${storeVO.imgSaveName}" alt="${ storeVO.storeName }"/>
+					<img src="/image/${storeVO.imgSaveName}" alt="${ storeVO.storeName }"/>
 				</div><br/>
 				<label>
 					로고 첨부
