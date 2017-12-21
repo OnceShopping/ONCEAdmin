@@ -7,11 +7,10 @@ public class TagStickerVO {
 
 	private int tagNo;
 	
-	private String managerId;
+	private int memNo;
 	
 	private int orderNo;
 	
-	private String id;
-	private String date;
+	private int staffNo;
 	
 }

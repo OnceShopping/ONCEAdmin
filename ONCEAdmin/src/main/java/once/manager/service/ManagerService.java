@@ -40,9 +40,12 @@ public interface ManagerService {
 	//매장 직원 관리
 	List<ManagerVO> selectByStore(String storeNo);
 
+	ManagerVO selectOnestaffNo(int staffNo);
+
 	List<ManagerVO> selectByStorePage(List<Object> page);
 
 	List<ManagerVO> searchByStore(ManagerVO manager);
 	
 	void add1(ManagerVO manager);
+
 }
