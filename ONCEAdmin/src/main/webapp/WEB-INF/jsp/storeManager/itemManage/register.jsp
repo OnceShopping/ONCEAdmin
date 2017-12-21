@@ -74,32 +74,61 @@ var rgx2 = /(\d+)(\d{3})/;
 				});
 			});
 		
-	
+		$('#big').change(function(){
+			if($('#big').val().length!=1){
+				infoAlert2('<p>해당 카테고리 중 한 항목만 선택해주세요.</p>');
+				for(var i=0; i<$(".cate1").length; i++){
+					$(".cate1")[i].selected=false;
+				}
+			}else{
+				for(var i=0; i<$(".cate2").length; i++){
+					$(".cate2")[i].selected=false;
+				}
+				for(var j=0; j<$(".cate3").length; j++){
+					$(".cate3")[j].selected=false;
+					$('.cloths').show();
+					$('.stuff').show();
+				}
+			}			
+		});
 		
 		//중분류 선택에 따른 소분류 표시 변경
 		$("#middle").change(function(){
-			var middleType = $(this).val();
-			
-			if(middleType=="의류"){
-				$('.cloths').show();
-				$('.stuff').hide();
-			}
-			else{
-				$('.cloths').hide();
-				$('.stuff').show();
+			if($('#middle').val().length!=1){
+				infoAlert2('<p>해당 카테고리 중 한 항목만 선택해주세요.</p>');
+				for(var i=0; i<$(".cate2").length; i++){
+					$(".cate2")[i].selected=false;
+				}
+			}else{
+				var middleType = $(this).val();
+				
+				if(middleType=="의류"){
+					$('.cloths').show();
+					$('.stuff').hide();
+				}
+				else{
+					$('.cloths').hide();
+					$('.stuff').show();
+				}				
 			}
 		});
 		
 		//소분류 선택에 따른 중분류 자동 선택
 		$("#small").change(function(){
-			
-			var middleType = $("#middle").val();
-			var smallType = $(this).val();
-			
-			if((smallType=="가방")||(smallType=="악세서리"))
-				$("#middle").val('잡화').prop("selected", true);
-			else
-				$("#middle").val('의류').prop("selected", true);
+			if($('#small').val().length!=1){
+				infoAlert2('<p>해당 카테고리 중 한 항목만 선택해주세요.</p>');
+				for(var i=0; i<$(".cate3").length; i++){
+					$(".cate3")[i].selected=false;
+				}
+			}else{
+				var middleType = $("#middle").val();
+				var smallType = $(this).val();
+				
+				if((smallType=="가방")||(smallType=="악세서리"))
+					$("#middle").val('잡화').prop("selected", true);
+				else
+					$("#middle").val('의류').prop("selected", true);				
+			}
 		});	
 		
 		//다이얼로그 format 정의 - alert창
@@ -134,6 +163,21 @@ var rgx2 = /(\d+)(\d{3})/;
 			var itemNo = $('#itemNo').val();
 			location.href="${ pageContext.request.contextPath }/item/register/"+itemNo;
 		});
+		
+		$('#dialog2').dialog({
+			 autoOpen: false,
+		      modal: true,
+		      width: '300',
+		      height: '250',
+		      padding : '10px',
+		      buttons : [{
+			      	id : "OK2",  //OK 버튼
+			      	text : "OK",
+			      	click : function(){
+				    	$(this).dialog("close");
+				   		}
+			      }]
+		 });
 	});
 	
 	//이미지 미리 보기
@@ -150,6 +194,12 @@ var rgx2 = /(\d+)(\d{3})/;
 	function infoAlert(str){
 		$('#dialog').html("<div><p>"+str+"</p></div>");
 		$("#dialog").dialog("open");
+	}
+	
+	//알림 모달 다이얼로그 태그 설정 : 카테고리 선택 설정
+	function infoAlert2(str){
+		$('#dialog2').html("<div><p>"+str+"</p></div>");
+		$("#dialog2").dialog("open");
 	}
 	
 	//특수문자를 입력받지 않도록 설정
@@ -209,6 +259,7 @@ var rgx2 = /(\d+)(\d{3})/;
 </head>
 <body class="">
 <div id="dialog" title="ALERT DIALOG"></div>
+<div id="dialog2" title="ALERT DIALOG"></div>
 	<section class="vbox">
 		<!-- 상단바 -->
 		<header
@@ -405,11 +456,11 @@ var rgx2 = /(\d+)(\d{3})/;
 												<div class="col-lg-4 m-l-n" style="width: 220px;">
 													<select multiple class="form-control" id="big"
 														name="itemCategory1" required="required">
-														<option value="님성">남성</option>
-														<option value="여성">여성</option>
-														<option value="공용">공용</option>
-														<option value="남아">남아</option>
-														<option value="여아">여아</option>
+														<option value="님성" class="cate1">남성</option>
+														<option value="여성" class="cate1">여성</option>
+														<option value="공용" class="cate1">공용</option>
+														<option value="남아" class="cate1">남아</option>
+														<option value="여아" class="cate1">여아</option>
 													</select>
 												</div>
 											</td>
@@ -418,7 +469,7 @@ var rgx2 = /(\d+)(\d{3})/;
 												<div class="col-lg-4 m-l-n" style="width: 220px;">
 													<select multiple class="form-control" id="middle"
 														name="itemCategory2" required="required">
-														<option id="cloths" class="cate2">의류</option>												
+														<option id="cloths" class="cate2">의류</option>
 														<option id="stuff" class="cate2">잡화</option>
 													</select>
 												</div>

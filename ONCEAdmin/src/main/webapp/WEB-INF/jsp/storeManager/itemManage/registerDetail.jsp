@@ -476,7 +476,7 @@ var third = 0;
 										<td style="width: 50px;">
 											<select id="size" style="width: 150px; height: 25px;">
 												<option value="Free">Free</option>
-												<c:if test="${ itemVO.itemCategory2 eq '의류' }">
+												<c:if test="${ item.itemCategory2 eq '의류' }">
 													<option value="S">S</option>
 													<option value="M">M</option>
 													<option value="L">L</option>
