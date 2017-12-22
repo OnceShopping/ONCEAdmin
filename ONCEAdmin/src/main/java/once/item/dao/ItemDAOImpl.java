@@ -212,4 +212,10 @@ public class ItemDAOImpl implements ItemDAO {
 	public void deleteItem(int num) {
 		sqlSession.delete("once.item.dao.ItemDAO.deleteItem", num);
 	}
+
+	//item 주문 확인을 위해 item 찾기
+	@Override
+	public ItemContentsVO getItemInfo(int detailNo) {
+		return sqlSession.selectOne("once.item.dao.ItemDAO.getItemInfo", detailNo);
+	}
 }

@@ -329,9 +329,10 @@ tr:hover {
 									<ul class="nav nav-main">
 										<li><a
 											href="${pageContext.request.contextPath}/notice/list"
-											class="auto"> <i class="i i-circle-sm-o text"></i> <i
-												class="i i-circle-sm text-active"></i><i
-												class="i i-statistics icon"> </i> <span class="font-bold">운영
+											class="auto"> <span class="pull-right text-muted">
+											<i class="i i-circle-sm-o text"></i> <i
+												class="i i-circle-sm text-active"></i>
+											</span>	<i class="i i-statistics icon"> </i> <span class="font-bold">운영
 													공지</span>
 										</a></li>
 										<li><a href="${pageContext.request.contextPath}/boardQA/list" class="auto"> <span

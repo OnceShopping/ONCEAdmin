@@ -122,7 +122,7 @@ th {
 											</span> <i class="i i-stack icon"> </i> <span class="font-bold">QNA
 													답변</span>
 										</a></li>
-										<li><a href="${pageContext.request.contextPath}/store/list" class="auto"> <span
+										<li><a href="${ pageContext.request.contextPath }/store/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>

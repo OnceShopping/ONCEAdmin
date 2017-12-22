@@ -80,7 +80,7 @@ public class StoreController {
 	//매장 추가 처리
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String addStore(MultipartHttpServletRequest request, @Valid StoreVO store) throws Exception {
-		String uploadPath = request.getServletContext().getRealPath("/upload/admin/");
+		String uploadPath = "C:\\Once\\image\\";
 		Iterator<String> iterator = request.getFileNames();
 		
 		while( iterator.hasNext()) {
@@ -129,7 +129,7 @@ public class StoreController {
 	@RequestMapping(value = "/detail/{storeNo}", method = RequestMethod.POST)
 	public String modify(@PathVariable String storeNo, @ModelAttribute @Valid StoreVO store, MultipartHttpServletRequest request, Model model) throws Exception {
 		
-		String updatePath = request.getServletContext().getRealPath("/upload/admin/");
+		String updatePath = "C:\\Once\\image\\";
 		File file = new File(updatePath + store.getImgSaveName());
 		
 		if(store.getImgSaveName() != null) {

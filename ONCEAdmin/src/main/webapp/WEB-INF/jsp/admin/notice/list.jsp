@@ -102,7 +102,7 @@ ul {
 											<li><a
 												href="${ pageContext.request.contextPath }/manager/check">Profile</a></li>
 											<li class="divider"></li>
-											<li><a href="modal.lockme.html" data-toggle="ajaxModal">Logout</a>
+											<li><a href="${ pageContext.request.contextPath }/logout">Logout</a>
 											</li>
 										</ul>
 									</div>
@@ -130,8 +130,9 @@ ul {
 											</span> <i class="i i-stack icon"> </i> <span class="font-bold">QNA
 													답변</span>
 										</a></li>
-										<li><a href="${pageContext.request.contextPath}/store/list" class="auto">
-											<span class="pull-right text-muted">
+										<li><a
+											href="${ pageContext.request.contextPath }/store/list"
+											class="auto"> <span class="pull-right text-muted">
 													<i class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
 											</span> <i class="i i-lab icon"> </i> <span class="font-bold">매장

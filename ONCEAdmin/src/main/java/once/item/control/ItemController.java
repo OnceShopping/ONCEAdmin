@@ -96,7 +96,7 @@ public class ItemController {
 		
 		itemImg = new ItemImgVO(); //이미지 등록을 위한 객체
 		
-	    String uploadDir = servletContext.getRealPath("/upload/");
+	    String uploadDir = "C:\\Once\\image\\";
 		    
 	    Iterator<String> iter = mRequest.getFileNames();
 	    
@@ -124,7 +124,7 @@ public class ItemController {
 		        long fileSize = mFile.getSize();
 			            
 		        // 고유한 파일명 만들기   
-		        String saveFileName = "once-" + UUID.randomUUID().toString() + ext;
+		        String saveFileName = "ONCE-" + UUID.randomUUID().toString() + ext;
 		         
 		        // 임시저장된 파일을 원하는 경로에 저장
 		        mFile.transferTo(new File(uploadDir + saveFileName));
@@ -181,7 +181,7 @@ public class ItemController {
 		service.addImage(itemImg);
 		
 		// 실행되는 웹어플리케이션의 실제 경로 가져오기
-	    String uploadDir = servletContext.getRealPath("/upload/");
+	    String uploadDir = "C:\\Once\\image\\";
     
 	    Iterator<String> iter = mRequest.getFileNames();
 	    
@@ -208,7 +208,7 @@ public class ItemController {
 		            
 		        long fileSize = mFile.getSize();
 		               
-		        String saveFileName = "once-" + UUID.randomUUID().toString() + ext;
+		        String saveFileName = "ONCE-" + UUID.randomUUID().toString() + ext;
 		         
 		        mFile.transferTo(new File(uploadDir + saveFileName));
 		        

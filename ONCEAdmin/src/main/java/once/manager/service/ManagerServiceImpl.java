@@ -22,6 +22,11 @@ public class ManagerServiceImpl implements ManagerService{
 	}
 	
 	@Override
+	public String checkType(String id) {
+		return dao.checkType(id);
+	}
+	
+	@Override
 	public boolean checkPassword(String managerId, String password) {
 		return dao.checkPassword(managerId, password);
 	}
@@ -109,6 +114,11 @@ public class ManagerServiceImpl implements ManagerService{
 		return list;
 	}
 
+	@Override
+	public ManagerVO selectOnestaffNo(int staffNo) {
+		return dao.selectOnestaffNo(staffNo);
+	}
+
 	//매장 직원 관리
 	@Override
 	public List<ManagerVO> selectByStore(String storeNo) {
@@ -131,5 +141,6 @@ public class ManagerServiceImpl implements ManagerService{
 	public void add1(ManagerVO manager) {		
 		dao.insert1(manager);
 	}
+
 }
  

@@ -569,9 +569,10 @@
 									<ul class="nav nav-main">
 										<li><a
 											href="${pageContext.request.contextPath}/notice/list"
-											class="auto"> <i class="i i-circle-sm-o text"></i> <i
-												class="i i-circle-sm text-active"></i><i
-												class="i i-statistics icon"> </i> <span class="font-bold">운영
+											class="auto"> <span class="pull-right text-muted">
+												<i class="i i-circle-sm-o text"></i> <i
+												class="i i-circle-sm text-active"></i>
+											</span>	<i class="i i-statistics icon"> </i> <span class="font-bold">운영
 													공지</span>
 										</a></li>
 										<li><a
@@ -669,7 +670,6 @@
 												name="storeSelect">
 													<option value="INFO1F" class="storeType info">1F 안내데스크</option>
 													<option value="INFOB1" class="storeType info">B1 안내데스크</option>
-													<option value="S1F01" class="storeType F01">MLB</option>
 													<option value="S1F02" class="storeType F01">나이키</option>
 													<option value="S2F01" class="storeType F02">뱅뱅</option>
 													<option value="S2F02" class="storeType F02">팬콧</option>

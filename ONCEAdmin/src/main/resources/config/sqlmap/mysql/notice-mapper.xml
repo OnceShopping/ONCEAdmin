@@ -28,8 +28,8 @@
  	
  	<!-- 글쓰기 -->
  	<insert id="insertNotice" parameterType="noticeVO">
- 		insert into notice ( title, content, imgSaveName, imgOriName, imgSize )
- 		values ( #{title}, #{content}, #{imgSaveName}, #{imgOriName}, #{imgSize} );
+ 		insert into notice ( title, content, imgSaveName, imgOriName, imgSize, viewcnt, regdate )
+ 		values ( #{title}, #{content}, #{imgSaveName}, #{imgOriName}, #{imgSize}, 0, curdate() );
  	</insert>
  	 	<!-- 	insert into notice(noticeNo,title,content)
  		values (seq_notice_noticeNo.nextval,#{title},#{content}) -->

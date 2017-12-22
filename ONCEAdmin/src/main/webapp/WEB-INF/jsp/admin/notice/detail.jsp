@@ -199,7 +199,7 @@ th {
 											</span> <i class="i i-stack icon"> </i> <span class="font-bold">QNA
 													답변</span>
 										</a></li>
-										<li><a href="${pageContext.request.contextPath}/store/list" class="auto"> <span
+										<li><a href="${ pageContext.request.contextPath }/store/list" class="auto"> <span
 												class="pull-right text-muted"> <i
 													class="i i-circle-sm-o text"></i> <i
 													class="i i-circle-sm text-active"></i>
@@ -264,7 +264,7 @@ th {
 									<tr>
 										<td style="text-align: left; align: center "  colspan="3">
 										<c:if test="${ noticeVO.imgSaveName ne null }">
-											<img src="${ pageContext.request.contextPath }/upload/admin/${ noticeVO.imgSaveName }" style="width: auto; height: auto; max-width:921px; align: center">
+											<img src="/image/${ noticeVO.imgSaveName }" style="width: auto; height: auto; max-width:921px; align: center">
 										</c:if>
 										<br/><br/>
 										<span >${ noticeVO.content }</span>
