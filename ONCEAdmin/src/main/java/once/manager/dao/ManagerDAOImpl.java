@@ -33,6 +33,11 @@ public class ManagerDAOImpl implements ManagerDAO {
 	}
 	
 	@Override
+	public String checkType(String id) {
+		return sqlSession.selectOne("once.manager.dao.ManagerDAO.checkType", id);
+	}
+
+	@Override
 	public boolean checkPassword(String managerId, String password) {
 		boolean result = false;
 		

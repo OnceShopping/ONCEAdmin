@@ -9,6 +9,8 @@ public interface ManagerService {
 
 	ManagerVO login(ManagerVO manager);
 	
+	String checkType(String id);
+
 	boolean checkPassword(String managerId, String password);
 
 	ManagerVO selectById(String managerId);

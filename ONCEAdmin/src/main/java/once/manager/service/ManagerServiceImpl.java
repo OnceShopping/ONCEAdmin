@@ -22,6 +22,11 @@ public class ManagerServiceImpl implements ManagerService{
 	}
 	
 	@Override
+	public String checkType(String id) {
+		return dao.checkType(id);
+	}
+	
+	@Override
 	public boolean checkPassword(String managerId, String password) {
 		return dao.checkPassword(managerId, password);
 	}
