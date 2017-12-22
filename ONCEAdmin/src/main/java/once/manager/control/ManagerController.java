@@ -143,7 +143,10 @@ public class ManagerController {
 	
 	//패스워드 체크 페이지
 	@RequestMapping(value = "/manager/check", method = RequestMethod.GET)
-	public String checkForm() {
+	public String checkForm(@ModelAttribute("loginVO") ManagerVO manager, Model model) {
+		String type = service.checkType((String)manager.getManagerId());
+		
+		model.addAttribute("type", type);
 		return "manager/check";
 	}
 

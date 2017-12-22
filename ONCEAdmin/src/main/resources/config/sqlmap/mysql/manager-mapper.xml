@@ -20,6 +20,13 @@
  		 where managerId = #{managerId} and password = #{password}
  	</select>
   	 	
+ 	<!-- 타입 체크 -->
+ 	<select id="checkType" resultType="String">
+ 		select type
+ 		from StoreMember
+ 		where managerId = #{id}
+ 	</select>
+
  	<!-- 패스워드 체크 -->
  	<select id="checkPassword" resultType="int">
  		select count(*)
