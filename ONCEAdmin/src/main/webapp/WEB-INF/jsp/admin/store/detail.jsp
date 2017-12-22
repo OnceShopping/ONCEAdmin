@@ -175,7 +175,7 @@
 							<div class="form-group" style="text-align: center;">
 								<div class="col-sm-offset-3 col-sm-5">
 									<button type="submit" class="btn btn-sm btn-primary" id="udtBtn">수정</button>
-									<button type="button" class="btn btn-sm btn-primary" id="goBackBtn" onclick="goBack()">취소</button>
+									<button type="button" class="btn btn-sm btn-primary" id="goBackBtn" onclick="history.go(-1)">취소</button>
 								</div>
 							</div>
 						</form>
