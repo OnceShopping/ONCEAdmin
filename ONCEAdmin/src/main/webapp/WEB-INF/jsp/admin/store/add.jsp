@@ -421,10 +421,6 @@
 	   	}
 	   	reader.readAsDataURL(file[0]);
 	   }
-	
-	function goBack() {
-		location.href ="${pageContext.request.contextPath}/store/list";
-	}
 </script>
 </head>
 <body class="">
@@ -519,7 +515,7 @@
 							</div>
 							<div class="storeSubmit">
 								<input type="submit" class="btn btn-s-md btn-primary" id="submitBtn" disabled="disabled" value="매장 등록"/>
-								<input type="button" class="btn btn-s-md btn-primary" value="취소" onclick="goBack()"/>
+								<input type="button" class="btn btn-s-md btn-primary" value="취소" onclick="history.go(-1)"/>
 							</div>
 						</form>
 					 </div>
@@ -533,6 +529,5 @@
          </section>
       </section>
    </section>
-   
 </body>
 </html>

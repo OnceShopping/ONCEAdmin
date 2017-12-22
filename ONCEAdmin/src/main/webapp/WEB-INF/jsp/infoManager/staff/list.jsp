@@ -307,7 +307,6 @@
 		});
    
 	});
-
 	//삭제 시 비밀번호를 확인하는 다이얼로그를 통해 비밀번호를 비교
 	function clickBtn(CheckPwd, loginPwd){
 		if(CheckPwd != loginPwd)
@@ -315,10 +314,8 @@
 		else
 			document.getElementById("listForm").submit();
 	}
-
 	//매니저 추가 후 표에 데이터를 뿌려주기
 	function printList(result) {
-
 		var row = "<tr>";
 		row += "<td><input type='checkbox' value= " + result.managerId + " name='managerId' class='check'></td>";
 		row += "<td>" + result.staffNo + "</td>";
@@ -328,14 +325,10 @@
 		row += "<td>" + result.telephone + "</td>";
 		row += "<td>" + result.date + "</td>";
 		row += "</tr>";
-
 		$('#addList').after(row);
-
 	}
-
 	//List 데이터를 각각의 데이터로 뽑아 검색 모달 다이얼로그에 출력되도록 태그 설정 
 	function printResult(data) {
-
 		var row = "<table style='width: 100%;' id='searchList'>";
 		row += "<tr style='width: 100%; height:30px; border: 1 solid; background: #E0DFDF;'>";
 		row += "<th style='text-align: center; width='10%'; height:30px;'>사원 번호</th>";
@@ -360,7 +353,6 @@
 		});
 		
 		row += "</table>";
-
 		return row;
 	}
 	
