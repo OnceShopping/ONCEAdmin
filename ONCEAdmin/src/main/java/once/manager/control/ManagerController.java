@@ -3,13 +3,9 @@ package once.manager.control;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -33,12 +29,8 @@ import once.manager.service.ManagerService;
 import once.manager.vo.ManagerVO;
 import once.notice.service.NoticeService;
 import once.notice.vo.NoticeVO;
-
 import once.order.service.OrderService;
 import once.order.vo.OrderVO;
-
-import once.store.service.StoreService;
-
 import once.store.vo.StoreVO;
 import once.warehouse.service.WarehouseService;
 import once.warehouse.vo.WarehouseVO;
@@ -726,4 +718,27 @@ public class ManagerController {
 		return mav;
 	}
 	
+	//층에 따른 매장 확인
+	@RequestMapping("/manager/storeCheck")
+	@ResponseBody
+	public List<StoreVO> storeCheck(@RequestParam("floor") String floor){
+		
+		List<StoreVO> list = new ArrayList<>();
+		
+		list = service.selectStoreByFloor(floor);
+		
+		return list;
+	}
+	
+	//층에 따른 info 확인
+	@RequestMapping("/manager/infoCheck")
+	@ResponseBody
+	public List<StoreVO> infoCheck(){
+		
+		List<StoreVO> list = new ArrayList<>();
+		
+		list = service.selectInfoByFloor();
+				
+		return list;
+	}
 }

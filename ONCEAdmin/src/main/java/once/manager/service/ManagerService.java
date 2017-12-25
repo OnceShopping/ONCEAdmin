@@ -50,4 +50,7 @@ public interface ManagerService {
 	
 	void add1(ManagerVO manager);
 
+	List<StoreVO> selectStoreByFloor(String floor);
+	
+	List<StoreVO> selectInfoByFloor();
 }
