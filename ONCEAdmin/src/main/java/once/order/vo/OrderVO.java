@@ -19,6 +19,8 @@ public class OrderVO {
 	private int staffNo;
 	private String managerId;
 	
+	private String tagNo;
+	
 	private String status;
 		
 	private String floor;

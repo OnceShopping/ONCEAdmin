@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import once.order.vo.OrderDetailVO;
 
 import once.order.vo.OrderVO;
+import once.store.vo.StoreVO;
 
 @Repository
 public class OrderDAOImpl implements OrderDAO {
@@ -43,10 +44,49 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
-	public List<OrderDetailVO> getStoreDetailList(int orderNo) {
+	public List<OrderDetailVO> getOrderDetailList(int orderNo) {
 		List<OrderDetailVO> orderNoDetailList = sqlSession.selectList("once.order.dao.OrderDAO.orderNoDetailList", orderNo);
 		return orderNoDetailList;
 	}
+
+	@Override
+	public List<OrderVO> getOptionOrderList(OrderVO options) {
+		List<OrderVO> storeOptionOrderList = sqlSession.selectList("once.order.dao.OrderDAO.optionOrderList", options);
+		return storeOptionOrderList;
+	}
+
+	@Override
+	public List<OrderVO> getSortOrderList(StoreVO store) {
+		List<OrderVO> sortOptionOrderList = sqlSession.selectList("once.order.dao.OrderDAO.sortOrderList", store);
+		return sortOptionOrderList;
+	}
+
+	@Override
+	public OrderVO getOrderVO(int orderNo) {
+		OrderVO orderInfo= sqlSession.selectOne("once.order.dao.OrderDAO.getOrderInfo", orderNo);
+		return orderInfo;
+	}
+
+	@Override
+	public OrderDetailVO getOrderDetail(int no) {
+		OrderDetailVO detail = sqlSession.selectOne("once.order.dao.OrderDAO.getDetailInfo", no);
+		return detail;
+	}
+
+	@Override
+	public void updateStatusAccpet(int orderNo) {
+		sqlSession.update("once.order.dao.OrderDAO.updateStatusAccpet", orderNo);
+	}
+
+	@Override
+	public void updateStatusDelivery(List<OrderVO> deliveryOrderList) {
 		
+		for(int i=0; i<deliveryOrderList.size(); i++) {
+			sqlSession.update("once.order.dao.OrderDAO.updateStatusDelivery", deliveryOrderList.get(i).getOrderNo());
+		}
+		
+	}
+
+			
 
 }

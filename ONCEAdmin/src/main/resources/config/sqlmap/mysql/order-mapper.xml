@@ -26,8 +26,59 @@
 	
 	<!-- orderDetail orderNo별 검색 -->
 	<select id="orderNoDetailList"  parameterType="int" resultType="OrderDetailVO">
-		select * from orderDetail where orderNo = #{orderNo}
+		select status, detailNo, no, storeNo, storeName, price, imgSaveName, count  from orders where orderNo = #{orderNo}
 	</select>
+	
+	<!-- orderNo별 검색 -->
+	<select id="getOrderInfo"  parameterType="int" resultType="OrderVO">
+		select * from orderList where orderNo = #{orderNo}
+	</select>
+	
+	<!-- no별 검색 -->
+	<select id="getDetailInfo"  parameterType="int" resultType="OrderDetailVO">
+		select * from orders where no = #{no}
+	</select>
+	
+	<!-- 주문 store status, floor Option 검색 -->
+	<select id="optionOrderList"  parameterType="OrderVO" resultType="OrderVO">
+		select * 
+		from orderList 
+		<where>
+		storeNo = #{storeNo} and
+			<choose>
+	 			<when test="status != null">
+	 				status = #{ status }
+	 			</when>
+	 			<when test="floor != null">
+	 				floor = #{ floor }
+	 			</when>
+	 		</choose>
+ 		</where>
+	</select>
+	
+	<!-- 주문 orderNo별 오름차순/내림차순 검색 -->
+	<select id="sortOrderList"  parameterType="OrderVO" resultType="OrderVO">
+		select * 
+		from orderList 
+		where storeNo = #{storeNo} 
+		order by (orderNo) 
+ 		<if test="sortChoice == 0">
+ 			desc
+ 		</if>
+ 		<if test="sortChoice == 1">
+ 			asc
+ 		</if>
+	</select>
+	
+	<!-- 상품승인완료로 변경 -->
+	<update id="updateStatusAccpet" parameterType="int">
+		update orderList set status = '상품승인완료' where orderNo = #{orderNo}
+	</update>
+	
+	<!-- 상품준비완료로 변경 -->
+	<update id="updateStatusDelivery" parameterType="int">
+		update orderList set status = '상품전달완료' where orderNo = #{orderNo}
+	</update>
 	
 </mapper>
 

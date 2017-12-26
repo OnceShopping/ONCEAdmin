@@ -1,18 +1,25 @@
 package once.order.control;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import once.customer.service.CustomerService;
 import once.customer.vo.CustomerVO;
 import once.item.service.ItemService;
 import once.item.vo.ItemContentsVO;
+import once.item.vo.ItemDetailVO;
 import once.manager.service.ManagerService;
 import once.manager.vo.ManagerVO;
 import once.order.service.OrderService;
@@ -20,69 +27,299 @@ import once.order.vo.OrderDetailVO;
 import once.order.vo.OrderVO;
 import once.store.service.StoreService;
 import once.store.vo.StoreVO;
+import once.tagSticker.vo.TagStickerVO;
 
 @Controller
 public class OrderController {
 
 	@Autowired
 	private OrderService service;
-	
+
 	@Autowired
 	private ItemService itemService;
-	
+
 	@Autowired
 	private CustomerService cusService;
-	
+
 	@Autowired
-	private StoreService StoreService;
+	private StoreService storeService;
 	
-	@Autowired
-	private ManagerService mngService;
-	
-	
-	@RequestMapping(value="/orderList/orderList")
-	public ModelAndView orderList(HttpSession session) {
-		ManagerVO loginVO = (ManagerVO)session.getAttribute("loginVO");
-		
-		int orderCount = 0;	// 전체 주문 개수	
-		
-		StoreVO store = StoreService.selectByStoreNo(loginVO.getStoreNo());
-		List<OrderVO> storeNoOrderList = service.getStoreOrderList(store.getStoreNo());	
-		
-		System.out.println("오류1");
-		for(int i=0; i<storeNoOrderList.size(); i++) {
-			List<OrderDetailVO> orderNoDetailList = service.getStoreDetailList(storeNoOrderList.get(i).getOrderNo());
-			System.out.println("오류2");
-			for(int j=0; j<orderNoDetailList.size(); j++) {				
-				ItemContentsVO info = itemService.getItemInfo(orderNoDetailList.get(j).getDetailNo());
-				System.out.println("오류3");
-				orderNoDetailList.get(j).setStoreNo(store.getStoreNo());
-				orderNoDetailList.get(j).setStoreName(store.getStoreName());
-				orderNoDetailList.get(j).setItemName(info.getItemName());
-				orderNoDetailList.get(j).setSize(info.getSize());
-				orderNoDetailList.get(j).setColor(info.getColor());
-				System.out.println("detail순회_"+j+" : "+orderNoDetailList.get(j));
+	private List<OrderVO> deliveryOrderList;
+
+	public List<OrderVO> getOrderDetailList(StoreVO store, List<OrderVO> orderVOList) {
+
+		for (int i = 0; i < orderVOList.size(); i++) {
+			List<OrderDetailVO> orderDetailList = service.getOrderDetailList(orderVOList.get(i).getOrderNo());
+			for (int j = 0; j < orderDetailList.size(); j++) {
+
+				ItemContentsVO info = itemService.getItemInfo(orderDetailList.get(j).getDetailNo());
+				orderDetailList.get(j).setOrderNo(orderVOList.get(i).getOrderNo());
+				orderDetailList.get(j).setStoreNo(store.getStoreNo());
+				orderDetailList.get(j).setStoreName(store.getStoreName());
+				orderDetailList.get(j).setItemName(info.getItemName());
+				orderDetailList.get(j).setSize(info.getSize());
+				orderDetailList.get(j).setColor(info.getColor());
+
 			}
-			storeNoOrderList.get(i).setOrderDetails(orderNoDetailList);
-			
-			CustomerVO cus = cusService.getCustomerInfo(storeNoOrderList.get(i).getMemNo());
-			System.out.println("오류4");
-			storeNoOrderList.get(i).setId(cus.getId());
-			storeNoOrderList.get(i).setTelephone(cus.getTelephone());
-			
-			storeNoOrderList.get(i).setStoreName(loginVO.getStoreName());
-			
-			orderCount += storeNoOrderList.get(i).getOrderDetails().size();
-			System.out.println("order순회_"+i+" : "+storeNoOrderList.get(i));
+
+			orderVOList.get(i).setOrderDetails(orderDetailList);
+
+			CustomerVO cus = cusService.getCustomerInfo(orderVOList.get(i).getMemNo());
+			orderVOList.get(i).setId(cus.getId());
+			orderVOList.get(i).setTelephone(cus.getTelephone());
+			orderVOList.get(i).setStoreName(store.getStoreName());
 		}
-				
+
+		return orderVOList;
+	}
+
+	public int getOrderCount(List<OrderVO> orderVOList) {
+		int orderCount = 0; // 전체 주문 개수
+		for (int i = 0; i < orderVOList.size(); i++) {
+			orderCount += orderVOList.get(i).getOrderDetails().size();
+		}
+		return orderCount;
+	}
+
+	@RequestMapping(value = "/orderList/alertModal")
+	public @ResponseBody ModelAndView alertModal(@RequestParam("str") String str) {
+
+		ModelAndView mav = new ModelAndView();
+
+		mav.setViewName("storeManager/orderList/alertModal");
+		mav.addObject("str", str);
+
+		return mav;
+	}
+
+	@RequestMapping(value = "/orderList/orderList")
+	public ModelAndView orderList(HttpSession session) {
+		ManagerVO loginVO = (ManagerVO) session.getAttribute("loginVO");
+
+		StoreVO store = storeService.selectByStoreNo(loginVO.getStoreNo());
+		List<OrderVO> storeNoOrderList = service.getStoreOrderList(store.getStoreNo());
+
+		storeNoOrderList = getOrderDetailList(store, storeNoOrderList);
+		int orderCount = getOrderCount(storeNoOrderList); // 전체 주문 개수
+
 		ModelAndView mav = new ModelAndView("storeManager/orderList/orderList");
-		
-		System.out.println("storeNoOrderList: "+storeNoOrderList);
+
+		System.out.println("storeNoOrderList: " + storeNoOrderList);
 		System.out.println("orderCount: " + orderCount);
+
+		mav.addObject("orderCount", orderCount);
+		mav.addObject("orderList", storeNoOrderList);
+
+		return mav;
+	}
+
+	@RequestMapping(value = "/orderList/serchOption")
+	public @ResponseBody ModelAndView serchOption(@RequestParam(value = "choice") String choice,
+			@RequestParam(value = "option", required = false) String option, HttpSession session) {
+
+		ModelAndView mav = new ModelAndView();
+
+		ManagerVO loginVO = (ManagerVO) session.getAttribute("loginVO");
+		StoreVO store = storeService.selectByStoreNo(loginVO.getStoreNo());
+		OrderVO options = new OrderVO();
+
+		options.setStoreNo(store.getStoreNo());
+
+		List<OrderVO> storeOptionOrderList = null;
+
+		if (choice.equals("all")) {
+
+			storeOptionOrderList = service.getStoreOrderList(store.getStoreNo());
+
+		} else if (choice.equals("status") || choice.equals("floor")) {
+
+			switch (choice) {
+			case "status":
+				options.setStatus(option);
+				break;
+
+			case "floor":
+				options.setFloor(option);
+				break;
+
+			default:
+				mav.setViewName("storeManager/orderList/optionError");
+				mav.addObject("msg", "이상한 옵션 선택");
+				return mav;
+			}
+
+			storeOptionOrderList = service.getOptionOrderList(options);
+
+		} else if (choice.equals("orderNo")) {
+
+			if (option.equals("내림차순")) {
+				store.setSortChoice(0);
+			} else if (option.equals("오름차순")) {
+				store.setSortChoice(1);
+			} else {
+				mav.setViewName("storeManager/orderList/optionError");
+				mav.addObject("msg", "이상한 옵션 선택");
+				return mav;
+			}
+
+			storeOptionOrderList = service.getSortOrderList(store);
+		}
+
+		storeOptionOrderList = getOrderDetailList(store, storeOptionOrderList);
+		int orderCount = getOrderCount(storeOptionOrderList);
+
+		mav.setViewName("storeManager/orderList/changeTable");
+		mav.addObject("orderList", storeOptionOrderList);
+		mav.addObject("orderCount", orderCount);
+		mav.addObject("choice", choice);
+		mav.addObject("option", option);
+
+		return mav;
+	}
+
+	@RequestMapping(value = "/orderList/preAcceptOrder")
+	public @ResponseBody ModelAndView preAcceptOrder(@RequestParam("orderNo") int orderNo,
+			@RequestParam("noList") int[] noList) {
+
+		List<OrderDetailVO> preAcceptOrderList = new ArrayList<>();
+		ModelAndView mav = new ModelAndView();
+
+		for (int i = 0; i < noList.length; i++) {
+			preAcceptOrderList.add(service.getOrderDetail(noList[i]));
+			ItemContentsVO detail = itemService.getItemInfo(preAcceptOrderList.get(i).getDetailNo());
+			preAcceptOrderList.get(i).setItemName(detail.getItemName());
+			preAcceptOrderList.get(i).setColor(detail.getColor());
+			preAcceptOrderList.get(i).setSize(detail.getSize());
+		}
+
+		OrderVO orderInfo = service.getOrderVO(orderNo);
+		System.out.println(orderInfo);
+
+		if (orderInfo.getCount() > noList.length) {
+			mav.setViewName("storeManager/orderList/alertModal");
+			mav.addObject("str", "같은 주문 번호의 상품(들)은 한번에 승인 하셔야 합니다.");
+			mav.addObject("more", "선택 상품 개수: " + noList.length + " | 주문상품개수: " + orderInfo.getCount());
+		} else {
+			// tagNo: 층 + 고객 + 매장 + 주문
+			orderInfo.setTagNo(
+					orderInfo.getFloor() + "-" + orderInfo.getMemNo() + "-" + orderInfo.getStoreNo() + "-" + orderNo);
+			orderInfo.setId(cusService.getCustomerInfo(orderInfo.getMemNo()).getId());
+			orderInfo.setStoreName(storeService.selectByStoreNo(orderInfo.getStoreNo()).getStoreName());
+
+			mav.setViewName("storeManager/orderList/acceptModal");
+			mav.addObject("preAcceptOrderList", preAcceptOrderList);
+			mav.addObject("orderInfo", orderInfo);
+			mav.addObject("count", noList.length);
+		}
+
+		return mav;
+	}
+
+	@RequestMapping(value = "/orderList/preDelivery")
+	public @ResponseBody ModelAndView preDelivery(@RequestParam("uniqOrderNoList") int[] uniqOrderNoList,
+			@RequestParam("noList") int[] noList, @RequestParam("floor") String floor) {
+
+		deliveryOrderList = new ArrayList<>();
+
+		ModelAndView mav = new ModelAndView();
+		boolean possible = false;		
 		
-		mav.addObject("orderCount", orderCount);	
-		mav.addObject("storeNoorderList", storeNoOrderList);
+		for (int i = 0; i < uniqOrderNoList.length; i++) {
+			
+			List<OrderDetailVO> preDetailList = new ArrayList<>();
+
+			OrderVO orderInfo = service.getOrderVO(uniqOrderNoList[i]);			
+						
+			orderInfo.setId(cusService.getCustomerInfo(orderInfo.getMemNo()).getId());
+			orderInfo.setStoreName(storeService.selectByStoreNo(orderInfo.getStoreNo()).getStoreName());
+			
+			deliveryOrderList.add(orderInfo);
+			
+			for (int j = 0; j < noList.length; j++) {
+				
+				OrderDetailVO orderDetail = service.getOrderDetail(noList[j]);
+				
+				if (orderInfo.getOrderNo() == orderDetail.getOrderNo()) {
+					ItemContentsVO detail = itemService.getItemInfo(orderDetail.getDetailNo());
+					orderDetail.setItemName(detail.getItemName());
+					orderDetail.setColor(detail.getColor());
+					orderDetail.setSize(detail.getSize());					
+					
+					preDetailList.add(orderDetail);
+					
+					deliveryOrderList.get(i).setOrderDetails(preDetailList);
+				}
+			}
+
+			if (deliveryOrderList.get(i).getCount() != deliveryOrderList.get(i).getOrderDetails().size()) {
+				possible = false;
+				break;
+			}else {
+				possible = true;
+			}
+		}
+		
+		if(possible==false) {
+			mav.setViewName("storeManager/orderList/alertModal");
+			mav.addObject("str", "같은 주문 번호의 상품(들)은 한번에 전달 하셔야 합니다.");
+		}else {
+			mav.setViewName("storeManager/orderList/deliveryModal");
+			mav.addObject("deliveryOrderList", deliveryOrderList);
+			mav.addObject("floor", floor);
+			mav.addObject("count", uniqOrderNoList.length);	// 해당 info에 가는 총 주문 개수
+		}
+		
+		return mav;
+	}
+
+	@RequestMapping(value = "/orderList/acceptOrder/{orderNo}", method = RequestMethod.GET)
+	public ModelAndView acceptOrder(@PathVariable("orderNo") int orderNo, HttpSession session) {
+
+		ManagerVO loginVO = (ManagerVO) session.getAttribute("loginVO");
+
+		service.updateStatusAccpet(orderNo);
+
+		StoreVO store = storeService.selectByStoreNo(loginVO.getStoreNo());
+		List<OrderVO> resultOrderList = service.getStoreOrderList(store.getStoreNo());
+
+		resultOrderList = getOrderDetailList(store, resultOrderList);
+		int orderCount = getOrderCount(resultOrderList); // 전체 주문 개수
+
+		ModelAndView mav = new ModelAndView();
+
+		mav.setViewName("storeManager/orderList/orderList");
+		mav.addObject("orderList", resultOrderList);
+		mav.addObject("orderCount", orderCount);
+
+		return mav;
+	}
+	
+	@RequestMapping(value = "/orderList/deliveryOrder/{floor}", method = RequestMethod.GET)
+	public ModelAndView deliveryOrder(@PathVariable("floor") String floor, HttpSession session) {
+		
+		ManagerVO loginVO = (ManagerVO) session.getAttribute("loginVO");
+			
+		ModelAndView mav = new ModelAndView();
+		
+		for(int i=0; i<deliveryOrderList.size(); i++) {
+			if(!deliveryOrderList.get(i).getFloor().equals(floor)) {
+				mav.setViewName("storeManager/orderList/alertModal");
+				mav.addObject("str", "같은 주문 번호의 상품(들)은 한번에 전달 하셔야 합니다.");
+				return mav;
+			}
+		}
+		
+		service.updateStatusDelivery(deliveryOrderList);
+		
+		StoreVO store = storeService.selectByStoreNo(loginVO.getStoreNo());
+		List<OrderVO> resultOrderList = service.getStoreOrderList(store.getStoreNo());
+		
+		resultOrderList = getOrderDetailList(store, resultOrderList);
+		int orderCount = getOrderCount(resultOrderList);
+		
+		mav.setViewName("storeManager/orderList/orderList");
+		mav.addObject("orderList", resultOrderList);
+		mav.addObject("orderCount", orderCount);
 		
 		return mav;
 	}

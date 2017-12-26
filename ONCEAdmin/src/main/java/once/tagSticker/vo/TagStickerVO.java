@@ -5,12 +5,11 @@ import lombok.Data;
 @Data
 public class TagStickerVO {
 
-	private int tagNo;
-	
+	private String tagNo;
+		
 	private int memNo;
 	
 	private int orderNo;
 	
 	private int staffNo;
-	
 }
