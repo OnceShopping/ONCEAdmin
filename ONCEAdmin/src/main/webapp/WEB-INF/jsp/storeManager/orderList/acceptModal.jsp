@@ -10,11 +10,75 @@
 <script	src="${pageContext.request.contextPath }/resources/js/bootstrap.js"></script>
 <script type="text/javascript">
 
-$(document).ready(function(){
-	
-	$('#exampleModal').modal('show');
-	
-});
+	$(document).ready(function(){
+		
+		$('#exampleModal').modal('show');
+		
+		<c:forEach var="detail" items="${ preAcceptOrderList }" varStatus="status">
+			settingPrice($('#price_'+${status.index}).text(), ${status.index});
+		</c:forEach>
+		
+	});
+
+	//comma를 설정하는 로직
+	function comma(obj){
+		
+		var num = obj.toString(); 
+		var array=[];
+		var replay = parseInt((num.length)%3);
+		var routine = parseInt((num.length+2)/3);
+				
+		if(replay==1){
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,1);
+				else if(i==1)
+					sample = num.substr(1,3);
+				else
+					sample = num.substr(((i-1)*3)+1, 3);
+				
+				array.push(sample);
+			}
+		}		
+		else if(replay==2){
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,2);
+				else if(i==1)
+					sample = num.substr(2,3);
+				else
+					sample = num.substr(((i-1)*3)+2, 3);
+				
+				array.push(sample);
+			}
+		}
+		else{
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,3);
+				else
+					sample = num.substr((i*3), 3);
+				
+				array.push(sample);
+			}
+		}	
+		return array.join(",");
+	}
+
+
+	//리스트에 존재하는 가격에 comma 설정 
+	function settingPrice(obj, index){
+		
+		var price = comma(obj);
+		
+		$('#price_'+index).html(price);
+	}
 
 </script>
 </head>
@@ -62,7 +126,7 @@ $(document).ready(function(){
 							<td>${ detail.itemName }
 							<span style="font-size: 10px;">(${detail.color} | ${detail.size})</span></td>
 							<td>&nbsp;&nbsp;${ detail.count }</td>
-							<td>${ detail.price }</td>
+							<td id="price_${status.index}">${ detail.price }</td>
 							</tr>
 		 			</c:forEach>
 		 			</table>
