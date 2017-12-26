@@ -10,6 +10,7 @@ import once.order.dao.OrderDAO;
 import once.order.vo.OrderDetailVO;
 
 import once.order.vo.OrderVO;
+import once.store.vo.StoreVO;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -41,8 +42,8 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public List<OrderDetailVO> getStoreDetailList(int orderNo) {
-		List<OrderDetailVO> orderNoDetailList = dao.getStoreDetailList(orderNo);
+	public List<OrderDetailVO> getOrderDetailList(int orderNo) {
+		List<OrderDetailVO> orderNoDetailList = dao.getOrderDetailList(orderNo);
 		return orderNoDetailList;
 	}
 
@@ -50,6 +51,40 @@ public class OrderServiceImpl implements OrderService {
 	public void updateStatusDelivery(int memNo) {
 		dao.updateStatusDelivery(memNo);
 		
+	}
+
+  @Override
+	public List<OrderVO> getOptionOrderList(OrderVO options) {
+		List<OrderVO> storeOptionOrderList = dao.getOptionOrderList(options);
+		return storeOptionOrderList;
+	}
+
+	@Override
+	public List<OrderVO> getSortOrderList(StoreVO store) {
+		List<OrderVO> sortOptionOrderList = dao.getSortOrderList(store);
+		return sortOptionOrderList;
+	}
+
+	@Override
+	public OrderVO getOrderVO(int orderNo) {
+		OrderVO orderInfo = dao.getOrderVO(orderNo);
+		return orderInfo;
+	}
+
+	@Override
+	public OrderDetailVO getOrderDetail(int no) {
+		OrderDetailVO detail = dao.getOrderDetail(no);
+		return detail;
+	}
+
+	@Override
+	public void updateStatusAccpet(int orderNo) {
+		dao.updateStatusAccpet(orderNo);
+	}
+
+	@Override
+	public void updateStatusDelivery(List<OrderVO> deliveryOrderList) {
+		dao.updateStatusDelivery(deliveryOrderList);		
 	}
 
 }

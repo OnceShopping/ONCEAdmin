@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/font.css" type="text/css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/app.css"	type="text/css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/js/datepicker/datepicker.css" type="text/css" />
+
 <script	src="${pageContext.request.contextPath }/resources/js/jquery.min.js"></script>
 <!-- Bootstrap -->
 <script	src="${pageContext.request.contextPath }/resources/js/bootstrap.js"></script>
@@ -24,234 +25,426 @@
 <!-- datepicker -->
 <script src="${pageContext.request.contextPath }/resources/js/datepicker/bootstrap-datepicker.js"></script>
 <script type="text/javascript">
+	var orderNo = 0;
+	var floor = "";
+	
+	function sidemenu(){
+		document.getElementById('itemRegister').setAttribute('class','');
+		document.getElementById('itemList').setAttribute('class','');
+		document.getElementById('itemManage').setAttribute('class','');
+		document.getElementById('orderList').setAttribute('class','');
+		document.getElementById('staffManage').setAttribute('class','');
+		document.getElementById('boardQAList').setAttribute('class','');
+	}
+
 	$(document).ready(function(){
+		
+		sidemenu();
+		document.getElementById('orderList').setAttribute('class','active');
+		
 		$('#option').hide();
+		
+		<c:forEach var="order" items="${ orderList }" varStatus="loop">
+			<c:forEach var="detail" items="${ order.orderDetails }" varStatus="status">
+			settingPrice($('#price_'+${loop.index}+'_'+${status.index}).text(), ${loop.index}, ${status.index});
+			</c:forEach>
+		</c:forEach>
+				
+		var orderStatusList = document.getElementsByClassName('order_status');
+		
+		for(var i=0; i<orderStatusList.length; i++){
+			var orderStatus = orderStatusList.item(i);
+			
+			if(orderStatus.innerHTML == '결제완료'){
+				orderStatus.setAttribute('class','order_status label bg-info');
+			}else if(orderStatus.innerHTML == '상품승인완료'){
+				orderStatus.setAttribute('class','order_status label bg-primary');
+			}else if(orderStatus.innerHTML == '상품전달완료'){
+				orderStatus.setAttribute('class','order_status label bg-success');
+			}else if(orderStatus.innerHTML == '상품준비완료'){
+				orderStatus.setAttribute('class','order_status label bg-danger');
+			}else if(orderStatus.innerHTML == '상품수령완료'){
+				orderStatus.setAttribute('class','order_status label bg-warning');
+			}
+		}
+		
 	});
 	
 	function showOption(){
 		var choice = $('#choice').val();
 		
-		if(choice=='처리사항'){
-			$('#option').html('<option id="all">전체</option>'+'<option id="payFinish">결제완료</option>'+'<option id="accpetFinish">수령장소</option>');
+		if(choice=='status'){
+			$('#option').html(
+					'<option id="payFinish" value="결제완료">결제완료</option>'
+					+'<option id="acceptFinish" value="상품승인완료">상품승인완료</option>'
+					+'<option id="deliveryFinish" value="상품전달완료">상품전달완료</option>'
+					+'<option id="getInfo" value="상품준비완료">상품준비완료</option>'
+					+'<option id="getCus" value="상품수령완료">상품수령완료</option>');
 			$('#option').show();
-		}else if(choice=='주문번호'){
+		}else if(choice=='orderNo'){
 			$('#option').html('<option id="up">오름차순</option>'+'<option id="down">내림차순</option>');
 			$('#option').show();
-		}else if(choice=='수령장소'){
+		}else if(choice=='floor'){
 			$('#option').html('<option id="1F">1F</option>'+'<option id="B1">B1</option>');
 			$('#option').show();
-		}else if(choice=='전체'){
+		}else if(choice=='all'){
 			$('#option').html('');
 			$('#option').hide();
 		}
 	}
+	
+	function serchOption(){
+		
+		var choice = $('#choice').val();
+		var option = $('#option').val();
+		
+		$.ajax({
+			url : "${ pageContext.request.contextPath }/orderList/serchOption",
+			data : {
+				'choice' : choice,
+				'option' : option
+			},
+			success : function(data) {
+				$('#changeResult').html("");
+				$('#changeResult').html(data);
+			}
+		});
+	}
+	
+	
+	function infoAlert(str){	/* 알림 모달 다이얼로그 태그 설정 */
+		
+		$.ajax({
+			url : "${ pageContext.request.contextPath }/orderList/alertModal",
+			type : "get",
+			data : {
+				'str'  : str
+			},
+			contentType : "application/json; charset=UTF-8",
+			success : function(data) {		
+				$( "#dialog" ).html(data);
+			}
+		});
+	
+	}
+	
+	function preAccept(){	/* 주문 번호 기준 | 태그 생성*/
+		
+		var checkVal = document.getElementsByClassName("check");	/* no의 모임 */
+		var orderNos = document.getElementsByClassName("orderNo"); /* orderNo의 모임 */
+		var statuses = document.getElementsByClassName("order_status"); /* status의 모임 */
+		var count = 0;	/* 선택된 개수 */
+		
+		var noList = new Array();	/* 선택된 no의 모임 */
+		var orderNoList = new Array();	/* 선택된 orderNo의 모임 */
+		var statusList = new Array();	/* 선택된 status의 모임 */
+		
+		for(var i = 0; i < checkVal.length; i++){
+			
+			if(checkVal[i].checked){
+				noList[count] = checkVal[i].value;
+				orderNoList[count] = orderNos[i].innerHTML;
+				statusList[count] = statuses[i].innerHTML;
+				count++;
+			}
+			
+		}
+		
+		var canAccept = false;
+		var status = "";
+		
+		if(count==0){
+			infoAlert("승인하고자 하는 주문의 체크박스를 선택해주세요.");	
+		}else{
+			orderNo = orderNoList[0];
+			status = statusList[0];
+			
+			for(var i = 0; i<count; i++){	
+				if(orderNoList[i]==orderNo){
+					canAccept = true;
+				}else{
+					canAccept = false;			
+					break;
+				}
+			}
+			
+			if(canAccept==false){
+				
+				infoAlert("같은 주문번호만 승인 할 수 있습니다. 다시 선택해 주세요.");
+				return;
+				
+			}else if(status != "결제완료"){
+				
+				infoAlert("결제완료만 승인 할 수 있습니다. 다시 선택해 주세요.");
+				return;
+				
+			}else if(canAccept==true){
+				
+				jQuery.ajaxSettings.traditional = true;
+
+				$.ajax({
+					url : "${ pageContext.request.contextPath }/orderList/preAcceptOrder",
+					type : "get",
+					data : {
+						'orderNo'  : orderNo,
+						'noList'	: noList
+					},
+					contentType : "application/json; charset=UTF-8",
+					success : function(data) {		
+						$( "#dialog" ).html(data);
+					}
+				});
+				
+			}	
+		}
+	}
+	
+	function preDelivery(){	/* info 위치 기준 | 배달 정보 모달 */
+		
+		var checkVal = document.getElementsByClassName("check");	/* no의 모임 */
+		var orderNos = document.getElementsByClassName("orderNo"); /* orderNo의 모임 */
+		var floors = document.getElementsByClassName("floor"); /* floor의 모임 */
+		var statuses = document.getElementsByClassName("order_status"); /* status의 모임 */
+		var count = 0;	/* 선택된 개수 */
+		
+		var noList = new Array();	/* 선택된 no의 모임 */
+		var orderNoList = new Array();	/* 선택된 orderNo의 모임(중복O) */
+		var floorList = new Array();	/* 선택된 floor의 모임 */
+		var statusList = new Array();	/* 선택된 status의 모임 */
+		
+		for(var i = 0; i < checkVal.length; i++){
+			
+			if(checkVal[i].checked){
+				noList[count] = checkVal[i].value;
+				orderNoList[count] = orderNos[i].innerHTML;
+				floorList[count] = floors[i].innerHTML;
+				statusList[count] = statuses[i].innerHTML;
+				count++;
+			}
+			
+		}
+		
+		/* 선택된 orderNo의 모임(중복X) */
+		var uniqOrderNoList = orderNoList.reduce(function(a,b){
+			if (a.indexOf(b) < 0 ) a.push(b);
+			return a;
+		},[]);
+		
+		
+		var canAccept = false;
+		floor = "";
+		var status = "";
+		
+		if(count==0){
+			infoAlert("전달하고자 하는 주문의 체크박스를 선택해주세요.");
+		}else{
+			orderNo = orderNoList[0];
+			floor = floorList[0];
+			status = statusList[0];
+			
+			for(var i = 0; i<count; i++){	
+				if(floorList[i]==floor){
+					canAccept = true;
+				}else{
+					canAccept = false;			
+					break;
+				}
+			}
+			
+			if(canAccept==false){
+				
+				infoAlert("같은 층의 INFO만 전달 할 수 있습니다. 다시 선택해 주세요.");
+				return;
+				
+			}else if(status != "상품승인완료"){
+				
+				infoAlert("상품승인완료 상태만 전달 할 수 있습니다. 다시 선택해 주세요.");
+				return;
+				
+			}else if(canAccept==true){
+				
+				jQuery.ajaxSettings.traditional = true;
+				
+				$.ajax({
+					url : "${ pageContext.request.contextPath }/orderList/preDelivery",
+					type : "get",
+					data : {
+						'uniqOrderNoList'  : uniqOrderNoList,
+						'noList'		: noList,
+						'floor'			: floor
+					},
+					contentType : "application/json; charset=UTF-8",
+					success : function(data) {
+						$( "#dialog" ).html(data);
+					}
+				});
+				
+			}
+		}
+	}
+	
+	function acceptOrder(){ /* 태그 생성 눌렀을 때 */
+		location.href="${ pageContext.request.contextPath }/orderList/acceptOrder/"+orderNo;
+	}
+	
+	function deliveryOrder(){	/* 전달 -> 확인 */
+		location.href="${ pageContext.request.contextPath }/orderList/deliveryOrder/"+floor;
+	}
+	
+	//comma를 설정하는 로직
+	function comma(obj){
+		
+		var num = obj.toString(); 
+		var array=[];
+		var replay = parseInt((num.length)%3);
+		var routine = parseInt((num.length+2)/3);
+				
+		if(replay==1){
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,1);
+				else if(i==1)
+					sample = num.substr(1,3);
+				else
+					sample = num.substr(((i-1)*3)+1, 3);
+				
+				array.push(sample);
+			}
+		}		
+		else if(replay==2){
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,2);
+				else if(i==1)
+					sample = num.substr(2,3);
+				else
+					sample = num.substr(((i-1)*3)+2, 3);
+				
+				array.push(sample);
+			}
+		}
+		else{
+			for(var i=0; i<routine; i++){
+				var sample;				
+				
+				if(i==0)
+					sample = num.substr(0,3);
+				else
+					sample = num.substr((i*3), 3);
+				
+				array.push(sample);
+			}
+		}	
+		return array.join(",");
+	}
+	
+	
+	//리스트에 존재하는 가격에 comma 설정 
+	function settingPrice(obj, loop, index){
+		
+		var price = comma(obj);
+		$('#price_'+loop+'_'+index).html(price);
+	}
+	
 </script>
+<style type="text/css">
+	.bg-success, .bg-primary, .bg-info, .bg-warning, .bg-danger {
+		font-size: 100%;
+		color: #ffffff;
+	}
+	.bg-danger {
+		background: #ff6600;
+	}
+</style>
 </head>
 <body>
 	<section class="vbox">
-      <!-- 상단바 -->
-      <header class="bg-white header header-md navbar navbar-fixed-top-xs box-shadow">
-         <div class="navbar-header aside-md dk">
-            <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen,open" data-target="#nav,html">
-               <i class="fa fa-bars"></i></a> 
-            <a href="index.html" class="navbar-brand"> <span class="hidden-nav-xs">ONCE</span></a>
-            <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".user"> <i class="fa fa-cog"></i></a>
-         </div>
-      </header>
-      <!-- 상단바 끝 -->
+     	<!-- 상단바 -->
+		<jsp:include page="/WEB-INF/jsp/storeManager/include/topmenu.jsp" flush="false"></jsp:include>
+		<!-- 상단바 끝 -->
       <section>
       	 <section class="hbox stretch">
-      	 	<!-- 메뉴 위 프로필 -->
-            <aside class="bg-black aside-md hidden-print hidden-xs" id="nav">
-               <section class="vbox">
-                  <section class="w-f scrollable">
-                     <div class="slim-scroll" data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="10px" data-railOpacity="0.2">
-                        <div class="clearfix wrapper dk nav-user hidden-xs">
-                           <div class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                 <span class="hidden-nav-xs clear"> 
-                                 <span class="block m-t-xs"> 
-                                 	<strong class="font-bold text-lt">${loginVO.managerId }</strong>
-                                 <b class="caret"></b>
-                                 </span>
-                              	 </span>
-                              </a>
-                              <!-- 프로필 클릭시 나오는 메뉴 -->
-                              <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                 <li><a href="${ pageContext.request.contextPath }/manager/check">Profile</a></li>
-                                 <li class="divider"></li>
-                                 <li><a href="modal.lockme.html" data-toggle="ajaxModal">Logout</a></li>
-                              </ul>
-                           </div>
-                        </div>
-                        <!-- 프로필 클릭시 나오는 메뉴 끝 -->
-                        <!-- 메뉴 위 프로필 끝 -->
-
-                        <!-- 사이드 메뉴 -->
-                        <nav class="nav-primary hidden-xs" id="sidemenu">
-                           <div class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
-                           <ul class="nav nav-main" data-ride="collapse">
-                              <li>
-                              	<a href="#" class="auto">
-                              	<span class="pull-right text-muted">
-                                <i class="i i-circle-sm-o text"></i> 
-                                <i class="i i-circle-sm text-active"></i>
-                                </span> 
-                                <i class="i i-statistics icon"></i>
-                               	<span class="font-bold">상품 관리</span>
-                              </a>
-                                 
-                                 <ul class="nav dk">
-                                    <li>
-                                    	<a  href="${pageContext.request.contextPath}/item/register" class="auto">
-                                    		<i class="i i-dot"></i><span>상품 등록</span>
-                                    </a></li>
-                                    <li>
-	                                    <a href="${pageContext.request.contextPath}/item/list" class="auto">
-	                                    	<i class="i i-dot"></i><span>상품  리스트</span>
-	                                    </a>
-                                    </li>
-                                    <li>
-                                    <a href="icons.html" class="auto">
-                                    	<i class="i i-dot"></i><span>상품 재고 관리</span>
-                                    </a>
-                                    </li>
-                                 </ul>
-                              <li>
-                              	<a href="#" class="auto"> 
-                              		<span class="pull-right text-muted"> 
-                              		<i class="i i-circle-sm-o text"></i> 
-                              		<i class="i i-circle-sm text-active"></i>
-                                 	</span> 
-                                 	<i class="i i-stack icon"> </i> <span class="font-bold">프로모션</span>
-                              	</a>
-                              </li>
-                              <li>
-                              	<a href="${pageContext.request.contextPath}/boardQA/list" class="auto"> 
-                              	<span class="pull-right text-muted"> 
-                              		<i class="i i-circle-sm-o text"></i> 
-                              		<i  class="i i-circle-sm text-active"></i>
-                                 </span> 
-                                 	<i class="i i-lab icon"></i>
-                                 <span class="font-bold">관리자  답변 게시판</span>
-                              	</a>
-                              </li>
-                              <li class="active">
-                              	<a href="${pageContext.request.contextPath}/orderList/orderList" class="auto">
-	                              	<span class="pull-right text-muted"> 
-	                              		<i class="i i-circle-sm-o text"></i> 
-	                              		<i class="i i-circle-sm text-active"></i>
-	                                </span>
-	                                	<i class="i i-docs icon"></i>
-	                                <span class="font-bold">주문 내역 게시판</span>
-                              	</a>
-                              </li>
-                              <li>
-                              	<a href="${pageContext.request.contextPath}/staffManage/list" class="auto">
-                              		<span class="pull-right text-muted"> 
-                              		<i class="i i-circle-sm-o text"></i> 
-                              		<i class="i i-circle-sm text-active"></i>
-                                 	</span>
-                                 	<i class="i i-grid2 icon"></i> 
-                                 	<span class="font-bold">매장  직원 관리</span>
-                              </a>
-                              </li>
-                           </ul>
-                        </nav>
-                  </div>
-                  </section>
-                  <footer class="footer hidden-xs no-padder text-center-nav-xs">
-                     <!-- 메뉴 하단 로그아웃 버튼 -->
-                     <a href="modal.lockme.html" data-toggle="ajaxModal" class="btn btn-icon icon-muted btn-inactive pull-right m-l-xs m-r-xs hidden-nav-xs">
-                        <i class="i i-logout"></i>
-                     </a>
-                     <!-- 메뉴 하단 축소 버튼 -->
-                     <a href="#nav" data-toggle="class:nav-xs" class="btn btn-icon icon-muted btn-inactive m-l-xs m-r-xs">
-                        <i class="i i-circleleft text"></i> <i class="i i-circleright text-active"></i>
-                     </a>
-                  </footer>
-               </section>
-            </aside>            
-            <!-- 사이드 메뉴 끝 -->
+      	 	<!-- 사이드메뉴 -->
+			<jsp:include page="/WEB-INF/jsp/storeManager/include/sidemenu.jsp" flush="false"></jsp:include>
+			<!-- 사이드메뉴 끝 -->
+			
 			<section id="content">
 				<section class="vbox">
 					<section class="scrollable wrapper" style="padding-left: 50px; padding-right: 50px;">
 						<br />
 						<h3 class="font-bold m-b-none m-t-none">주문 내역 게시판</h3>
-						<br />
-						<div style="text-align: right;">
-							<p style="float: left;">전체 주문 내역: <u>${orderCount}</u> 개</p>
-							<div style="margin-left: 30px;">
-								<select id="choice" onchange="showOption()" style="width: 85px;">
-									<option>전체</option>
-									<option>처리사항</option>
-									<option>주문번호</option>
-									<option>수령장소</option>
-								</select>
-								<select id="option" style="width: 85px;">
-									<option>전체</option>
-								</select>
-			                	<input type="submit" value="검색" class="btn btn-default" id="dateSearch">
-								<br/><br/>
+						<br/>
+						<form id="OrderVO" name="OrderVO">
+						<div id="changeResult">
+							<div style="text-align: right;">
+								<p style="float: left;">전체 주문 내역:&nbsp;&nbsp;<u>${orderCount}</u> 개</p>
+								<div style="margin-left: 30px;">
+									<select id="choice" onchange="showOption()" style="width: 85px;">
+										<option value="all">전체</option>
+										<option value="status">처리사항</option>
+										<option value="orderNo">주문번호</option>
+										<option value="floor">수령장소</option>
+									</select>
+									<select id="option" style="width: 150px;">
+									</select>
+				                	<input id="dateSearch" type="button" value="검색" class="btn btn-default" onclick="serchOption()">
+									<br/><br/>
+								</div>
+							</div>
+							<div style="width: 100%;">
+								<table class="table table-striped m-b-none dataTable no-footer" >
+									<tr style="text-align: center;">
+										<th width="7%">선택</th>
+										<th >주문번호</th>
+										<th >주문자</th>
+										<th >상품고유번호</th>
+										<th >상품명</th>
+										<th >수량</th>
+										<th >연락처</th>
+										<th >처리사항</th>
+										<th >가격</th>
+										<th >주문일</th>
+										<th>수령장소</th>
+									</tr>
+									<c:forEach var="order" items="${ orderList }" varStatus="loop">
+									<c:forEach var="detail" items="${ order.orderDetails }" varStatus="status">
+									<tr id="item_${loop.index}_${status.index}">
+										<td>
+											<input type="checkbox" class="check" name="orderDetails[${ status.index }].orderNo" value="${ detail.no }">
+										</td>
+										<td class="orderNo">${ detail.orderNo }</td>
+										<td>${ order.id }</td>
+										<td>${ detail.detailNo }</td>
+										<td>${ detail.itemName }<br/>
+											<span style="font-size: 10px;">(${detail.color} | ${detail.size})</span>
+										</td>
+										<td>${ detail.count }</td>
+										<td>${ order.telephone }</td>
+										<td><span class="order_status label ">${ order.status }</span></td>									
+										<td id="price_${loop.index}_${status.index}">${ detail.price }</td>
+										<td>${ order.date }</td>
+										<td class="floor">${ order.floor }</td>
+									</tr>
+									</c:forEach>
+									</c:forEach>
+								</table>
+								<br/>
 							</div>
 						</div>
-						
-						<div style="width: 100%;">
-							<table class="table table-striped m-b-none dataTable no-footer" >
-								<tr style="text-align: center;">
-									<th width="7%">선택</th>
-									<th >주문번호</th>
-									<th >주문자</th>
-									<th >상품고유번호</th>
-									<th >상품명</th>
-									<th >수량</th>
-									<th >연락처</th>
-									<th >처리사항</th>
-									<th >가격</th>
-									<th >주문일</th>
-									<th>수령장소</th>
-								</tr>
-								<c:forEach var="order" items="${ storeNoorderList }" varStatus="loop">
-								<c:forEach var="detail" items="${ order.orderDetails }" varStatus="status">
-								<tr id="item_${loop.index}_${status.index}">
-									<td id="item_${loop.index}_${status.index}"><input type="checkbox" id="choice_${loop.index}_${status.index}"></td>
-									<td id="orderNo_${loop.index}_${status.index}">${ detail.orderNo }</td>
-									<td id="id_${loop.index}_${status.index}">${ order.id }</td>
-									<td id="detailNo_${loop.index}_${status.index}">${ detail.detailNo }</td>
-									<td id="itemName_${loop.index}_${status.index}">${ detail.itemName }<br/>
-									<span style="font-size: 10px;">(${detail.color} | ${detail.size})</span>
-									</td>
-									<td id="count_${loop.index}_${status.index}">${ detail.count }</td>
-									<td id="phone_${loop.index}_${status.index}">${ order.telephone }</td>
-									<c:choose>
-									<c:when test="${ order.status eq '결제완료' }">
-									<th id="status_${loop.index}_${status.index}" style="color: #1aae88;">${ order.status }</th>
-									</c:when>
-									<c:when test="${ order.status eq '상품승인완료' }">
-									<th id="status_${loop.index}_${status.index}" style="color: #a94442;">${ order.status }</th>
-									</c:when>
-									<c:otherwise>
-									<th id="status_${loop.index}_${status.index}">${ order.status }</th>
-									</c:otherwise>
-									</c:choose>
-									
-									<td id="price_${loop.index}_${status.index}">${ detail.price }</td>
-									<td id="date_${loop.index}_${status.index}">${ order.date }</td>
-									<td id="floor_${loop.index}_${status.index}">${ order.floor }</td>
-								</tr>
-								</c:forEach>
-								</c:forEach>
-							</table>
-						<br/>
-						</div>
 						<div style="float: right;">
-							<button id="accept" type="button" class="btn btn-primary" style="margin: 10px;">승인</button><!-- (제어걸기) 주문 번호 기준  | 결재완료인 것만 -->
-							<button id="delivery" type="button" class="btn btn-primary" >전달</button><!-- (제어걸기) 수령 장소 기준  | 상품승인완료인 것만 -->
-						</div>								
+							<button id="accept" type="button" class="btn btn-primary" onclick="preAccept()" style="margin: 10px;">승인</button><!-- (제어걸기) 주문 번호 기준  | 결재완료인 것만 -->
+							<button id="delivery" type="button" class="btn btn-primary" onclick="preDelivery()"  >전달</button><!-- (제어걸기) 수령 장소 기준  | 상품승인완료인 것만 -->
+						</div>
+						</form>							
+					<!-- 메뉴 사이즈 조정 끝-->
+					<div id="dialog" title="ALERT DIALOG"></div>
 					</section>
 					<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen,open" data-target="#nav,html"></a>						
 				</section>
-				<!-- 메뉴 사이즈 조정 끝-->
 			</section>
       	 </section>
       </section>      

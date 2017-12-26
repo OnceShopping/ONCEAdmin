@@ -9,6 +9,8 @@ public interface ManagerService {
 
 	ManagerVO login(ManagerVO manager);
 	
+	String checkType(String id);
+
 	boolean checkPassword(String managerId, String password);
 
 	ManagerVO selectById(String managerId);
@@ -48,4 +50,7 @@ public interface ManagerService {
 	
 	void add1(ManagerVO manager);
 
+	List<StoreVO> selectStoreByFloor(String floor);
+	
+	List<StoreVO> selectInfoByFloor();
 }

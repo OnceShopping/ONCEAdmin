@@ -47,11 +47,16 @@
 	
 		var ModalTest;
 		var requiredCheck = false; //ID 중복 확인
+		var secSelect;
+		
+		sidemenu();
+		document.getElementById('managerList').setAttribute('class','active');
 		
 			$('#typeSelect').val(''); // 매장 타입 콤보 박스 초기화
 			$('#storeSelect').val(''); // 매장 이름  콤보 박스 초기화
 			$('#searchType').val(''); // 검색 콤보 박스 초기화 
-
+		
+			
 			//체크박스 전체 선택, 선택 해제
 			$('#checkAll').click(function() {
 			var checkVal = document.getElementsByClassName("check");
@@ -85,44 +90,55 @@
 					}
 			});
 			
-			//매장 선택 - 첫 번째 콤보박스 선택 시 두 번째 콤보박스에 표시되는 option 제어 
 			$('#typeSelect').on("change", function() {
-
-				var state = $('#typeSelect option:selected').val();
-
-				$('#storeSelect').val('');
-				$('.storeType').hide(); // 두 번째 select-box에 존재하는 option 모두 숨기기
-
-					if (state == "0000") { // admin일 경우
-						$('#storeSelect').hide(); // 두번 째 select-box가 사라짐
-					} else { // admin이 아닐 경우 
-						$('#storeSelect').show(); // 두번 째 select-box를 표시함
-
-						// 첫 번째 select-box에 해당하는 것만 보여주기 위한 로직
-						if (state == "info")
-							$('.info').show();
-						else if (state == "F01")
-							$('.F01').show();
-						else if (state == "F02")
-							$('.F02').show();
-						else
-							$('.F03').show();
-					}
-			});
-			
-			//매장 선택 - 두 번째 콤보박스에서 option 선택 시 첫 번째 콤보박스 option이 자동으로 설정될 수 있도록 제어
-			$('#storeSelect').on("change",function() {
-
-				var store = $('#storeSelect').val();
-
-				if ((store == 'INFO1F')|| (store == 'INFOB1'))
-					$("#typeSelect").val("info").prop("selected", true);
-				else if ((store == 'S1F01')|| (store == 'S1F02'))
-					$("#typeSelect").val("F01").prop("selected", true);
-				else if ((store == 'S2F01')|| (store == 'S2F01'))
-					$("#typeSelect").val("F02").prop("selected", true);
-				else
-					$("#typeSelect").val("F03").prop("selected", true);
+				$('#storeSelect').html('');
+				$('#storeSelect').show();
+				
+				var select = $('#typeSelect').val();
+				
+				if(select=='통합관리자'){
+					
+					$('#storeSelect').hide();
+				
+				}else if(select=='Information Desk'){ //information Desk를 선택했을 경우
+					
+					$.ajax({
+						url : "${ pageContext.request.contextPath }/manager/infoCheck",
+						cache : false,
+						contentType : "application/json; charset=UTF-8",
+						success : function(data){		
+							var result = $.parseJSON(data);
+							secSelect = printFloor(result);
+							$('#storeSelect').html(secSelect);
+						},
+						error : function(request,status, error) {
+							alert("에러 발생! : " + request.status + "message : "+ request.responseText+ "\n"+ "error : "+ error);
+						}
+					});
+				}else{
+					
+					$.ajax({
+						url : "${ pageContext.request.contextPath }/manager/storeCheck",
+						data : {
+							"floor" : select
+						},
+						type : "get",
+						cache : false,
+						contentType : "application/json; charset=UTF-8",
+						success : function(data){
+							
+							var result = $.parseJSON(data);
+							secSelect = printStore(result);
+							$('#storeSelect').html(secSelect);
+							
+						},
+						error : function(request,status, error) {
+							alert("에러 발생! : " + request.status + "message : "+ request.responseText+ "\n"+ "error : "+ error);
+						}
+					});	
+					
+				}
+				
 			});
 
 			//추가
@@ -150,9 +166,9 @@
 					var type = $('#typeSelect').val();
 					var Mtype;
 	
-					if (type == 'info')
+					if (type == 'Information Desk')
 						Mtype = "infoManager";
-					else if (type == '0000')
+					else if (type == '통합관리자')
 						Mtype = "admin";
 					else
 						Mtype = "storeManager";
@@ -445,6 +461,40 @@
 			else
 				return false;
 		}
+		
+		//information desk
+		function printFloor(data){
+				
+			var row="<option disabled='disabled'>----------------</option>";
+			
+			$.each(data,function(index,item){
+				
+				row += "<option value='"+item.storeNo+"'>"+item.floor+"</option>";
+			});
+	
+			return row;
+		}
+		
+		//매장
+		function printStore(data){
+			
+			var row="<option disabled='disabled'>-------매장-------</option>";
+			
+			$.each(data,function(index,item){
+				
+				row += "<option value='"+item.storeNo+"'>"+item.storeName+"</option>";
+			});
+	
+			return row;
+		}
+
+		function sidemenu(){
+				document.getElementById('noticeList').setAttribute('class','');
+				document.getElementById('boardQAList').setAttribute('class','');
+				document.getElementById('storeList').setAttribute('class','');
+				document.getElementById('managerList').setAttribute('class','');
+				document.getElementById('cusomterList').setAttribute('class','');
+			}
 </script>
 <style type="text/css">
 	.addDiv {
@@ -479,6 +529,9 @@
 			font-size: 12pt;
 			font-weight: bold;
 			color: #788288;
+	}
+	#searchType{
+		display: inline-block;
 	}
 </style>
 </head>
@@ -515,116 +568,13 @@
 	</div>
 	<section class="vbox">
 		<!-- 상단바 -->
-		<header
-			class="bg-white header header-md navbar navbar-fixed-top-xs box-shadow">
-			<div class="navbar-header aside-md dk">
-				<a class="btn btn-link visible-xs"
-					data-toggle="class:nav-off-screen,open" data-target="#nav,html">
-					<i class="fa fa-bars"></i>
-				</a> <a href="index.html" class="navbar-brand"> <span
-					class="hidden-nav-xs">ONCE</span>
-				</a> <a class="btn btn-link visible-xs" data-toggle="dropdown"
-					data-target=".user"> <i class="fa fa-cog"></i>
-				</a>
-			</div>
-		</header>
+			<jsp:include page="/WEB-INF/jsp/admin/include/topmenu.jsp" flush="false"></jsp:include>
 		<!-- 상단바 끝 -->
 
 		<section>
 			<section class="hbox stretch">
-				<!-- 메뉴 위 프로필 -->
-				<aside class="bg-black aside-md hidden-print hidden-xs" id="nav">
-					<section class="vbox">
-						<section class="w-f scrollable">
-							<div class="slim-scroll" data-height="auto"
-								data-disable-fade-out="true" data-distance="0" data-size="10px"
-								data-railOpacity="0.2">
-								<div class="clearfix wrapper dk nav-user hidden-xs">
-									<div class="dropdown">
-										<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-											<span class="hidden-nav-xs clear"> <span
-												class="block m-t-xs"> <strong
-													class="font-bold text-lt">${loginVO.managerId }</strong> <b
-													class="caret"></b>
-											</span>
-										</span>
-										</a>
-										<!-- 프로필 클릭시 나오는 메뉴 -->
-										<ul class="dropdown-menu animated fadeInRight m-t-xs">
-											<li><a
-												href="${ pageContext.request.contextPath }/manager/check">Profile</a></li>
-											<li class="divider"></li>
-											<li><a href="modal.lockme.html" data-toggle="ajaxModal">Logout</a>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<!-- 프로필 클릭시 나오는 메뉴 끝 -->
-								<!-- 메뉴 위 프로필 끝 -->
-
-								<!-- 사이드 메뉴 -->
-								<nav class="nav-primary hidden-xs" id="sidemenu">
-									<div
-										class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
-									<ul class="nav nav-main">
-										<li><a
-											href="${pageContext.request.contextPath}/notice/list"
-											class="auto"> <span class="pull-right text-muted">
-												<i class="i i-circle-sm-o text"></i> <i
-												class="i i-circle-sm text-active"></i>
-											</span>	<i class="i i-statistics icon"> </i> <span class="font-bold">운영
-													공지</span>
-										</a></li>
-										<li><a
-											href="${pageContext.request.contextPath}/boardQA/list"
-											class="auto"> <span class="pull-right text-muted">
-													<i class="i i-circle-sm-o text"></i> <i
-													class="i i-circle-sm text-active"></i>
-											</span> <i class="i i-stack icon"> </i> <span class="font-bold">QNA
-													답변</span>
-										</a></li>
-										<li><a href="#" class="auto"> <span
-												class="pull-right text-muted"> <i
-													class="i i-circle-sm-o text"></i> <i
-													class="i i-circle-sm text-active"></i>
-											</span> <i class="i i-lab icon"> </i> <span class="font-bold">매장
-													관리</span>
-										</a></li>
-										<li class="active"><a
-											href="${pageContext.request.contextPath}/manager/list"
-											class="auto"> <span class="pull-right text-muted">
-													<i class="i i-circle-sm-o text"></i> <i
-													class="i i-circle-sm text-active"></i>
-											</span> <i class="i i-docs icon"> </i> <span class="font-bold">매니저
-													관리</span>
-										</a></li>
-										<li><a
-											href="${pageContext.request.contextPath}/customer/list"
-											class="auto"> <span class="pull-right text-muted">
-													<i class="i i-circle-sm-o text"></i> <i
-													class="i i-circle-sm text-active"></i>
-											</span> <i class="i i-grid2 icon"> </i> <span class="font-bold">고객
-													관리</span>
-										</a></li>
-									</ul>
-								</nav>
-							</div>
-						</section>
-						<footer class="footer hidden-xs no-padder text-center-nav-xs">
-							<!-- 메뉴 하단 로그아웃 버튼 -->
-							<a href="modal.lockme.html" data-toggle="ajaxModal"
-								class="btn btn-icon icon-muted btn-inactive pull-right m-l-xs m-r-xs hidden-nav-xs">
-								<i class="i i-logout"></i>
-							</a>
-							<!-- 메뉴 하단 축소 버튼 -->
-							<a href="#nav" data-toggle="class:nav-xs"
-								class="btn btn-icon icon-muted btn-inactive m-l-xs m-r-xs">
-								<i class="i i-circleleft text"></i> <i
-								class="i i-circleright text-active"></i>
-							</a>
-						</footer>
-					</section>
-				</aside>
+			<!-- 사이드 메뉴 -->
+					<jsp:include page="/WEB-INF/jsp/admin/include/sidemenu.jsp" flush="false"></jsp:include>
 				<!-- 사이드 메뉴 끝 -->
 				<section id="content">
 					<section class="vbox">
@@ -661,44 +611,38 @@
 											<th colspan="2" style="text-align: left;">매장 이름 &nbsp;</th>
 											<td colspan="5" style="text-align: left;"><select
 												style="height: 25px" id="typeSelect">
-													<option value="0000" id="center" class="bigType">통합관리자</option>
-													<option value="info" id="infoDesk" class="bigType">info</option>
-													<option value="F01" id="F01" class="bigType">1층</option>
-													<option value="F02" id="F02" class="bigType">2층</option>
-													<option value="F03" id="F03" class="bigType">3층</option>
-											</select> <select style="height: 25px" id="storeSelect"
+													<option id="center" class="bigType">통합관리자</option>
+													<option id="infoDesk" class="bigType">Information Desk</option>
+													<option id="F01" class="bigType">1F</option>
+													<option id="F02" class="bigType">2F</option>
+													<option id="F03" class="bigType">3F</option>
+											</select> 
+											<select style="height: 25px; width: 100px;" id="storeSelect"
 												name="storeSelect">
-													<option value="INFO1F" class="storeType info">1F 안내데스크</option>
-													<option value="INFOB1" class="storeType info">B1 안내데스크</option>
-													<option value="S1F02" class="storeType F01">나이키</option>
-													<option value="S2F01" class="storeType F02">뱅뱅</option>
-													<option value="S2F02" class="storeType F02">팬콧</option>
-													<option value="S3F01" class="storeType F03">자라</option>
-													<option value="S3F02" class="storeType F03">유니클로</option>
 											</select>
 										</tr>
 										<tr height="5px" />
 									</table>
 									<div align="right" style="padding-right: 2px;">
-										<input type="submit" value="추가" id="Add">
+										<input type="submit" value="추가" id="Add" class="btn btn-default">
 									</div>
 								</div>
 							</form>
 							<form id="searchForm">
-								<div align="right">
-									<select id="searchType" name="searchType" style="height: 27px">
+								<div align="right" >
+									<select id="searchType" class="form-control" style="width:150px; margin-right: 5px;" name="searchType" style="height: 27px">
 										<option value="name">이름</option>
 										<option value="storeName">해당 매장</option>
 										<option value="managerId">아이디</option>
-									</select>&nbsp; <input type="text" name="searchText" id="searchText">&nbsp;
-									<input type="submit" value="검색" data-toggle="modal" data-target="#exampleModal"/>
+									</select><input type="text" name="searchText" id="searchText" style="margin-right: 5px;">
+									<input type="submit" value="검색" class="btn btn-default" data-toggle="modal" data-target="#exampleModal"/>
 								</div>
 							</form>							
 							<br />
 							<form action="${pageContext.request.contextPath}/manager/list"
 								method="post" id="listForm" name="listForm">
-								<table class="managerList" style="margin-bottom: 100px;">
-									<tr style="text-align: center; background-color: #E7E7E7; height: 30px; padding: 5px;"   id="addList">
+								<table class="managerList" style="margin-bottom: 100px;" class="table table-striped m-b-none dataTable no-footer">
+									<tr style="text-align: center; background-color: #E7E7E7; height: 30px; padding: 5px;"   id="addList" >
 										<th width="5%"><input type="checkbox" id="checkAll"></th>
 										<th width="15%" class="tbTile">사원 번호</th>
 										<th width="10%" class="tbTile">해당 매장</th>

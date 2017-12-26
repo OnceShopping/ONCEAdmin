@@ -15,5 +15,7 @@ public class StoreVO {
 	private String floor;
 	private String imgOriName;
 	private String imgSaveName;
-	private int imgSize;	
+	private int imgSize;
+	
+	private int sortChoice;
 }

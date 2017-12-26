@@ -103,10 +103,7 @@ public class CustomerController {
 	@RequestMapping(value="/search", method=RequestMethod.POST)
 	@ResponseBody
 	public List<CustomerVO> searchList(@RequestParam(value="searchType") String searchType, @RequestParam(value="searchText") String searchText) {
-	   
-		System.out.println("searchType : " + searchType);
-		System.out.println("searchText : " + searchText);
-		
+	   		
 		String search;
 		CustomerVO customer = new CustomerVO();
 		List<CustomerVO> customerList = new ArrayList<>();

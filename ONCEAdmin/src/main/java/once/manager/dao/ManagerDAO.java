@@ -7,6 +7,8 @@ import once.store.vo.StoreVO;
 
 public interface ManagerDAO {
 
+	String checkType(String id);
+
 	boolean checkPassword(String managerId, String password);
 
 	ManagerVO selectById(String managerId);
@@ -48,4 +50,7 @@ public interface ManagerDAO {
 	
 	void insert1(ManagerVO manager);
 
+	List<StoreVO> selectStoreByFloor(String floor);
+	
+	List<StoreVO> selectInfoByFloor();
 }

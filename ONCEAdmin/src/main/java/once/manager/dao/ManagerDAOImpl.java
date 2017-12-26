@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import once.manager.vo.ManagerVO;
+import once.pickupPlace.vo.PickupPlaceVO;
 import once.store.vo.StoreVO;
 
 @Repository
@@ -32,6 +33,11 @@ public class ManagerDAOImpl implements ManagerDAO {
 		return managerVO;
 	}
 	
+	@Override
+	public String checkType(String id) {
+		return sqlSession.selectOne("once.manager.dao.ManagerDAO.checkType", id);
+	}
+
 	@Override
 	public boolean checkPassword(String managerId, String password) {
 		boolean result = false;
@@ -181,5 +187,16 @@ public class ManagerDAOImpl implements ManagerDAO {
 		
 		sqlSession.insert("once.manager.dao.ManagerDAO.insert1", manager);
 	}
+	
+	@Override
+	public List<StoreVO> selectStoreByFloor(String floor) {
+		List<StoreVO> list = sqlSession.selectList("once.manager.dao.ManagerDAO.selectStoreByFloor", floor);
+		return list;
+	}
 
+	@Override
+	public List<StoreVO> selectInfoByFloor() {
+		List<StoreVO> list = sqlSession.selectList("once.manager.dao.ManagerDAO.selectInfoByFloor");
+		return list;
+	}
 }
