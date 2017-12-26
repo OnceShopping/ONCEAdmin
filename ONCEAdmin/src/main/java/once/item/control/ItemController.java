@@ -147,8 +147,14 @@ public class ItemController {
 	@RequestMapping(value="/registerDetail", method=RequestMethod.POST)
 	public ModelAndView registerItemDetail(MultipartHttpServletRequest mRequest) throws Exception {
 		
+		System.out.println("ITEM 상세");
+		
 		service.addItem(itemVO); //Item 테이블에 데이터 추가
 		service.addItemColor(itemVO); //ItemColor 테이블에 데이터 추가
+		
+		//int num = service.findNum()-1;
+		int num = itemVO.getNum();
+		System.out.println(num);
 		
 		//size와 count 값 가져옴
 		String [] size = mRequest.getParameterValues("size");
@@ -186,7 +192,9 @@ public class ItemController {
 	    Iterator<String> iter = mRequest.getFileNames();
 	    
 	    while(iter.hasNext()) {
-	         
+	    
+	    ItemImgVO itemImgs = new ItemImgVO();
+	    	
 	    String formFileName = iter.next();
 	    
 	    // 폼에서 파일을 선택하지 않아도 객체 생성됨
@@ -195,28 +203,32 @@ public class ItemController {
 	    // 원본 파일명
 	    String oriFileName = mFile.getOriginalFilename();
 	    
-		    if(oriFileName != null && !oriFileName.equals("")) {
-		         
-		    	ItemImgVO itemImgs = new ItemImgVO();
+		    if(oriFileName != null && !oriFileName.equals("")) {	    	
 		    	
+		    	 // 확장자 처리
 		        String ext = "";
 		        
+		        // 뒤쪽에 있는 . 의 위치
 		        int index = oriFileName.lastIndexOf(".");
+		      
+		        
 		        if (index != -1) {
-		            ext = oriFileName.substring(index);
+		            ext = oriFileName.substring(index); // 파일명에서 확장자명(.포함)을 추출
 		        }
 		            
 		        long fileSize = mFile.getSize();
 		               
-		        String saveFileName = "ONCE-" + UUID.randomUUID().toString() + ext;
-		         
+		        String saveFileName = "ONCE-" + UUID.randomUUID().toString() + ext; // 고유한 파일명 만들기  
+		        System.out.println("저장 이름 : "+saveFileName);
+		        
+		        // 임시저장된 파일을 원하는 경로에 저장
 		        mFile.transferTo(new File(uploadDir + saveFileName));
 		        
 		        itemImgs.setImgSaveName(saveFileName);
 		        itemImgs.setImageSize((int)fileSize);
 		        itemImgs.setImgOriName(oriFileName);
-		        itemImgs.setNum(itemVO.getNum());
-		        
+		        itemImgs.setNum(num);
+		       
 		        service.addImage(itemImgs);
 		    }
 	    }

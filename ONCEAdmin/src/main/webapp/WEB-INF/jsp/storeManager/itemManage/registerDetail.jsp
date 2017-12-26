@@ -43,7 +43,6 @@
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
-
 var index = 0; //추가된 size와 count에 해당하는 index
 var img = 0; //상세 이미지를 등록했는지 여부
 
@@ -172,10 +171,14 @@ var third = 0;
     	var reader = new FileReader();
     	reader.onload = function(rst){
     		
+    		
+    		
     		if(img==0){ //상세 이미지를 등록했는지 여부 - 처음 이미지를 등록하는 경우
 	   			++img;
-    			if(imgIndex=='0')
+	   			$('#carousel-example-generic').prepend("<div class='carousel-inner' role='listbox' id='itemImg' ></div>");
+    			if(imgIndex=='0'){
     				$('#itemImg').prepend("<div class='item active' id='detail1'><img src='" + rst.target.result+"' alt='First slide' style='margin-left: auto; margin-right: auto;'></div>");
+    			}
     			else if(imgIndex=='1')
     				$('#itemImg').prepend("<div class='item active' id='detail2'><img src='" + rst.target.result+"' alt='Second slide' style='margin-left: auto; margin-right: auto;'></div>");
     			else
@@ -188,12 +191,12 @@ var third = 0;
 						$('#detail1').html("<img src='" + rst.target.result+"' alt='First slide' style='margin-left: auto; margin-right: auto;'>");
 				}else if(imgIndex=='1'){
 					if(second=="")
-						$('#itemImg').append("<div class='item' id='detail2'><img src='" + rst.target.result+"' alt='First slide' style='margin-left: auto; margin-right: auto;'></div>");
+						$('#itemImg').append("<div class='item' id='detail2'><img src='" + rst.target.result+"' alt='Second slide' style='margin-left: auto; margin-right: auto;'></div>");
 					else
 						$('#detail2').html("<img src='" + rst.target.result+"' alt='Second slide'  style='margin-left: auto; margin-right: auto;'>");
 				}else
 					if(third=="")
-						$('#itemImg').append("<div class='item' id='detail3'><img src='" + rst.target.result+"' alt='First slide' style='margin-left: auto; margin-right: auto;'></div>");
+						$('#itemImg').append("<div class='item' id='detail3'><img src='" + rst.target.result+"' alt='Third slide' style='margin-left: auto; margin-right: auto;'></div>");
 					else
 						$('#detail3').html("<img src='" + rst.target.result+"' alt='Third slide'  style='margin-left: auto; margin-right: auto;'>");
     		}
@@ -430,14 +433,13 @@ var third = 0;
 									<tr style="height: 30px;"/>
 									<tr style="height: 100px;">
 										<td style="width: 200px;">상세 이미지 등록</td>										
-										<td><input type="file" value="파일 찾기" id="uploadLogo1" accept="image/*" onchange="fileInfo(this, '0')"></td>
+										<td><input type="file" value="파일 찾기" id="uploadLogo1" name="attachFile0"  accept="image/*" onchange="fileInfo(this, '0')"></td>
 										<!-- 이미지 -->
 										<td rowspan="3" style="width: 50px;">
 										<td rowspan="3" style="width: 300px;">
 											<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 												<!-- Wrapper for slides -->
-												  <div class="carousel-inner" role="listbox" id="itemImg" >										   
-												  </div>
+												
 											  <!-- Controls -->
 											  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
 											    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
@@ -452,11 +454,11 @@ var third = 0;
 									</tr>
 									<tr style="height: 100px;">
 										<td>상세 이미지 등록</td>
-										<td><input type="file" value="파일 찾기" id="uploadLogo2" accept="image/*" onchange="fileInfo(this, '1')"></td>
+										<td><input type="file" value="파일 찾기" id="uploadLogo2" name="attachFile1" accept="image/*" onchange="fileInfo(this, '1')"></td>
 									</tr>
 									<tr style="height: 100px;">
 										<td>상세 이미지 등록</td>
-										<td><input type="file" value="파일 찾기" id="uploadLogo3" accept="image/*" onchange="fileInfo(this, '2')"></td>
+										<td><input type="file" value="파일 찾기" id="uploadLogo3" name="attachFile2" accept="image/*" onchange="fileInfo(this, '2')"></td>
 									</tr>
 								</table>
 								<br /> <br />
