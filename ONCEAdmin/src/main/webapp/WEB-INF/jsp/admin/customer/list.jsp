@@ -243,8 +243,8 @@ tr:hover {
 </style>
 </head>
 <body class="">
-<!-- Modal --> 						
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -404,16 +404,8 @@ tr:hover {
 							</div>
 							<div>
 								<br />
-								<form
-									action="${pageContext.request.contextPath}/customer/list"
+								<form action="${pageContext.request.contextPath}/customer/list" 
 									method="post" id="listForm" name="listForm">
-									<!--<div style="text-align: right;">
-										회원 등급 <select class="select">
-												<option value="1">Option 1</option>
-												<option value="2">Option 2</option>
-												<option value="3">Option 3</option>
-										</select>
-									</div>  -->
 									<table
 										class="table table-striped m-b-none dataTable no-footer">
 										<tr style="text-align: center; background-color: #E7E7E7">
@@ -422,7 +414,6 @@ tr:hover {
 											<th width="15%" class="tbTile">아이디</th>
 											<th width="15%" class="tbTile">이름</th>
 											<th width="20%" class="tbTile">연락처</th>
-											<th width="10%" class="tbTile">회원 등급</th>
 											<th width="20%" class="tbTile">가입일</th>
 										</tr>
 										<c:forEach items="${ customerList }" var="customer">
@@ -433,7 +424,6 @@ tr:hover {
 												<td>${ customer.id }</td>
 												<td>${ customer.name }</td>
 												<td>${ customer.telephone }</td>
-												<td>등급</td>
 												<td>${ customer.date }</td>
 											</tr>
 										</c:forEach>
