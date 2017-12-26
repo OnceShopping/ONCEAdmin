@@ -57,9 +57,15 @@
 		var option = '${option}';
 		$('#option').val(option).attr('selected', 'selected');
 		
+		
+		<c:forEach var="order" items="${ orderList }" varStatus="loop">
+		<c:forEach var="detail" items="${ order.orderDetails }" varStatus="status">
+			settingPrice($('#price_'+${loop.index}+'_'+${status.index}).text(), ${loop.index}, ${status.index});
+		</c:forEach>
+		</c:forEach>
 	});
 </script>
-							<div style="text-align: right;">
+<div style="text-align: right;">
 								<p style="float: left;">전체 주문 내역:&nbsp;&nbsp;<u>${orderCount}</u> 개</p>
 								<div style="margin-left: 30px;">
 									<select id="choice" onchange="showOption()" style="width: 85px;">
@@ -104,7 +110,7 @@
 										<td>${ detail.count }</td>
 										<td>${ order.telephone }</td>
 										<td><span class="order_status label ">${ order.status }</span></td>									
-										<td>${ detail.price }</td>
+										<td id="price_${loop.index}_${status.index}">${ detail.price }</td>
 										<td>${ order.date }</td>
 										<td class="floor">${ order.floor }</td>
 									</tr>
