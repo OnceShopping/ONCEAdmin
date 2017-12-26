@@ -18,5 +18,7 @@ public interface OrderDAO {
 
 	List<OrderDetailVO> getStoreDetailList(int orderNo);
 
+	void updateStatusDelivery(int memNo);
+
 
 }

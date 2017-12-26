@@ -1,6 +1,7 @@
 package once.warehouse.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import once.warehouse.vo.WarehouseVO;
 
@@ -13,6 +14,10 @@ public interface WarehouseDAO {
 	WarehouseVO selectOneWarehouse(int memNo);
 
 	void updateWarehouse(int memNo);
+
+	void subtractWarehouse(Map<String, Object> map);
+
+	void deleteWarehouse(int memNo);
 
 
 }

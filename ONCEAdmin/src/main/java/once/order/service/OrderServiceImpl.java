@@ -46,5 +46,11 @@ public class OrderServiceImpl implements OrderService {
 		return orderNoDetailList;
 	}
 
+	@Override
+	public void updateStatusDelivery(int memNo) {
+		dao.updateStatusDelivery(memNo);
+		
+	}
+
 }
 

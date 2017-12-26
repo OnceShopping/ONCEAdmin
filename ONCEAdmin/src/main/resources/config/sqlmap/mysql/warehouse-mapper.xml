@@ -23,6 +23,16 @@
 	<select id="selectOneWarehouse" resultType="WarehouseVO">
 		select * from warehouse where memNo = #{memNo}
 	</select>
+	
+	<!-- 물품 다 안왔을때 변경 -->
+	<update id="subtractWarehouse" parameterType="hashMap">
+		update warehouse set count = #{count} where memNo = #{memNo}
+	</update>
+	
+	<!-- 물품 다 왔을때 삭제 -->
+	<delete id="deleteWarehouse" parameterType="int">
+		 delete from warehouse where memNo = #{memNo}
+	</delete>
 </mapper>
 
 

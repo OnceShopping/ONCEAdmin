@@ -1,12 +1,16 @@
 package once.order.control;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import once.customer.service.CustomerService;
@@ -20,6 +24,8 @@ import once.order.vo.OrderDetailVO;
 import once.order.vo.OrderVO;
 import once.store.service.StoreService;
 import once.store.vo.StoreVO;
+import once.warehouse.service.WarehouseService;
+import once.warehouse.vo.WarehouseVO;
 
 @Controller
 public class OrderController {
@@ -38,6 +44,9 @@ public class OrderController {
 	
 	@Autowired
 	private ManagerService mngService;
+	
+	@Autowired
+	private WarehouseService wService;
 	
 	
 	@RequestMapping(value="/orderList/orderList")
@@ -86,4 +95,82 @@ public class OrderController {
 		
 		return mav;
 	}
+	
+	@RequestMapping("/info/searchCustomer")
+	public @ResponseBody Map<String, Object> customerOrderList(@RequestParam String inputID, @RequestParam int inputOrderPassword) {
+		Map<String, Object> map = new HashMap<>();
+		System.out.println(inputID);
+		System.out.println(inputOrderPassword);
+		CustomerVO customerVO = cusService.selectById(inputID);
+		System.out.println(customerVO);
+		if(customerVO == null) {
+			map.put("msg", "아이디가 일치하지 않습니다. <br> 다시 입력 해주세요");
+			map.put("id", inputID);
+			map.put("orderPassword", "****");
+		} else if( customerVO != null && inputOrderPassword != customerVO.getOrderPassword()) {
+			map.put("msg", "비밀번호가 일치하지 않습니다. <br> 다시 입력 해주세요");
+			map.put("id", inputID);
+			map.put("orderPassword", "****");
+		} else {
+			map.put("id", inputID);
+			map.put("orderPassword", "****");
+			List<OrderVO> orderList =  service.memNoOrderList(customerVO.getMemNo());
+			
+			map.put("orderList", orderList);
+			
+			int totalCount = 0;
+			String floor = null;
+			WarehouseVO warehouseVO = null;
+			for (int i = 0; i <orderList.size(); i++) {
+				orderList.get(i).setStoreName(StoreService.checkStoreName(orderList.get(i).getStoreNo()).getStoreName());
+				if( !orderList.get(i).getStatus().equals("수령완료") ) {
+					totalCount++;
+					floor = orderList.get(i).getFloor();
+					warehouseVO =  wService.selectOneWarehouse(customerVO.getMemNo());
+					map.put("wareCount", warehouseVO.getCount());
+				}
+			}
+			
+			map.put("floor", floor);
+			
+			if(warehouseVO == null) {
+				map.put("wareCount", 0);
+				map.put("totalCount", totalCount);
+			} else {
+				map.put("totalCount", totalCount);
+			}
+			
+		}
+		return map;
+	}
+	
+	@RequestMapping("/info/handOver")
+	public ModelAndView customerDelivery(ModelAndView mav, @RequestParam String[] post, @RequestParam String tableTotalCount) {
+		
+		for (int i = 0; i < post.length; i++) {
+			System.out.println(post[i]);
+		}
+		System.out.println(tableTotalCount);
+		// total에서 warecount 만큼 제거 0이 되면 지움
+		// 상품상태 변경 ->상품준비완료에서 수령완료
+/*		CustomerVO customerVO = new CustomerVO();
+		service.updateStatusDelivery(customerVO.getMemNo());
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("memNo", customerVO.getMemNo());
+		
+		int totalCount = 0;
+		int count = 0;
+		if(totalCount - count == 0) {
+			wService.deleteWarehouse(customerVO.getMemNo());
+		} else {
+			map.put("count", count);
+			wService.subtractWarehouse(map);
+		}*/
+		
+		mav.setViewName("redirect:/info/itemDelivery");
+		return mav;	
+	}
+	
+	
 }

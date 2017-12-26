@@ -6,7 +6,7 @@
 
 
 	<sql id="select">
-		select memNo, id, name, telephone,
+		select memNo, id, name, telephone, orderPassword,
 		DATE_FORMAT(date, '%Y-%m-%d') as date
 		from customer
 	</sql>

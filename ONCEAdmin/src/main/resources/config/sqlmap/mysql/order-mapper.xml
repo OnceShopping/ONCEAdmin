@@ -29,5 +29,9 @@
 		select * from orderDetail where orderNo = #{orderNo}
 	</select>
 	
+	<!-- 물푼 고객 수령 완료 -->
+	<update id="updateStatusDelivery" parameterType="int">
+		update orderList set status = '상품수령완료' where memNo = #{memNo} and status = '상품준비완료'
+	</update>
 </mapper>
 

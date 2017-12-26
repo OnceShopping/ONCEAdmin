@@ -47,6 +47,11 @@ public class OrderDAOImpl implements OrderDAO {
 		List<OrderDetailVO> orderNoDetailList = sqlSession.selectList("once.order.dao.OrderDAO.orderNoDetailList", orderNo);
 		return orderNoDetailList;
 	}
+
+	@Override
+	public void updateStatusDelivery(int memNo) {
+		sqlSession.update("once.order.dao.OrderDAO.updateStatusDelivery", memNo);
+	}
 		
 
 }
