@@ -1,6 +1,7 @@
 package once.warehouse.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +34,15 @@ public class WarehouseDAOImpl implements WarehouseDAO {
 	@Override
 	public void updateWarehouse(int memNo) {
 		sqlSession.update("once.warehouse.dao.WarehouseDAO.updateWarehouse", memNo);
+	}
+
+	@Override
+	public void subtractWarehouse(Map<String, Object> map) {
+		sqlSession.update("once.warehouse.dao.WarehouseDAO.subtractWarehouse", map);
+	}
+
+	@Override
+	public void deleteWarehouse(int memNo) {
+		sqlSession.delete("once.warehouse.dao.WarehouseDAO.deleteWarehouse", memNo);
 	}
 }

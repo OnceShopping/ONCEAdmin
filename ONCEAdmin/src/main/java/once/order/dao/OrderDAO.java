@@ -19,6 +19,8 @@ public interface OrderDAO {
 
 	List<OrderDetailVO> getOrderDetailList(int orderNo);
 
+	void updateStatusDelivery(int memNo);
+
 	List<OrderVO> getOptionOrderList(OrderVO options);
 
 	List<OrderVO> getSortOrderList(StoreVO store);

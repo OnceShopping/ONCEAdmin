@@ -48,6 +48,12 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
+	public void updateStatusDelivery(int memNo) {
+		dao.updateStatusDelivery(memNo);
+		
+	}
+
+  @Override
 	public List<OrderVO> getOptionOrderList(OrderVO options) {
 		List<OrderVO> storeOptionOrderList = dao.getOptionOrderList(options);
 		return storeOptionOrderList;
@@ -80,5 +86,6 @@ public class OrderServiceImpl implements OrderService {
 	public void updateStatusDelivery(List<OrderVO> deliveryOrderList) {
 		dao.updateStatusDelivery(deliveryOrderList);		
 	}
+
 }
 

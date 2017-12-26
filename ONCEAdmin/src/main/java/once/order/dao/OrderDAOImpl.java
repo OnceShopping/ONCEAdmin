@@ -50,6 +50,11 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
+	public void updateStatusDelivery(int memNo) {
+		sqlSession.update("once.order.dao.OrderDAO.updateStatusDeliveryMemNo", memNo);
+	}
+  
+  @Override
 	public List<OrderVO> getOptionOrderList(OrderVO options) {
 		List<OrderVO> storeOptionOrderList = sqlSession.selectList("once.order.dao.OrderDAO.optionOrderList", options);
 		return storeOptionOrderList;

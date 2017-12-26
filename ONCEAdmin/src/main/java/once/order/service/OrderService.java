@@ -31,4 +31,6 @@ public interface OrderService {
 
 	void updateStatusDelivery(List<OrderVO> deliveryOrderList);
 
+	void updateStatusDelivery(int memNo);
+
 }
