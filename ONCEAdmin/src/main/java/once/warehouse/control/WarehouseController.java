@@ -37,7 +37,7 @@ public class WarehouseController {
 	
 	@RequestMapping("insert")
 	public @ResponseBody Map<String, Object> insertWarehouse(@RequestParam(value="warehouseId")String warehouseId, 
-			@RequestParam("TagNo")int tagNo, @RequestParam("memNo")int memNo, @RequestParam("floor")String floor, @RequestParam("floorWareNo")int floorWareNo) {
+			@RequestParam("TagNo")String tagNo, @RequestParam("memNo")int memNo, @RequestParam("floor")String floor, @RequestParam("floorWareNo")int floorWareNo) {
 		Map<String, Object> map = new HashMap<>();
 		
 		TagStickerVO tagStickerVO = tService.selectOneTag(tagNo);

@@ -56,13 +56,13 @@ $(document).ready(function() {
 	//고객 검색
 	$('#form-inline').ajaxForm({
 		success : function(data) {
-			alert(data);
+			
 			var customer = $.parseJSON(data);
 			
 				$('#searchcustom').hide();
 				$('#customSearchResult').hide();
 				$('#customDelivery').hide();
-				
+				$('#cancelClick').hide();
 				if(customer.msg != null) {
 					$('#orderFloorName').hide();
 					$('#orderMsgName').show();
@@ -70,7 +70,7 @@ $(document).ready(function() {
 					$('#orderId').text(customer.id);
 					$('#orderPw').text(customer.orderPassword);
 					$('#orderTotalName').hide();
-					
+					$('#tableOrderList').text("");
 				} else {
 					$('#orderMsgName').hide();
 					$('#orderFloorName').show();
@@ -79,40 +79,44 @@ $(document).ready(function() {
 					$('#orderPw').text(customer.orderPassword);
 					
 					$('#orderTotal').text(customer.wareCount+'/'+customer.totalCount);
-				}
-				
-				for(var i=0; i<customer.orderList.length; i++) {
-					var table;
-					table += '<tr>';
-					table += '<td>'+customer.orderList[i].orderNo+'</td>';
-					table += '<td>'+customer.orderList[i].storeName+'</td>';
-					table += '<td>'+customer.orderList[i].count+'</td>';
 					
-					switch(customer.orderList[i].status) {
-					case "결재완료" : table += '<td><span class="label bg-info">결재완료</span></td>';
-						break;
-					case "상품승인완료" : table += '<td><span class="label bg-primary">상품승인완료</span></td>';
-						break;
-					case "상품전달완료" : table += '<td><span class="label bg-success">상품전달완료</span></td>';
-						break;
-					case "상품준비완료" : table += '<td><span class="label bg-danger">상품준비완료</span></td>';
-						break;
+					for(var i=0; i<customer.orderList.length; i++) {
+						var table;
+						table += '<tr>';
+						table += '<td>'+customer.orderList[i].orderNo+'</td>';
+						table += '<td>'+customer.orderList[i].storeName+'</td>';
+						table += '<td>'+customer.orderList[i].count+'</td>';
+						
+						switch(customer.orderList[i].status) {
+						case "결재완료" : table += '<td><span class="label bg-info">결재완료</span></td>';
+							break;
+						case "상품승인완료" : table += '<td><span class="label bg-primary">상품승인완료</span></td>';
+							break;
+						case "상품전달완료" : table += '<td><span class="label bg-success">상품전달완료</span></td>';
+							break;
+						case "상품준비완료" : table += '<td><span class="label bg-danger">상품준비완료</span></td>';
+							break;
+						}
+						
+						if(customer.orderList[i].status == "상품준비완료") {
+							table += '<td><label class="checkbox m-l m-t-none m-b-none i-checks"><input type="checkbox" name="post" checked="checked"'
+							+'value="'+customer.orderList[i].orderNo+'"><i></i></label></td>';
+						}	
+						else {
+							table += '<td><label class="checkbox m-l m-t-none m-b-none i-checks"><input type="checkbox" name="post"'
+							+'value="'+customer.orderList[i].orderNo+'"><i></i></label></td>';
+						}
+						table += '</tr>';
+						table += '<input type="hidden"'
+						$('#tableOrderList').html(table);
+						$('#tableTotalCount').text(customer.wareCount+'/'+customer.totalCount);
+						$('#Counts').val($('#tableTotalCount').text());
+						$('#customerId').val($('#inputID').val());
 					}
 					
-					if(customer.orderList[i].status == "상품전달완료") {
-						table += '<td><label class="checkbox m-l m-t-none m-b-none i-checks"><input type="checkbox" name="post" checked="checked"'
-						+'value="'+customer.orderList[i].orderNo+'"><i></i></label></td>';
-					}	
-					else {
-						table += '<td><label class="checkbox m-l m-t-none m-b-none i-checks"><input type="checkbox" name="post"'
-						+'value="'+customer.orderList[i].orderNo+'"><i></i></label></td>';
-					}
-					table += '</tr>';
-					table += '<input type="hidden"'
-					$('#tableOrderList').html(table);
-					$('#tableTotalCount').text(customer.wareCount+'/'+customer.totalCount);
+					
+					
 				}
-				
 				
 				$('#modal-searchResult').modal();
 			
@@ -121,14 +125,15 @@ $(document).ready(function() {
 	
 	//태그모달창 닫기 이벤트
 	$('#modal-searchResult').on('hidden.bs.modal', function () {
-		
-//		$('#tableOrderList').text("");
+			$('#searchcustom').show();
+		if($('#tableOrderList').text() != "") {
+			
+			$('#customSearchResult').show();
+			$('#customDelivery').show();
+			$('#cancelClick').show();
+		}	
 
 
-		$('#searchcustom').show();
-		$('#customSearchResult').show();
-		$('#customDelivery').show();
-		$('#cancelClick').show();
 	});
 	
 	//취소 버튼 클릭 이벤트
@@ -140,18 +145,6 @@ $(document).ready(function() {
 		$('#cancelClick').hide();
 	});
 	
-	//전달 클릭 이벤트
-/* 	$('#customDelivery').click(function() {
-		$.ajax({
-			url : '${pageContext.request.contextPath}/info/customerDelivery',
-			data : { "tagNo" : tagNo},
-			type : "get",
-			cache : false,
-			success : function(data) {
-			
-			}
-		});	
-	}); */
 });
 </script>
 <style type="text/css">
@@ -384,13 +377,15 @@ $(document).ready(function() {
 										<div class="col-sm-4 text-right text-center-xs">
 											<ul class="list-group no-radius">
 												<li class="list-group-item">Total</li>
-												<li class="list-group-item" id="tableTotalCount">2/3</li>
+												<li class="list-group-item" id="tableTotalCount"><input type="text">2/3</li>
+												
 											</ul>
 										</div>
 										
 									</div>
 								</footer>
-								
+								<input type="hidden" name="customerId" id="customerId">
+								<input type="hidden" name="Counts" id="Counts">
 							</section>
 							<div class="col-sm-4 text-right" style="float: right">
 							<input type="submit" class="btn btn-default btn-lg" id="customDelivery" value="고객 전달">

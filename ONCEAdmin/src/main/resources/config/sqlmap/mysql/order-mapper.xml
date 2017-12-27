@@ -31,7 +31,7 @@
 	
 	<!-- 물푼 고객 수령 완료 -->
 	<update id="updateStatusDeliveryMemNo" parameterType="int">
-		update orderList set status = '상품수령완료' where memNo = #{memNo} and status = '상품준비완료'
+		update orderList set status = '수령완료' where memNo = #{memNo} and status = '상품준비완료'
 	</update>
 
 	<!-- orderNo별 검색 -->

@@ -31,6 +31,7 @@ import once.store.service.StoreService;
 import once.store.vo.StoreVO;
 import once.warehouse.service.WarehouseService;
 import once.warehouse.vo.WarehouseVO;
+import once.tagSticker.service.TagStickerService;
 import once.tagSticker.vo.TagStickerVO;
 
 
@@ -52,11 +53,14 @@ public class OrderController {
 	@Autowired
 	private WarehouseService wService;
 	
-  @Autowired
+	@Autowired
 	private StoreService storeService;
 	
 	private List<OrderVO> deliveryOrderList;
-
+	
+	@Autowired
+	private TagStickerService tService;
+	
 	public List<OrderVO> getOrderDetailList(StoreVO store, List<OrderVO> orderVOList) {
 
 		for (int i = 0; i < orderVOList.size(); i++) {
@@ -283,21 +287,28 @@ public class OrderController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/orderList/acceptOrder/{orderNo}", method = RequestMethod.GET)
-	public ModelAndView acceptOrder(@PathVariable("orderNo") int orderNo, HttpSession session) {
-
+	@RequestMapping(value = "/orderList/acceptOrder/{orderNo}/{tagNo}", method = RequestMethod.GET)
+	public ModelAndView acceptOrder(@PathVariable("orderNo") int orderNo, HttpSession session, @PathVariable("tagNo")String tagNo) {
+		ModelAndView mav = new ModelAndView();
 		ManagerVO loginVO = (ManagerVO) session.getAttribute("loginVO");
-
+		System.out.println(tagNo);
+		 String[] words = tagNo.split("-");
+		 for (int i = 0; i < words.length; i++) {
+			System.out.println(words[i]);
+		}
+		 
 		service.updateStatusAccpet(orderNo);
 
 		StoreVO store = storeService.selectByStoreNo(loginVO.getStoreNo());
 		List<OrderVO> resultOrderList = service.getStoreOrderList(store.getStoreNo());
-
+			
 		resultOrderList = getOrderDetailList(store, resultOrderList);
 		int orderCount = getOrderCount(resultOrderList); // 전체 주문 개수
-
-		ModelAndView mav = new ModelAndView();
-
+		
+		TagStickerVO tagStickerVO = new TagStickerVO(tagNo, Integer.parseInt(words[1]), orderNo, loginVO.getStaffNo());
+		System.out.println(tagStickerVO);
+		tService.insertTag(tagStickerVO);
+		
 		mav.setViewName("storeManager/orderList/orderList");
 		mav.addObject("orderList", resultOrderList);
 		mav.addObject("orderCount", orderCount);
@@ -361,21 +372,25 @@ public class OrderController {
 			String floor = null;
 			WarehouseVO warehouseVO = null;
 			for (int i = 0; i <orderList.size(); i++) {
-				orderList.get(i).setStoreName(StoreService.checkStoreName(orderList.get(i).getStoreNo()).getStoreName());
+				orderList.get(i).setStoreName(storeService.checkStoreName(orderList.get(i).getStoreNo()).getStoreName());
 				if( !orderList.get(i).getStatus().equals("수령완료") ) {
 					totalCount++;
 					floor = orderList.get(i).getFloor();
 					warehouseVO =  wService.selectOneWarehouse(customerVO.getMemNo());
-					map.put("wareCount", warehouseVO.getCount());
+					
 				}
 			}
 			
 			map.put("floor", floor);
+			if(floor == null) {
+				map.put("msg", "물품이 존재하지 않습니다");
+			}
 			
 			if(warehouseVO == null) {
 				map.put("wareCount", 0);
 				map.put("totalCount", totalCount);
 			} else {
+				map.put("wareCount", warehouseVO.getCount());
 				map.put("totalCount", totalCount);
 			}
 			
@@ -384,28 +399,30 @@ public class OrderController {
 	}
 	
 	@RequestMapping("/info/handOver")
-	public ModelAndView customerDelivery(ModelAndView mav, @RequestParam String[] post, @RequestParam String tableTotalCount) {
+	public ModelAndView customerDelivery(ModelAndView mav, @RequestParam("post") String[] orderNo, @RequestParam String Counts, 
+			@RequestParam("customerId")String id) {
 		
-		for (int i = 0; i < post.length; i++) {
-			System.out.println(post[i]);
+		for (int i = 0; i < orderNo.length; i++) {
+			System.out.println(orderNo[i]);
 		}
-		System.out.println(tableTotalCount);
+		System.out.println(Counts);
+		String[] words = Counts.split("/");
+		int wareCount = Integer.parseInt(words[0]);
+		int totalCount = Integer.parseInt(words[1]);
 		// total에서 warecount 만큼 제거 0이 되면 지움
 		// 상품상태 변경 ->상품준비완료에서 수령완료
-/*		CustomerVO customerVO = new CustomerVO();
+		CustomerVO customerVO = cusService.selectById(id);
 		service.updateStatusDelivery(customerVO.getMemNo());
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("memNo", customerVO.getMemNo());
 		
-		int totalCount = 0;
-		int count = 0;
-		if(totalCount - count == 0) {
+		if(totalCount - wareCount == 0) {
 			wService.deleteWarehouse(customerVO.getMemNo());
 		} else {
-			map.put("count", count);
+			map.put("count", wareCount);
 			wService.subtractWarehouse(map);
-		}*/
+		}
 		
 		mav.setViewName("redirect:/info/itemDelivery");
 		return mav;	

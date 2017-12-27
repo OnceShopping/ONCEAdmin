@@ -104,12 +104,6 @@ $(document).ready(function() {
 		});
 	});
 	
-	//숫자만 입력
-	$('#searchTagbar').keyup(function() {
-		this.value = this.value.replace(/[^0-9]/g,'');
-		$('#insertTag').hide();
-	});
-	
 	//태그등록 클릭
 	$('#insertTag').click(function() {
 		var insertId = $('#customerID').text().substring(5);
