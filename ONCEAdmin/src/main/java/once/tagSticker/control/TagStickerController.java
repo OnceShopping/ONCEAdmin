@@ -43,17 +43,14 @@ public class TagStickerController {
 		Map<String, Object> map = new HashMap<>();
 		
 		ManagerVO loginVO = (ManagerVO)session.getAttribute("loginVO");
-		System.out.println(loginVO.getStoreNo().substring(4));
 		if(tagNo == "") {
 			map.put("msg", "태그 번호를 입력해주세요");
 		} else {
 			
 			TagStickerVO tagStickerVO = service.selectOneTag(tagNo);
-			System.out.println(tagStickerVO);
 			
 			if(tagStickerVO !=null) {
 				List<OrderVO> memNoOrderList = oService.memNoOrderList(tagStickerVO.getMemNo());
-				System.out.println(memNoOrderList);
 				CustomerVO customerVO = cService.selectOneCustomer(tagStickerVO.getMemNo());
 				
 				for (int i = 0; i < memNoOrderList.size(); i++) {
@@ -68,7 +65,6 @@ public class TagStickerController {
 						map.put("tagStickerVO", tagStickerVO);
 						map.put("customerVO", customerVO);
 						map.put("msg", null);
-						System.out.println(customerVO);
 						break;
 					} else if(tagStickerVO.getOrderNo() == memNoOrderList.get(i).getOrderNo() && memNoOrderList.get(i).getStatus().equals("상품준비완료")) {
 						map.put("msg", "이미 물품이 존재합니다");

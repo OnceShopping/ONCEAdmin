@@ -664,10 +664,8 @@ public class ManagerController {
 	public ModelAndView infoAddItem(ModelAndView mav, HttpSession session) {
 		ManagerVO loginVO = (ManagerVO)session.getAttribute("loginVO");
 		List<WarehouseVO> warehouseList = wService.selectAllWarehouse(loginVO.getStoreNo().substring(4));
-		System.out.println("warehouseList : " +warehouseList);
 		
 		List<OrderVO> orderList = oService.selectAllOrder(loginVO.getStoreNo().substring(4));
-		System.out.println(orderList);
 		
 		List<Map<String, Object>> memNoList = new ArrayList<>();
 		
@@ -684,11 +682,9 @@ public class ManagerController {
 				for (int j = 0; j < memNoList.size(); j++) {
 					int memNo =(int)memNoList.get(j).get("memNo");
 					if( memNo == orderList.get(i).getMemNo()  ) {
-						System.out.println("같음");
 						memNoList.get(j).put("itemCount", (int)memNoList.get(j).get("itemCount")+1);
 						break;
 					} else if(j == memNoList.size()-1) {
-						System.out.println("다름");
 						Map<String, Object> orderIdCount = new HashMap<>();
 						customerVO = cService.selectOneCustomer(orderList.get(i).getMemNo());
 						orderIdCount.put("id", customerVO.getId());

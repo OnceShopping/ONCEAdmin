@@ -119,9 +119,6 @@ public class OrderController {
 
 		ModelAndView mav = new ModelAndView("storeManager/orderList/orderList");
 
-		System.out.println("storeNoOrderList: " + storeNoOrderList);
-		System.out.println("orderCount: " + orderCount);
-
 		mav.addObject("orderCount", orderCount);
 		mav.addObject("orderList", storeNoOrderList);
 
@@ -208,7 +205,6 @@ public class OrderController {
 		}
 
 		OrderVO orderInfo = service.getOrderVO(orderNo);
-		System.out.println(orderInfo);
 
 		if (orderInfo.getCount() > noList.length) {
 			mav.setViewName("storeManager/orderList/alertModal");
@@ -291,11 +287,7 @@ public class OrderController {
 	public ModelAndView acceptOrder(@PathVariable("orderNo") int orderNo, HttpSession session, @PathVariable("tagNo")String tagNo) {
 		ModelAndView mav = new ModelAndView();
 		ManagerVO loginVO = (ManagerVO) session.getAttribute("loginVO");
-		System.out.println(tagNo);
-		 String[] words = tagNo.split("-");
-		 for (int i = 0; i < words.length; i++) {
-			System.out.println(words[i]);
-		}
+		String[] words = tagNo.split("-");
 		 
 		service.updateStatusAccpet(orderNo);
 
@@ -306,7 +298,6 @@ public class OrderController {
 		int orderCount = getOrderCount(resultOrderList); // 전체 주문 개수
 		
 		TagStickerVO tagStickerVO = new TagStickerVO(tagNo, Integer.parseInt(words[1]), orderNo, loginVO.getStaffNo());
-		System.out.println(tagStickerVO);
 		tService.insertTag(tagStickerVO);
 		
 		mav.setViewName("storeManager/orderList/orderList");
@@ -349,10 +340,7 @@ public class OrderController {
 	@RequestMapping("/info/searchCustomer")
 	public @ResponseBody Map<String, Object> customerOrderList(@RequestParam String inputID, @RequestParam int inputOrderPassword) {
 		Map<String, Object> map = new HashMap<>();
-		System.out.println(inputID);
-		System.out.println(inputOrderPassword);
 		CustomerVO customerVO = cusService.selectById(inputID);
-		System.out.println(customerVO);
 		if(customerVO == null) {
 			map.put("msg", "아이디가 일치하지 않습니다. <br> 다시 입력 해주세요");
 			map.put("id", inputID);
@@ -402,10 +390,6 @@ public class OrderController {
 	public ModelAndView customerDelivery(ModelAndView mav, @RequestParam("post") String[] orderNo, @RequestParam String Counts, 
 			@RequestParam("customerId")String id) {
 		
-		for (int i = 0; i < orderNo.length; i++) {
-			System.out.println(orderNo[i]);
-		}
-		System.out.println(Counts);
 		String[] words = Counts.split("/");
 		int wareCount = Integer.parseInt(words[0]);
 		int totalCount = Integer.parseInt(words[1]);
