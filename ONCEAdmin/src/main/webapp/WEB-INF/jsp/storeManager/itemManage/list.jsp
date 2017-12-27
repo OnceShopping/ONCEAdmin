@@ -53,7 +53,7 @@ $(document).ready(function(){
 	$('#searchType').val(''); // 검색 콤보 박스 초기화
 	
 	<c:forEach var="item" items="${itemList}" varStatus="index">
-	settingPrcie($('#itemIndex_'+${index.count}).text(), ${index.count});
+	settingPrice($('#itemIndex_'+${index.count}).text(), ${index.count});
 	settingCount($('#itemCount_'+${index.count}).text(), ${index.count});
 	</c:forEach> 
 	
@@ -198,7 +198,7 @@ function printResult(data) {
 	
 	
 	//리스트에 존재하는 가격에 comma 설정 
-	function settingPrcie(obj, count){
+	function settingPrice(obj, count){
 		
 		var price = comma(obj);
 	
