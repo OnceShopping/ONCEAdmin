@@ -361,7 +361,7 @@ public class OrderController {
 			String floor = null;
 			WarehouseVO warehouseVO = null;
 			for (int i = 0; i <orderList.size(); i++) {
-				orderList.get(i).setStoreName(StoreService.checkStoreName(orderList.get(i).getStoreNo()).getStoreName());
+				orderList.get(i).setStoreName(storeService.checkStoreName(orderList.get(i).getStoreNo()).getStoreName());
 				if( !orderList.get(i).getStatus().equals("수령완료") ) {
 					totalCount++;
 					floor = orderList.get(i).getFloor();
