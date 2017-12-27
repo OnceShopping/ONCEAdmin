@@ -156,7 +156,7 @@
 		 		</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="acceptOrder()">태그 출력</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="acceptOrder('${orderInfo.tagNo}')">태그 출력</button>
 				<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="history.go(0)">취소</button>
 			</div>			
 			</div>

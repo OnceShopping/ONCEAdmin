@@ -27,6 +27,7 @@
 <script type="text/javascript">
 	var orderNo = 0;
 	var floor = "";
+	var tagNo = "";
 	
 	function sidemenu(){
 		document.getElementById('itemRegister').setAttribute('class','');
@@ -283,8 +284,8 @@
 		}
 	}
 	
-	function acceptOrder(){ /* 태그 생성 눌렀을 때 */
-		location.href="${ pageContext.request.contextPath }/orderList/acceptOrder/"+orderNo;
+	function acceptOrder(tagNo){ /* 태그 생성 눌렀을 때 */
+		location.href="${ pageContext.request.contextPath }/orderList/acceptOrder/"+orderNo+"/"+tagNo;
 	}
 	
 	function deliveryOrder(){	/* 전달 -> 확인 */

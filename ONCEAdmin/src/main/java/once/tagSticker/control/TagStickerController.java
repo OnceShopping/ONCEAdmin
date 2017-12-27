@@ -48,9 +48,9 @@ public class TagStickerController {
 			map.put("msg", "태그 번호를 입력해주세요");
 		} else {
 			
-			TagStickerVO tagStickerVO = service.selectOneTag(Integer.parseInt(tagNo));
+			TagStickerVO tagStickerVO = service.selectOneTag(tagNo);
 			System.out.println(tagStickerVO);
-
+			
 			if(tagStickerVO !=null) {
 				List<OrderVO> memNoOrderList = oService.memNoOrderList(tagStickerVO.getMemNo());
 				System.out.println(memNoOrderList);
@@ -58,7 +58,10 @@ public class TagStickerController {
 				
 				for (int i = 0; i < memNoOrderList.size(); i++) {
 					
-					if(tagStickerVO.getOrderNo() == memNoOrderList.get(i).getOrderNo() && !memNoOrderList.get(i).getFloor().equals(loginVO.getStoreNo().substring(4))) {
+					if(tagStickerVO.getOrderNo() == memNoOrderList.get(i).getOrderNo() && memNoOrderList.get(i).getStatus().equals("수령완료")) {
+						map.put("msg", "해당 물품은 이미 수령되었습니다");
+						break;
+					} else if(tagStickerVO.getOrderNo() == memNoOrderList.get(i).getOrderNo() && !memNoOrderList.get(i).getFloor().equals(loginVO.getStoreNo().substring(4))) {
 						map.put("msg", "이 물품은 다른층에 있어야합니다 "+memNoOrderList.get(i).getFloor()+"로 보내주세요");
 						break;
 					} else if(tagStickerVO.getOrderNo() == memNoOrderList.get(i).getOrderNo() && !memNoOrderList.get(i).getStatus().equals("상품준비완료") ) {
@@ -70,7 +73,7 @@ public class TagStickerController {
 					} else if(tagStickerVO.getOrderNo() == memNoOrderList.get(i).getOrderNo() && memNoOrderList.get(i).getStatus().equals("상품준비완료")) {
 						map.put("msg", "이미 물품이 존재합니다");
 						break;
-					}
+					} 
 				}
 				
 			} else {

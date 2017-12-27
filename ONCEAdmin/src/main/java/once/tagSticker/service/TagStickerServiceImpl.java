@@ -15,7 +15,7 @@ public class TagStickerServiceImpl implements TagStickerService {
 	private TagStickerDAO dao;
 
 	@Override
-	public TagStickerVO selectOneTag(int tagNo) {
+	public TagStickerVO selectOneTag(String tagNo) {
 		return dao.selectOneTag(tagNo);
 	}
 
@@ -24,4 +24,10 @@ public class TagStickerServiceImpl implements TagStickerService {
 		List<TagStickerVO> tagList = dao.selectTagByMemNo(memNo);
 		return tagList;
 	}
+
+	@Override
+	public void insertTag(TagStickerVO tagStickerVO) {
+		dao.insertTag(tagStickerVO);
+	}
+
 }
