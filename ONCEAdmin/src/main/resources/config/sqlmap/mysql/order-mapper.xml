@@ -4,6 +4,11 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="once.order.dao.OrderDAO">
 	
+	<!-- orderDetail의 count mapping -->
+ 	<resultMap type="OrderDetailVO" id="OrderDetailMap">
+ 		<result column="detailCount" property="count"/>
+ 	</resultMap>
+	
 	<!-- 주문 전체 검색 -->
 	<select id="selectAllOrder" resultType="OrderVO" parameterType="String">
 		select * from orderlist where floor = #{floor}
@@ -25,8 +30,8 @@
 	</select>
 	
 	<!-- orderDetail orderNo별 검색 -->
-	<select id="orderNoDetailList"  parameterType="int" resultType="OrderDetailVO">
-		select status, detailNo, no, storeNo, storeName, price, imgSaveName, count  from orders where orderNo = #{orderNo}
+	<select id="orderNoDetailList"  parameterType="int" resultMap="OrderDetailMap">
+		select status, detailNo, no, storeNo, storeName, price, imgSaveName, detailCount from orders where orderNo = #{orderNo}
 	</select>
 	
 	<!-- 물푼 고객 수령 완료 -->
@@ -40,8 +45,8 @@
 	</select>
 	
 	<!-- no별 검색 -->
-	<select id="getDetailInfo"  parameterType="int" resultType="OrderDetailVO">
-		select * from orders where no = #{no}
+	<select id="getDetailInfo"  parameterType="int" resultMap="OrderDetailMap">
+		select  status, detailNo, no, storeNo, storeName, price, imgSaveName, detailCount from orders where no = #{no}
 	</select>
 	
 	<!-- 주문 store status, floor Option 검색 -->
