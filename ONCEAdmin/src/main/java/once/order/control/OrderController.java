@@ -74,7 +74,6 @@ public class OrderController {
 				orderDetailList.get(j).setItemName(info.getItemName());
 				orderDetailList.get(j).setSize(info.getSize());
 				orderDetailList.get(j).setColor(info.getColor());
-
 			}
 
 			orderVOList.get(i).setOrderDetails(orderDetailList);
@@ -84,7 +83,6 @@ public class OrderController {
 			orderVOList.get(i).setTelephone(cus.getTelephone());
 			orderVOList.get(i).setStoreName(store.getStoreName());
 		}
-
 		return orderVOList;
 	}
 
@@ -113,10 +111,11 @@ public class OrderController {
 
 		StoreVO store = storeService.selectByStoreNo(loginVO.getStoreNo());
 		List<OrderVO> storeNoOrderList = service.getStoreOrderList(store.getStoreNo());
-
 		storeNoOrderList = getOrderDetailList(store, storeNoOrderList);
 		int orderCount = getOrderCount(storeNoOrderList); // 전체 주문 개수
 
+		System.out.println("orderList: "+storeNoOrderList);
+		
 		ModelAndView mav = new ModelAndView("storeManager/orderList/orderList");
 
 		mav.addObject("orderCount", orderCount);
@@ -195,8 +194,9 @@ public class OrderController {
 
 		List<OrderDetailVO> preAcceptOrderList = new ArrayList<>();
 		ModelAndView mav = new ModelAndView();
-
+		
 		for (int i = 0; i < noList.length; i++) {
+			System.out.println(noList[i]);
 			preAcceptOrderList.add(service.getOrderDetail(noList[i]));
 			ItemContentsVO detail = itemService.getItemInfo(preAcceptOrderList.get(i).getDetailNo());
 			preAcceptOrderList.get(i).setItemName(detail.getItemName());
