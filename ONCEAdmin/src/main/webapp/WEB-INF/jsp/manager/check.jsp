@@ -22,6 +22,12 @@
 <script src="${pageContext.request.contextPath }/resources/js/app.js"></script>
 <script src="${pageContext.request.contextPath }/resources/js/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		alert('${type}');
+	});
+</script>
 </head>
 <body class="">
    <section class="vbox">
@@ -31,11 +37,11 @@
 		      <jsp:include page="/WEB-INF/jsp/admin/include/topmenu.jsp" flush="false"></jsp:include>
 	      </c:when>
 	      <c:when test="${ type eq storeManager || type eq storeStaff}">
- 		     <jsp:include page="/WEB-INF/jsp/infoManager/include/topmenu.jsp" flush="false"></jsp:include>
+ 		     <jsp:include page="/WEB-INF/jsp/storeManager/include/topmenu.jsp" flush="false"></jsp:include>
 	      </c:when>
-	      <c:otherwise>
-		      <jsp:include page="/WEB-INF/jsp/storeManager/include/topmenu.jsp" flush="false"></jsp:include>
-	      </c:otherwise>
+	      <c:when test="${ type eq infoManager || type eq infoStaff}">
+		      <jsp:include page="/WEB-INF/jsp/infoManager/include/topmenu.jsp" flush="false"></jsp:include>
+	      </c:when>
       </c:choose>
       <!-- 상단바 끝 -->
 
@@ -43,15 +49,15 @@
          <section class="hbox stretch">
             <!-- 사이드메뉴 -->
 			<c:choose>
-			      <c:when test="${ type eq admin }">
+			      <c:when test="${ type eq  admin }">
 					<jsp:include page="/WEB-INF/jsp/admin/include/sidemenu.jsp" flush="false"></jsp:include>
 			      </c:when>
 			      <c:when test="${ type eq storeManager || type eq storeStaff}">
+		            <jsp:include page="/WEB-INF/jsp/storeManager/include/sidemenu.jsp" flush="false"></jsp:include>
+			      </c:when>
+			      <c:when test="${ type eq infoManager || type eq infoStaff}">
 		            <jsp:include page="/WEB-INF/jsp/infoManager/include/sidemenu.jsp" flush="false"></jsp:include>
 			      </c:when>
-			      <c:otherwise>
-		            <jsp:include page="/WEB-INF/jsp/storeManager/include/sidemenu.jsp" flush="false"></jsp:include>
-			      </c:otherwise>
 		      </c:choose>
             <!-- 사이드메뉴 끝 -->
             
