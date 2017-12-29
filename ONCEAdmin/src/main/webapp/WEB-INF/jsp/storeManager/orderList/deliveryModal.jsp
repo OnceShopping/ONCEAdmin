@@ -52,7 +52,11 @@ $(document).ready(function(){
 		 		<div id="deliveryDetail">
 		 			<hr/>
 		 			<c:forEach var="order" items="${ deliveryOrderList }" varStatus="loop">
-		 			<h6>주문 번호: ${ order.orderNo }</h6>
+		 			<table style="width: 100%; margin-bottom: 10px;">
+		 				<tr>
+		 					<td style="font-size: 13px; ">주문번호:&nbsp;&nbsp;${ order.orderNo }</td>
+		 				</tr>
+		 			</table>
 		 			<table style="width: 100%;">
 						<tr style="text-align: center; font-size: 10px;">
 							<th width="25%">상품고유번호</th>
@@ -60,7 +64,7 @@ $(document).ready(function(){
 							<th width="15%">수량</th>
 						</tr>		 			
 					<c:forEach var="detail" items="${ order.orderDetails }" varStatus="status">
-					<tr id="item_${loop.index}_${status.index}">
+					<tr id="item_${loop.index}_${status.index}"  style="font-size: 13px;">
 						<td>${ detail.detailNo }</td>
 						<td>${ detail.itemName }
 						<span style="font-size: 10px;">(${detail.color} | ${detail.size})</span>

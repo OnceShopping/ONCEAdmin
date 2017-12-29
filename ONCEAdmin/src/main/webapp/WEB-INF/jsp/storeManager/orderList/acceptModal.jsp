@@ -108,20 +108,22 @@
 		 				</tr>
 		 				<tr>
 		 				</tr>
-		 				<tr>
-		 					<td style="font-size: 13px;">주문번호: ${ orderInfo.orderNo } &nbsp; | 주문자: ${ orderInfo.id }</td>
-		 				</tr>
 		 			</table>
 		 			<hr/>
-		 			<table>
-						<tr style="text-align: center;">
+		 			<table style="width: 100%; margin-bottom: 10px;">
+		 				<tr>
+		 					<td style="font-size: 13px; ">주문번호:&nbsp;&nbsp;${ orderInfo.orderNo }</td>
+		 				</tr>
+		 			</table>
+		 			<table style="width: 80%;">
+						<tr style="text-align: center; font-size: 12px;">
 							<th width="25%">상품고유번호</th>
-							<th width="50%">상품명</th>
+							<th width="65%">상품명</th>
 							<th width="15%">수량</th>
 							<th>가격</th>
 						</tr>
 		 			<c:forEach var="detail" items="${ preAcceptOrderList }" varStatus="status">
-						<tr>
+						<tr style="font-size: 13px;">
 							<td>${ detail.detailNo }</td><!-- 선택 지워도됨 -->
 							<td>${ detail.itemName }
 							<span style="font-size: 10px;">(${detail.color} | ${detail.size})</span></td>
@@ -131,19 +133,9 @@
 		 			</c:forEach>
 		 			</table>
 		 			<hr/>
-		 			<table style="float: right;">
-		 				<tr>
-							<td width="60%">현재상품개수</td>
-								<td>주문상품개수</td>
-						</tr>
-						<tr style="text-align: right;">
-							<th width="60%">${ count}</th>
-								<th>${ orderInfo.count }</th>
-						</tr>
-		 				</table>
-		 				<table>
-							<tr style="text-align: right;">
-								<th width="30%">INFO</th>
+	 				<table style="float: right;">
+						<tr style="text-align: right; font-size: 13px;">
+							<th width="30%">INFO</th>
 			 				<th width="35%">ID</th>
 			 				<th width="35%">Store</th>
 			 			</tr>
@@ -152,7 +144,9 @@
 			 				<td>${ orderInfo.id }</td>
 			 				<td>${ orderInfo.storeName }</td>
 			 			</tr>
-		 			</table>		 				  
+		 			</table>
+		 			<br/>
+		 			<br/>		 				  
 		 		</div>
 			</div>
 			<div class="modal-footer">

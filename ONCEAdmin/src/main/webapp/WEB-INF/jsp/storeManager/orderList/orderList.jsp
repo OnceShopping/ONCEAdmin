@@ -123,9 +123,10 @@
 			},
 			contentType : "application/json; charset=UTF-8",
 			success : function(data) {		
-				$( "#dialog" ).html(data);
+				$( "#dialog" ).html(data);				
 			}
 		});
+		
 	
 	}
 	
