@@ -219,6 +219,7 @@
 	    subCategoryArray.push(subCategoryObject);
 	
 	    //2F
+	    subCategoryObject = new Object();
 	    subCategoryObject.main_category_id = "2F";
 	    subCategoryObject.sub_category_id = "S2F01"
 	    subCategoryObject.sub_category_name = "S2F01" 
@@ -279,6 +280,7 @@
 	    subCategoryArray.push(subCategoryObject);
 	    
 	    //3F
+	    subCategoryObject = new Object();
 	    subCategoryObject.main_category_id = "3F";
 	    subCategoryObject.sub_category_id = "S3F01"
 	    subCategoryObject.sub_category_name = "S3F01" 
