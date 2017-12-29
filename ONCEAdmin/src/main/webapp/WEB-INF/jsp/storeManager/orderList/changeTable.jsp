@@ -11,7 +11,7 @@
 					+'<option id="acceptFinish" value="상품승인완료">상품승인완료</option>'
 					+'<option id="deliveryFinish" value="상품전달완료">상품전달완료</option>'
 					+'<option id="getInfo" value="상품준비완료">상품준비완료</option>'
-					+'<option id="getCus" value="상품수령완료">상품수령완료</option>');
+					+'<option id="getCus" value="수령완료">수령완료</option>');
 			$('#option').show();
 		}else if(choice=='orderNo'){
 			$('#option').html('<option id="up" value="오름차순">오름차순</option>'+'<option id="down" value="내림차순">내림차순</option>');
@@ -40,7 +40,7 @@
 				orderStatus.setAttribute('class','order_status label bg-success');
 			}else if(orderStatus.innerHTML == '상품준비완료'){
 				orderStatus.setAttribute('class','order_status label bg-danger');
-			}else if(orderStatus.innerHTML == '상품수령완료'){
+			}else if(orderStatus.innerHTML == '수령완료'){
 				orderStatus.setAttribute('class','order_status label bg-warning');
 			}
 		}
