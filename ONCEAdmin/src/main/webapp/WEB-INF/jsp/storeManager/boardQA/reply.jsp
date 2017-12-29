@@ -2,6 +2,20 @@
 	pageEncoding="UTF-8"%>
 <script src = "http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
+function sidemenu(){
+		document.getElementById('itemRegister').setAttribute('class','');
+		document.getElementById('itemList').setAttribute('class','');
+		document.getElementById('itemManage').setAttribute('class','');
+		document.getElementById('orderList').setAttribute('class','');
+		document.getElementById('staffManage').setAttribute('class','');
+		document.getElementById('boardQAList').setAttribute('class','');
+}
+	$(document).ready(function() { 
+	sidemenu();
+	document.getElementById('boardQAList').setAttribute('class','active');
+});
+</script>
+<script>
 	var rno = '${ boardVO.no }'; //게시글 번호
 	$(function(){
 		$('[name=commentInsertBtn]').click(function() { //댓글 등록 버튼 클릭시 

@@ -44,6 +44,22 @@
  <!-- parsley -->
 <script src="${pageContext.request.contextPath }/resources/js/parsley/parsley.min.js"></script>
 <script src="${pageContext.request.contextPath }/resources/js/parsley/parsley.extend.js"></script>
+
+<script>
+function sidemenu(){
+		document.getElementById('itemRegister').setAttribute('class','');
+		document.getElementById('itemList').setAttribute('class','');
+		document.getElementById('itemManage').setAttribute('class','');
+		document.getElementById('orderList').setAttribute('class','');
+		document.getElementById('staffManage').setAttribute('class','');
+		document.getElementById('boardQAList').setAttribute('class','');
+	}
+$(document).ready(function() { 
+	sidemenu();
+	document.getElementById('boardQAList').setAttribute('class','active');
+});
+</script>
+
 <script type="text/javascript">
 
 	function doAction() {
