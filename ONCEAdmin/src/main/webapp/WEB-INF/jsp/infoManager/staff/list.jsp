@@ -534,46 +534,46 @@
 							</c:if>
 						</div>
 					</form>
-					<!-- Modal -->
-					<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-						<div class="modal-dialog modal-lg">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal">
-										<span aria-hidden="true">×</span>
-										<span class="sr-only">Close</span>
-										</button>
-									<h3 class="modal-title" id="exampleModalLabel">SEARCH RESULT</h3>
-							 	</div>
-						 	<div class="modal-body">
-						 		<div id="searchResult">검색 란을 작성해주세요.</div>
-							</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-								</div>
-							</div>
-						 </div>
-					</div>
-					<div id="dialog" title="ALERT DIALOG"></div>
-					<div id="dialog-pwd" title="CHECK PASSWORD">
-					  	<p class="validateTips">해당 정보를 삭제하기 위해서 비밀 번호를 다시 한번 입력해주세요.</p>
-					 	<form>
-						    <fieldset>
-						        <label for="password">Password</label>
-						      <input type="password" name="pwd" id="pwd" class="text ui-widget-content ui-corner-all">
-						    </fieldset>
-					  	</form>
-					</div>
                   </section>
                </section>
                <a href="#" class="hide nav-off-screen-block"
                   data-toggle="class:nav-off-screen,open" data-target="#nav,html"></a>
             </section>
-            <!-- 메뉴 사이즈 조정 끝-->
 
          </section>
       </section>
    </section>
    
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">×</span>
+						<span class="sr-only">Close</span>
+						</button>
+					<h3 class="modal-title" id="exampleModalLabel">SEARCH RESULT</h3>
+			 	</div>
+		 	<div class="modal-body">
+		 		<div id="searchResult">검색 란을 작성해 주세요</div>
+			</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		 </div>
+	</div>
+	<div id="dialog" title="ALERT DIALOG"></div>
+	<div id="dialog-pwd" title="CHECK PASSWORD">
+	  	<p class="validateTips">해당 정보를 삭제하기 위해서 비밀 번호를 다시 한번 입력해 주세요</p>
+	 	<form>
+		    <fieldset>
+		        <label for="password">Password</label>
+		      <input type="password" name="pwd" id="pwd" class="text ui-widget-content ui-corner-all">
+		    </fieldset>
+	  	</form>
+	</div>
+        <!-- 메뉴 사이즈 조정 끝-->
 </body>
 </html>
