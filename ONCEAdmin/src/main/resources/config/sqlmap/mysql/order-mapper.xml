@@ -31,7 +31,7 @@
 	
 	<!-- orderDetail orderNo별 검색 -->
 	<select id="orderNoDetailList"  parameterType="int" resultMap="OrderDetailMap">
-		select status, detailNo, no, storeNo, storeName, price, imgSaveName, detailCount from orders where orderNo = #{orderNo}
+		select orderNo, status, detailNo, no, storeNo, storeName, price, imgSaveName, detailCount from orders where orderNo = #{orderNo}
 	</select>
 	
 	<!-- 물푼 고객 수령 완료 -->
@@ -46,7 +46,7 @@
 	
 	<!-- no별 검색 -->
 	<select id="getDetailInfo"  parameterType="int" resultMap="OrderDetailMap">
-		select  status, detailNo, no, storeNo, storeName, price, imgSaveName, detailCount from orders where no = #{no}
+		select orderNo, status, detailNo, no, storeNo, storeName, price, imgSaveName, detailCount from orders where no = #{no}
 	</select>
 	
 	<!-- 주문 store status, floor Option 검색 -->

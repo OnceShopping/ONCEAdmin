@@ -14,6 +14,10 @@ $(document).ready(function(){
 	
 	$('#exampleModal').modal('show');
 	
+	
+	$('#yes').click(function(){
+		location.href="${ pageContext.request.contextPath }/orderList/orderList";
+	});
 });
 
 </script>
@@ -37,7 +41,7 @@ $(document).ready(function(){
 		 		<div id="moreInfo">${ more }</div>
 			</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" data-dismiss="modal" id="yes" onclick="history.go(0)">확인</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" id="yes" >확인</button>
 				</div>
 			</div>
 		 </div>

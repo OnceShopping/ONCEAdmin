@@ -113,8 +113,6 @@ public class OrderController {
 		List<OrderVO> storeNoOrderList = service.getStoreOrderList(store.getStoreNo());
 		storeNoOrderList = getOrderDetailList(store, storeNoOrderList);
 		int orderCount = getOrderCount(storeNoOrderList); // 전체 주문 개수
-
-		System.out.println("orderList: "+storeNoOrderList);
 		
 		ModelAndView mav = new ModelAndView("storeManager/orderList/orderList");
 
@@ -196,7 +194,6 @@ public class OrderController {
 		ModelAndView mav = new ModelAndView();
 		
 		for (int i = 0; i < noList.length; i++) {
-			System.out.println(noList[i]);
 			preAcceptOrderList.add(service.getOrderDetail(noList[i]));
 			ItemContentsVO detail = itemService.getItemInfo(preAcceptOrderList.get(i).getDetailNo());
 			preAcceptOrderList.get(i).setItemName(detail.getItemName());
@@ -240,16 +237,16 @@ public class OrderController {
 			List<OrderDetailVO> preDetailList = new ArrayList<>();
 
 			OrderVO orderInfo = service.getOrderVO(uniqOrderNoList[i]);			
-						
+			
 			orderInfo.setId(cusService.getCustomerInfo(orderInfo.getMemNo()).getId());
 			orderInfo.setStoreName(storeService.selectByStoreNo(orderInfo.getStoreNo()).getStoreName());
 			
 			deliveryOrderList.add(orderInfo);
 			
+			
 			for (int j = 0; j < noList.length; j++) {
 				
 				OrderDetailVO orderDetail = service.getOrderDetail(noList[j]);
-				
 				if (orderInfo.getOrderNo() == orderDetail.getOrderNo()) {
 					ItemContentsVO detail = itemService.getItemInfo(orderDetail.getDetailNo());
 					orderDetail.setItemName(detail.getItemName());
@@ -258,16 +255,19 @@ public class OrderController {
 					
 					preDetailList.add(orderDetail);
 					
-					deliveryOrderList.get(i).setOrderDetails(preDetailList);
-				}
+				}				
+				
 			}
-
+			
+			deliveryOrderList.get(i).setOrderDetails(preDetailList);
+			
 			if (deliveryOrderList.get(i).getCount() != deliveryOrderList.get(i).getOrderDetails().size()) {
 				possible = false;
 				break;
 			}else {
 				possible = true;
 			}
+			
 		}
 		
 		if(possible==false) {
@@ -300,7 +300,7 @@ public class OrderController {
 		TagStickerVO tagStickerVO = new TagStickerVO(tagNo, Integer.parseInt(words[1]), orderNo, loginVO.getStaffNo());
 		tService.insertTag(tagStickerVO);
 		
-		mav.setViewName("storeManager/orderList/orderList");
+		mav.setViewName("redirect:/orderList/orderList");
 		mav.addObject("orderList", resultOrderList);
 		mav.addObject("orderCount", orderCount);
 
