@@ -478,10 +478,6 @@ public class ManagerController {
 		public ModelAndView storeStaffList(HttpServletRequest request, HttpSession session) {
 			// 로그인한 manager테이블 정보 알아냄
 			ManagerVO loginVO = (ManagerVO)session.getAttribute("loginVO");
-			/*System.out.println(loginVO);*/
-			/*System.out.println(loginVO.getManagerId());*/
-			/*System.out.println(loginVO.getStoreNo());*/
-			
 			
 			// 현재 페이지 번호 저장 변수
 			int pageNo = 1;
@@ -594,9 +590,7 @@ public class ManagerController {
 		//매장 직원 추가
 		@RequestMapping(value="/staffManage/add1", method=RequestMethod.GET )
 		@ResponseBody
-		public ManagerVO addStoreStaff(@RequestParam(value="managerId") String managerId, @RequestParam(value="password") String password, @RequestParam(value="name") String name, @RequestParam(value="telephone") String telephone,@RequestParam(value="type") String type,@RequestParam(value="storeNo") String storeNo,@RequestParam(value="regDate") String regDate) {
-			/*System.out.println(managerId);*/
-			/*System.out.println(storeNo);*/
+		public ManagerVO addStoreStaff(@RequestParam(value="managerId") String managerId, @RequestParam(value="password") String password, @RequestParam(value="name") String name, @RequestParam(value="telephone") String telephone,@RequestParam(value="type") String type,@RequestParam(value="storeNo") String storeNo) {
 			ManagerVO manager = new ManagerVO();
 			
 			manager.setManagerId(managerId);
@@ -605,10 +599,7 @@ public class ManagerController {
 			manager.setType(type);
 			manager.setName(name);
 			manager.setStoreNo(storeNo);
-			//
-			manager.setDate(regDate);
-			//
-			/*System.out.println(manager);*/
+			
 			service.add1(manager);
 			
 			//추가된 매니저에 대한 정보 조회(staffNo, date)
