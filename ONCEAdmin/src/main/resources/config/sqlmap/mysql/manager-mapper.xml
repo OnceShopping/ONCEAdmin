@@ -171,7 +171,7 @@
  	<insert id="insert1" parameterType="ManagerVO">
  		insert into StoreMember(managerId, type, password, storeNo, name, telephone, date) 
  		values 
- 		(#{managerId}, #{type}, #{password}, #{storeNo}, #{name}, #{telephone}, #{date}) 
+ 		(#{managerId}, #{type}, #{password}, #{storeNo}, #{name}, #{telephone}, curDate()) 
  	</insert>
  	
  	<!-- 모든 조건 검색 -->
