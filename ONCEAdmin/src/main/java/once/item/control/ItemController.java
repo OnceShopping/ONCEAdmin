@@ -170,8 +170,8 @@ public class ItemController {
 		}
 		
 		//Item 테이블에 추가할 detail 값을 가져온 후 ItemDetail테이블을 update 함
-		String detail = mRequest.getParameter("detail");
-
+		String detail = mRequest.getParameter("detail").replace("\r\n", "<br>");
+			
 		if(detail!=null) {
 			itemVO.setDetail(detail);
 		}else {
