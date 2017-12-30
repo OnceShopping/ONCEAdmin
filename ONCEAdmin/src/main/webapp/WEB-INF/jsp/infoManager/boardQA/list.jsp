@@ -60,6 +60,12 @@ function sidemenu(){
 	var searchC='${searchC}';
 	var search='${search}';
 	var selectCategory3='${selectCategory3}';
+	function sidemenu(){
+		document.getElementById('addItem').setAttribute('class','');
+		document.getElementById('itemDelivery').setAttribute('class','');
+		document.getElementById('staffList').setAttribute('class','');
+		document.getElementById('boardQAList').setAttribute('class','');
+	}
 	
 $(document).ready(function() {
 	sidemenu();

@@ -40,7 +40,18 @@
 	src="${pageContext.request.contextPath }/resources/js/slimscroll/jquery.slimscroll.min.js"></script>
 <script
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
-
+<script type="text/javascript">
+function sidemenu(){
+    document.getElementById('addItem').setAttribute('class','');
+    document.getElementById('itemDelivery').setAttribute('class','');
+    document.getElementById('staffList').setAttribute('class','');
+    document.getElementById('boardQAList').setAttribute('class','');
+}
+	$(document).ready(function(){
+		sidemenu();
+		document.getElementById('boardQAList').setAttribute('class','active');
+	});
+</script>
 <style type="text/css">
 th {
 	text-align: center;

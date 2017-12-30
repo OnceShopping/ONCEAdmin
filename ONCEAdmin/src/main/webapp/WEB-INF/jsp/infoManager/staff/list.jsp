@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/icon.css" type="text/css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/font.css" type="text/css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/app.css" type="text/css" />
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 <style type="text/css">
 	.addDiv {
@@ -46,6 +47,7 @@
 <script src="${pageContext.request.contextPath }/resources/js/app.js"></script>
 <script src="${pageContext.request.contextPath }/resources/js/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script type="text/javascript">
 	function sidemenu(){
@@ -81,14 +83,12 @@
 		
 		//매장 선택 - 첫 번째 콤보박스 선택 시 두 번째 콤보박스에 표시되는 option 제어 
 		$('#typeSelect').on("change", function() {
-			$('#storeSelect').val('');
-			$('#storeSelect').show(); // 두번 째 select-box를 표시함
-	
-			// 첫 번째 select-box에 해당하는 것만 보여주기 위한 로직
+			var state = $('#typeSelect').val();
+
 			if (state == "B1F") {
-				$('.B1F').show();
+				$('#storeSelect').val("B1 안내데스크").prop("selected", true);
 			} else {
-				$('.1F').show();
+				$('#storeSelect').val("1F 안내데스크").prop("selected", true);
 			}
 		});
 		
@@ -414,7 +414,7 @@
 									<td width="5%" />
 									<td width="25%"><input type="tel" id="telephone"
 										name="telephone" pattern="(010)-\d{3,4}-\d{4}"
-										title="010-xxx-xxxx 또는  010-xxxx-xxxx 형식으로  작성해주세요."></td>
+										title="010-xxx-xxxx 또는  010-xxxx-xxxx 형식으로  작성해 주세요"></td>
 								</tr>
 								<tr height="20px" />
 								<tr>
@@ -422,8 +422,8 @@
 										위치</th>
 									<td colspan="5" style="text-align: left;"><select
 										style="height: 25px" id="typeSelect">
-											<option value="B1F" id="B1F">B1F</option>
-											<option value="1F" id="1F">1F</option>
+											<option class="typeOption" value="B1F" id="B1F">B1F</option>
+											<option class="typeOption" value="1F" id="1F">1F</option>
 									</select> <select style="height: 25px" id="storeSelect"
 										name="storeSelect">
 											<option value="INFOB1" class="storeType B1F">B1 안내데스크</option>

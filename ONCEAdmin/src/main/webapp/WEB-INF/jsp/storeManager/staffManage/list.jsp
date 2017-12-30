@@ -45,7 +45,19 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	
 <script type="text/javascript">
+	
+	function sidemenu(){
+		document.getElementById('itemRegister').setAttribute('class','');
+		document.getElementById('itemList').setAttribute('class','');
+		document.getElementById('itemManage').setAttribute('class','');
+		document.getElementById('orderList').setAttribute('class','');
+		document.getElementById('staffManage').setAttribute('class','');
+		document.getElementById('boardQAList').setAttribute('class','');
+	}	
+	
 	$(document).ready(function() {
+		sidemenu();
+		document.getElementById('staffManage').setAttribute('class','active');
 		
 		var ModalTest;
 		var requiredCheck = false; //ID 중복 확인
