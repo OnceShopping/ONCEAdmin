@@ -37,8 +37,8 @@
                         <nav class="nav-primary hidden-xs" id="sidemenu">
                            <div class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
                            <ul class="nav nav-main" data-ride="collapse">
-                              <li>
-                              	<a href="${ pageContext.request.contextPath }/info/addItem" class="auto">
+                              <li id="items">
+                              	<a href="#" class="auto">
                               	<span class="pull-right text-muted">
                                 <i class="i i-circle-sm-o text"></i> 
                                 <i class="i i-circle-sm text-active"></i>

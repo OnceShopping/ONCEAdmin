@@ -44,6 +44,15 @@
 <script src="${pageContext.request.contextPath }/resources/js/datepicker/bootstrap-datepicker.js"></script>
 
 <script type="text/javascript">
+function sidemenu(){
+	document.getElementById('itemRegister').setAttribute('class','');
+	document.getElementById('itemList').setAttribute('class','');
+	document.getElementById('itemManage').setAttribute('class','');
+	document.getElementById('orderList').setAttribute('class','');
+	document.getElementById('staffManage').setAttribute('class','');
+	document.getElementById('boardQAList').setAttribute('class','');
+}
+	
 	var pageNo=${pageNo};
 	var date1='${date1}';
 	var date2='${date2}';
@@ -123,10 +132,8 @@ ul {
 							
 							<select id="selectCategory3" class="form-control " style="width: 150px; display: table-cell;" name="selectCategory3" >
 								<option value="all">전체</option>
-								<option>고객편의시설</option>
-								<option>기본시설</option>
-								<option>영업시간</option>
-								<option>서비스</option>
+								<option>입고문의</option>
+								<option>재고문의</option>
 								<option>기타</option>
 							</select>
 									

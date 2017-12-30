@@ -42,7 +42,20 @@
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
+function sidemenu(){
+	document.getElementById('items').setAttribute('class', '');
+    document.getElementById('addItem').setAttribute('class','');
+    document.getElementById('itemDelivery').setAttribute('class','');
+    document.getElementById('staffList').setAttribute('class','');
+    document.getElementById('boardQAList').setAttribute('class','');
+    
+}
+
 $(document).ready(function() {
+	sidemenu();
+	document.getElementById('items').setAttribute('class', 'active');
+	document.getElementById('addItem').setAttribute('class','active');
+	
 	var vo;
 	//태그 검색 클릭 전
 	$('#searchTagbar').toggle();
@@ -112,7 +125,6 @@ $(document).ready(function() {
 			var warehouseId = $('#id-'+i).text();
 			if(insertId == warehouseId.substring(5)) {
 				 $('#changeColor'+i).addClass("yellowColor");
-				 alert('있는것 등록');
 				 $.ajax({
 					url : '${pageContext.request.contextPath}/warehouse/insert',
 					type : "get",
@@ -138,7 +150,6 @@ $(document).ready(function() {
 				 
 			}  else if($('#id-'+i).text() == "") {
 				$('#changeColor'+i).addClass("yellowColor");
-				alert('없는것 등록'); 
 				$.ajax({
 					url : '${pageContext.request.contextPath}/warehouse/insert',
 					type : "get",
@@ -235,112 +246,15 @@ $(document).ready(function() {
 
 	<section class="vbox">
 		<!-- 상단바 -->
-		<header
-			class="bg-white header header-md navbar navbar-fixed-top-xs box-shadow">
-			<div class="navbar-header aside-md dk">
-				<a class="btn btn-link visible-xs"
-					data-toggle="class:nav-off-screen,open" data-target="#nav,html">
-					<i class="fa fa-bars"></i>
-				</a> <a href="index.html" class="navbar-brand"> <span
-					class="hidden-nav-xs">ONCE</span>
-				</a> <a class="btn btn-link visible-xs" data-toggle="dropdown"
-					data-target=".user"> <i class="fa fa-cog"></i>
-				</a>
-			</div>
-		</header>
+			<jsp:include page="/WEB-INF/jsp/infoManager/include/topmenu.jsp" flush="false"></jsp:include>
 		<!-- 상단바 끝 -->
 
 		<section>
 			<section class="hbox stretch">
-				<!-- 메뉴 위 프로필 -->
-				<aside class="bg-black aside-md hidden-print hidden-xs" id="nav">
-					<section class="vbox">
-						<section class="w-f scrollable">
-							<div class="slim-scroll" data-height="auto"
-								data-disable-fade-out="true" data-distance="0" data-size="10px"
-								data-railOpacity="0.2">
-								<div class="clearfix wrapper dk nav-user hidden-xs">
-									<div class="dropdown">
-										<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-											<span class="hidden-nav-xs clear"> <span
-												class="block m-t-xs"> <strong
-													class="font-bold text-lt">${loginVO.managerId }</strong> <b
-													class="caret"></b>
-											</span>
-										</span>
-										</a>
-										<!-- 프로필 클릭시 나오는 메뉴 -->
-										<ul class="dropdown-menu animated fadeInRight m-t-xs">
-											<li><a
-												href="${ pageContext.request.contextPath }/manager/check">Profile</a></li>
-											<li class="divider"></li>
-											<li><a href="modal.lockme.html" data-toggle="ajaxModal">Logout</a>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<!-- 프로필 클릭시 나오는 메뉴 끝 -->
-								<!-- 메뉴 위 프로필 끝 -->
-
-								<!-- 사이드 메뉴 -->
-								<nav class="nav-primary hidden-xs" id="sidemenu">
-									<div
-										class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
-									<ul class="nav nav-main" data-ride="collapse">
-										<li class="active"><a
-											href="#"
-											class="auto"> <span class="pull-right text-muted">
-													<i class="i i-circle-sm-o text"></i> <i
-													class="i i-circle-sm text-active"></i>
-											</span> <i class="i i-statistics icon"> </i> <span class="font-bold">물품
-													관리</span>
-										</a>
-											<ul class="nav dk">
-												<li class="active"><a
-													href="${ pageContext.request.contextPath }/info/addItem"
-													class="auto"> <i class="i i-dot"></i> <span>물품
-															추가</span>
-												</a></li>
-												<li><a
-													href="${ pageContext.request.contextPath }/info/itemDelivery"
-													class="auto"> <i class="i i-dot"></i> <span>물품
-															전달</span>
-												</a></li>
-												
-											</ul>
-										<li><a href="${ pageContext.request.contextPath }/info/staffList" class="auto"> <span
-												class="pull-right text-muted"> <i
-													class="i i-circle-sm-o text"></i> <i
-													class="i i-circle-sm text-active"></i>
-											</span> <i class="i i-stack icon"> </i> <span class="font-bold">직원 관리</span>
-										</a></li>
-										<li><a href="${ pageContext.request.contextPath }/boardQA/list" class="auto"> <span
-												class="pull-right text-muted"> <i
-													class="i i-circle-sm-o text"></i> <i
-													class="i i-circle-sm text-active"></i>
-											</span> <i class="i i-lab icon"> </i> <span class="font-bold">관리자
-													답변 게시판</span>
-										</a></li>
-									</ul>
-								</nav>
-							</div>
-						</section>
-						<footer class="footer hidden-xs no-padder text-center-nav-xs">
-							<!-- 메뉴 하단 로그아웃 버튼 -->
-							<a href="modal.lockme.html" data-toggle="ajaxModal"
-								class="btn btn-icon icon-muted btn-inactive pull-right m-l-xs m-r-xs hidden-nav-xs">
-								<i class="i i-logout"></i>
-							</a>
-							<!-- 메뉴 하단 축소 버튼 -->
-							<a href="#nav" data-toggle="class:nav-xs"
-								class="btn btn-icon icon-muted btn-inactive m-l-xs m-r-xs">
-								<i class="i i-circleleft text"></i> <i
-								class="i i-circleright text-active"></i>
-							</a>
-						</footer>
-					</section>
-				</aside>
-				<!-- 사이드 메뉴 끝 -->
+				<!-- 사이드메뉴 -->
+            	<jsp:include page="/WEB-INF/jsp/infoManager/include/sidemenu.jsp" flush="false"></jsp:include>
+            	<!-- 사이드메뉴 끝 -->
+            	
 				<section id="content">
 					<section class="vbox">
 						<section class="scrollable wrapper" style="padding-left: 50px">
@@ -365,8 +279,6 @@ $(document).ready(function() {
                   			<section class=" col-sm-6" style="padding-left: 100px">
                   			<br>
                   			<input type="button" value="태그 등록" class="btn btn-success" id="insertTag">
-                    		<input type="button" value="테이블 보기" class="btn btn-s-md btn-warning" style="margin-left: 20px">
-                    		<input type="button" value="리스트 보기" class="btn btn-s-md btn-warning" style="margin-left: 20px">
                   			</section>
                   			<br><br><br><br>
 							</div>

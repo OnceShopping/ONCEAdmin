@@ -88,8 +88,9 @@ public class BoardQAController {
 			request.setAttribute("searchC", request.getParameter("searchC"));
 			request.setAttribute("search", request.getParameter("search"));
 		}
-		
-		if(storeVO.getStoreName().matches(".*안내데스크.*")) {
+		if(storeVO.getStoreName().equals("once")) {
+			boardQAMap.put("category2", "백화점");
+		} else if(storeVO.getStoreName().matches(".*안내데스크.*")) {
 			boardQAMap.put("category2", "info");
 		} else {
 			boardQAMap.put("category2", storeVO.getStoreName());

@@ -51,6 +51,7 @@
 
 <script type="text/javascript">
 	function sidemenu(){
+		document.getElementById('items').setAttribute('class', '');
 		document.getElementById('addItem').setAttribute('class','');
 		document.getElementById('itemDelivery').setAttribute('class','');
 		document.getElementById('staffList').setAttribute('class','');
