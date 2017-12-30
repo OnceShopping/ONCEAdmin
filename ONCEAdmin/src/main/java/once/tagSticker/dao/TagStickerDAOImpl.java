@@ -15,7 +15,7 @@ public class TagStickerDAOImpl implements TagStickerDAO {
 	private SqlSessionTemplate sqlSession;
 
 	@Override
-	public TagStickerVO selectOneTag(int tagNo) {
+	public TagStickerVO selectOneTag(String tagNo) {
 		return sqlSession.selectOne("once.tagSticker.dao.TagStickerDAO.selectOneTag", tagNo);
 	}
 	
@@ -23,6 +23,11 @@ public class TagStickerDAOImpl implements TagStickerDAO {
 	public List<TagStickerVO> selectTagByMemNo(int memNo) {
 		List<TagStickerVO> tagList = sqlSession.selectList("once.tagSticker.dao.TagStickerDAO.selectTagByMemNo", memNo);
 		return tagList;
+	}
+
+	@Override
+	public void insertTag(TagStickerVO tagStickerVO) {
+		sqlSession.insert("once.tagSticker.dao.TagStickerDAO.insertTag", tagStickerVO);
 	}
 	
 }

@@ -6,8 +6,9 @@ import once.tagSticker.vo.TagStickerVO;
 
 public interface TagStickerService {
 
-	TagStickerVO selectOneTag(int tagNo);
+	TagStickerVO selectOneTag(String tagNo);
 
 	List<TagStickerVO> selectTagByMemNo(int memNo);
 
+	void insertTag(TagStickerVO tagStickerVO);
 }

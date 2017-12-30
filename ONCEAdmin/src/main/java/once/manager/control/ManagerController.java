@@ -3,13 +3,9 @@ package once.manager.control;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -33,12 +29,8 @@ import once.manager.service.ManagerService;
 import once.manager.vo.ManagerVO;
 import once.notice.service.NoticeService;
 import once.notice.vo.NoticeVO;
-
 import once.order.service.OrderService;
 import once.order.vo.OrderVO;
-
-import once.store.service.StoreService;
-
 import once.store.vo.StoreVO;
 import once.warehouse.service.WarehouseService;
 import once.warehouse.vo.WarehouseVO;
@@ -486,10 +478,6 @@ public class ManagerController {
 		public ModelAndView storeStaffList(HttpServletRequest request, HttpSession session) {
 			// 로그인한 manager테이블 정보 알아냄
 			ManagerVO loginVO = (ManagerVO)session.getAttribute("loginVO");
-			/*System.out.println(loginVO);*/
-			/*System.out.println(loginVO.getManagerId());*/
-			/*System.out.println(loginVO.getStoreNo());*/
-			
 			
 			// 현재 페이지 번호 저장 변수
 			int pageNo = 1;
@@ -602,9 +590,7 @@ public class ManagerController {
 		//매장 직원 추가
 		@RequestMapping(value="/staffManage/add1", method=RequestMethod.GET )
 		@ResponseBody
-		public ManagerVO addStoreStaff(@RequestParam(value="managerId") String managerId, @RequestParam(value="password") String password, @RequestParam(value="name") String name, @RequestParam(value="telephone") String telephone,@RequestParam(value="type") String type,@RequestParam(value="storeNo") String storeNo,@RequestParam(value="regDate") String regDate) {
-			/*System.out.println(managerId);*/
-			/*System.out.println(storeNo);*/
+		public ManagerVO addStoreStaff(@RequestParam(value="managerId") String managerId, @RequestParam(value="password") String password, @RequestParam(value="name") String name, @RequestParam(value="telephone") String telephone,@RequestParam(value="type") String type,@RequestParam(value="storeNo") String storeNo) {
 			ManagerVO manager = new ManagerVO();
 			
 			manager.setManagerId(managerId);
@@ -613,10 +599,7 @@ public class ManagerController {
 			manager.setType(type);
 			manager.setName(name);
 			manager.setStoreNo(storeNo);
-			//
-			manager.setDate(regDate);
-			//
-			/*System.out.println(manager);*/
+			
 			service.add1(manager);
 			
 			//추가된 매니저에 대한 정보 조회(staffNo, date)
@@ -672,10 +655,8 @@ public class ManagerController {
 	public ModelAndView infoAddItem(ModelAndView mav, HttpSession session) {
 		ManagerVO loginVO = (ManagerVO)session.getAttribute("loginVO");
 		List<WarehouseVO> warehouseList = wService.selectAllWarehouse(loginVO.getStoreNo().substring(4));
-		System.out.println("warehouseList : " +warehouseList);
 		
 		List<OrderVO> orderList = oService.selectAllOrder(loginVO.getStoreNo().substring(4));
-		System.out.println(orderList);
 		
 		List<Map<String, Object>> memNoList = new ArrayList<>();
 		
@@ -692,11 +673,9 @@ public class ManagerController {
 				for (int j = 0; j < memNoList.size(); j++) {
 					int memNo =(int)memNoList.get(j).get("memNo");
 					if( memNo == orderList.get(i).getMemNo()  ) {
-						System.out.println("같음");
 						memNoList.get(j).put("itemCount", (int)memNoList.get(j).get("itemCount")+1);
 						break;
 					} else if(j == memNoList.size()-1) {
-						System.out.println("다름");
 						Map<String, Object> orderIdCount = new HashMap<>();
 						customerVO = cService.selectOneCustomer(orderList.get(i).getMemNo());
 						orderIdCount.put("id", customerVO.getId());
@@ -726,4 +705,27 @@ public class ManagerController {
 		return mav;
 	}
 	
+	//층에 따른 매장 확인
+	@RequestMapping("/manager/storeCheck")
+	@ResponseBody
+	public List<StoreVO> storeCheck(@RequestParam("floor") String floor){
+		
+		List<StoreVO> list = new ArrayList<>();
+		
+		list = service.selectStoreByFloor(floor);
+		
+		return list;
+	}
+	
+	//층에 따른 info 확인
+	@RequestMapping("/manager/infoCheck")
+	@ResponseBody
+	public List<StoreVO> infoCheck(){
+		
+		List<StoreVO> list = new ArrayList<>();
+		
+		list = service.selectInfoByFloor();
+				
+		return list;
+	}
 }

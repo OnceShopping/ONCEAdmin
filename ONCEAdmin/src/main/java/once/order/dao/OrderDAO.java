@@ -5,6 +5,7 @@ import java.util.List;
 import once.order.vo.OrderDetailVO;
 
 import once.order.vo.OrderVO;
+import once.store.vo.StoreVO;
 
 public interface OrderDAO {
 
@@ -16,7 +17,20 @@ public interface OrderDAO {
 
 	List<OrderVO> getStoreOrderList(String storeNo);
 
-	List<OrderDetailVO> getStoreDetailList(int orderNo);
+	List<OrderDetailVO> getOrderDetailList(int orderNo);
 
+	void updateStatusDelivery(int memNo);
+
+	List<OrderVO> getOptionOrderList(OrderVO options);
+
+	List<OrderVO> getSortOrderList(StoreVO store);
+
+	OrderVO getOrderVO(int orderNo);
+
+	OrderDetailVO getOrderDetail(int no);
+
+	void updateStatusAccpet(int orderNo);
+
+	void updateStatusDelivery(List<OrderVO> deliveryOrderList);
 
 }

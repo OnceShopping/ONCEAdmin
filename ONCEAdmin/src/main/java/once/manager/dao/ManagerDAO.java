@@ -50,4 +50,7 @@ public interface ManagerDAO {
 	
 	void insert1(ManagerVO manager);
 
+	List<StoreVO> selectStoreByFloor(String floor);
+	
+	List<StoreVO> selectInfoByFloor();
 }

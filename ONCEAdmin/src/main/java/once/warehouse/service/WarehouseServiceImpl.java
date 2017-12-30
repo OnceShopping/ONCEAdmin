@@ -1,6 +1,7 @@
 package once.warehouse.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,15 @@ public class WarehouseServiceImpl implements WarehouseService {
 	@Override
 	public void updateWarehouse(int memNo) {
 		dao.updateWarehouse(memNo);
+	}
+
+	@Override
+	public void subtractWarehouse(Map<String, Object> map) {
+		dao.subtractWarehouse(map);
+	}
+
+	@Override
+	public void deleteWarehouse(int memNo) {
+		dao.deleteWarehouse(memNo);
 	}
 }

@@ -141,6 +141,15 @@ public class ManagerServiceImpl implements ManagerService{
 	public void add1(ManagerVO manager) {		
 		dao.insert1(manager);
 	}
-
+	
+	@Override
+	public List<StoreVO> selectStoreByFloor(String floor) {
+		return dao.selectStoreByFloor(floor);
+	}
+	
+	@Override
+	public List<StoreVO> selectInfoByFloor() {
+		return dao.selectInfoByFloor();
+	}
 }
  

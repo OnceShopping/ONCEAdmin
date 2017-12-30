@@ -47,7 +47,6 @@ public class BoardQAController {
 		String type = (String)request.getAttribute("type");
 		// manager테이블에 매칭되는  store테이블을 찾음
 		StoreVO storeVO = sService.checkStoreName(loginVO.getStoreNo());
-		
 		Map<String, Object> boardQAMap = new HashMap<>();
 
 		String date1;
@@ -151,9 +150,7 @@ public class BoardQAController {
 	public String selectOne(@PathVariable int boardNo, Model mod, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		BoardQAVO boardQAVO = service.selectOneBoard(boardNo);
 		Cookie[] Cookies = request.getCookies(); //모든 쿠키의 값을 가져옴
-		System.out.println(Cookies.length);
 	for (int i = 0; i < Cookies.length; i++) {
-		System.out.println(Cookies[i].getValue());
 		if(Cookies[i].getValue().equals("boardQA"+boardNo)) { //쿠키의 noticeNo 페이지값과 들어간 페이지의 noticeNo가 같으면 break
 			break;
 		} else if (i == Cookies.length - 1 ){ //없으면 쿠키를 생성해서 추가하고 게시물 조회수를 1 늘림
@@ -181,7 +178,6 @@ public class BoardQAController {
 	@RequestMapping(value = "/write/{boardNo}", method = RequestMethod.POST)
 	public String write(@Valid BoardQAVO sboardQAVO, HttpSession session) {
 		BoardQAVO pBoardQAVO = service.selectOneBoard(sboardQAVO.getBoardNo());
-		System.out.println(pBoardQAVO);
 		pBoardQAVO.setFamily(pBoardQAVO.getFamily());	//부모글의 family	- 그룹번호
 		pBoardQAVO.setParent(pBoardQAVO.getBoardNo());	//부모글의 no	  	- 부모글
 		pBoardQAVO.setDepth(pBoardQAVO.getDepth()+1);	//부모글의 +1		- 글 순서
@@ -199,7 +195,6 @@ public class BoardQAController {
 		
 		ManagerVO managerVO = mService.selectById(loginVO.getManagerId());
 		pBoardQAVO.setStaffNo(managerVO.getStaffNo());
-		System.out.println(pBoardQAVO);
 		service.insertBoard(pBoardQAVO);
 		
 		return "redirect:/boardQA/list";

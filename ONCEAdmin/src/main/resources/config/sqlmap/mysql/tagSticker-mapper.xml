@@ -5,7 +5,7 @@
 <mapper namespace="once.tagSticker.dao.TagStickerDAO">
 	
 	<!-- tagsticker 한개 검색 -->
-	<select id="selectOneTag" parameterType="int" resultType="TagStickerVO">
+	<select id="selectOneTag" parameterType="String" resultType="TagStickerVO">
 		select * from TagSticker where tagNo = #{tagNo}
 	</select>
 	
@@ -13,6 +13,11 @@
 	<select id="selectTagByMemNo" parameterType="int" resultType="TagStickerVO">
 		select * from TagSticker where memNo = #{memNo}
 	</select>
+	
+	<!-- tagsticker 생성 -->
+	<insert id="insertTag" parameterType="TagStickerVO">
+		insert into TagSticker(tagNo ,staffNo, orderNo, memNo) values(#{tagNo}, #{staffNo}, #{orderNo}, #{memNo})
+	</insert>
 </mapper>
 
 

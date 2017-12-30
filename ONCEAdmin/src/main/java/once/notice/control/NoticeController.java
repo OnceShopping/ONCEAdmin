@@ -85,9 +85,7 @@ public class NoticeController {
 	public String selectOne(@PathVariable int noticeNo, Model model, HttpServletRequest request, HttpServletResponse response) {
 		NoticeVO noticeVO = service.selectOneNotice(noticeNo);
 		Cookie[] Cookies = request.getCookies(); //모든 쿠키의 값을 가져옴
-			System.out.println(Cookies.length);
 		for (int i = 0; i < Cookies.length; i++) {
-			System.out.println(Cookies[i].getValue());
 			if(Cookies[i].getValue().equals("notice"+noticeNo)) { //쿠키의 noticeNo 페이지값과 들어간 페이지의 noticeNo가 같으면 break
 				break;
 			} else if (i == Cookies.length - 1 ){ //없으면 쿠키를 생성해서 추가하고 게시물 조회수를 1 늘림
@@ -98,7 +96,6 @@ public class NoticeController {
 			}
 		}
 		
-		System.out.println(noticeVO);
 		model.addAttribute("noticeVO", noticeVO);
 		return "admin/notice/detail";
 	}
@@ -113,7 +110,6 @@ public class NoticeController {
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	public String write(MultipartHttpServletRequest mRequest, @Valid NoticeVO noticeVO) 
 	throws Exception{
-		System.out.println(mRequest.getContextPath()); //상대경로
 		//로컬 경로가 아니라 서버쪽 경로에 저장됨->
 //		String uploadPath = mRequest.getServletContext().getRealPath("/upload/admin/");
 		String uploadPath2 = "C:\\Once\\image\\";
@@ -126,7 +122,6 @@ public class NoticeController {
 			
 			// 원본 파일명
 			String oriFileName = mFile.getOriginalFilename();
-			System.out.println("원본 파일명 : " + oriFileName);
 			
 			if(oriFileName != null && !oriFileName.equals("")) {
 			
@@ -141,11 +136,9 @@ public class NoticeController {
 				
 				// 파일 사이즈
 				long fileSize = mFile.getSize();
-				System.out.println("파일 사이즈 : " + fileSize);
 				
 				// 고유한 파일명 만들기	
 				String saveFileName = "ONCE-" + UUID.randomUUID().toString() + ext;
-				System.out.println("저장할 파일명 : " + saveFileName);
 			
 				// 임시저장된 파일을 원하는 경로에 저장
 				mFile.transferTo(new File(uploadPath2 + saveFileName));
@@ -156,7 +149,6 @@ public class NoticeController {
 			}
 			
 		}
-		System.out.println(noticeVO);
 		noticeVO.setContent(noticeVO.getContent().replace("\r\n", "<br>"));
 		service.insertNotice(noticeVO);
 		return "redirect:list";
@@ -189,7 +181,6 @@ public class NoticeController {
 			
 			// 원본 파일명
 			String oriFileName = mFile.getOriginalFilename();
-			System.out.println("원본 파일명 : " + oriFileName);
 			
 			if(oriFileName != null && !oriFileName.equals("")) {
 			
@@ -204,11 +195,9 @@ public class NoticeController {
 				
 				// 파일 사이즈
 				long fileSize = mFile.getSize();
-				System.out.println("파일 사이즈 : " + fileSize);
 				
 				// 고유한 파일명 만들기	
 				String saveFileName = "ONCE-" + UUID.randomUUID().toString() + ext;
-				System.out.println("저장할 파일명 : " + saveFileName);
 			
 				// 임시저장된 파일을 원하는 경로에 저장
 				mFile.transferTo(new File(uploadPath2 + saveFileName));
