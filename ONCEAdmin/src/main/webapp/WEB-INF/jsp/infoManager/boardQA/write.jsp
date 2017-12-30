@@ -45,7 +45,21 @@
 <script src="${pageContext.request.contextPath }/resources/js/parsley/parsley.min.js"></script>
 <script src="${pageContext.request.contextPath }/resources/js/parsley/parsley.extend.js"></script>
 <script type="text/javascript">
-
+	function sidemenu(){
+	    document.getElementById('addItem').setAttribute('class','');
+	    document.getElementById('itemDelivery').setAttribute('class','');
+	    document.getElementById('staffList').setAttribute('class','');
+	    document.getElementById('boardQAList').setAttribute('class','');
+	}	
+	
+	$(document).ready(function() { 
+		 sidemenu();
+		   document.getElementById('boardQAList').setAttribute('class','active');
+	
+		
+		if(selectCategory3 == null)
+		$('#selectCategory3').val('all');
+	});
 	function doAction() {
 		location.href = "${ pageContext.request.contextPath }/boardQA/list"
 

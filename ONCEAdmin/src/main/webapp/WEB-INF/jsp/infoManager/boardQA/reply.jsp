@@ -93,8 +93,18 @@
 			}
 		});
 	}
-
+	
+	function sidemenu(){
+	      document.getElementById('addItem').setAttribute('class','');
+	      document.getElementById('itemDelivery').setAttribute('class','');
+	      document.getElementById('staffList').setAttribute('class','');
+	      document.getElementById('boardQAList').setAttribute('class','');
+	}
+	
 	$(document).ready(function() {
+		sidemenu();
+		document.getElementById('boardQAList').setAttribute('class','active');
+		
 		commentList(); //페이지 로딩시 댓글 목록 출력 
 		
 	});
