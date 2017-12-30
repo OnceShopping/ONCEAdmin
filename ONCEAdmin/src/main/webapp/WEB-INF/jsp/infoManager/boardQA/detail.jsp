@@ -47,17 +47,32 @@ th {
 	font-size: 13pt;
 }
 </style>
+<script>
+function sidemenu(){
+	document.getElementById('items').setAttribute('class', '');
+    document.getElementById('addItem').setAttribute('class','');
+    document.getElementById('itemDelivery').setAttribute('class','');
+    document.getElementById('staffList').setAttribute('class','');
+    document.getElementById('boardQAList').setAttribute('class','');
+    
+}
+
+$(document).ready(function() {
+	sidemenu();
+	document.getElementById('boardQAList').setAttribute('class', 'active');
+});	
+</script>
 </head>
 <body class="">
 	<section class="vbox">
 		<!-- navbar -->
-			<jsp:include page="/WEB-INF/jsp/storeManager/include/topmenu.jsp"></jsp:include>
+			<jsp:include page="/WEB-INF/jsp/infoManager/include/topmenu.jsp"></jsp:include>
 		<!-- end navbar -->
 
 		<section>
 			<section class="hbox stretch">
 			<!-- navbar -->
-				<jsp:include page="/WEB-INF/jsp/storeManager/include/sidemenu.jsp"></jsp:include>
+				<jsp:include page="/WEB-INF/jsp/infoManager/include/sidemenu.jsp"></jsp:include>
 			<!-- end navbar -->
 
 				<!-- 메뉴 사이즈 조정 -->
