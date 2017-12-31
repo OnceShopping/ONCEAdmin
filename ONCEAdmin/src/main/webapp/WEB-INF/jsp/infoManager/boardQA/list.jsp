@@ -44,6 +44,16 @@
 <script src="${pageContext.request.contextPath }/resources/js/datepicker/bootstrap-datepicker.js"></script>
 
 <script type="text/javascript">
+function sidemenu(){
+	document.getElementById('items').setAttribute('class', '');
+    document.getElementById('addItem').setAttribute('class','');
+    document.getElementById('itemDelivery').setAttribute('class','');
+    document.getElementById('staffList').setAttribute('class','');
+    document.getElementById('boardQAList').setAttribute('class','');
+    
+}
+
+
 	var pageNo=${pageNo};
 	var date1='${date1}';
 	var date2='${date2}';
@@ -57,9 +67,9 @@
 		document.getElementById('boardQAList').setAttribute('class','');
 	}
 	
-$(document).ready(function() { 
+$(document).ready(function() {
 	sidemenu();
-	document.getElementById('staffList').setAttribute('class','active');
+	document.getElementById('boardQAList').setAttribute('class', 'active');
 	
 	if(selectCategory3 == null)
 	$('#selectCategory3').val('all');
@@ -96,14 +106,14 @@ ul {
 <body>
    <section class="vbox">
 		<!-- navbar -->
-			<jsp:include page="/WEB-INF/jsp/storeManager/include/topmenu.jsp"></jsp:include>
+			<jsp:include page="/WEB-INF/jsp/infoManager/include/topmenu.jsp"></jsp:include>
 		<!-- end navbar -->
 
 
       <section>
          <section class="hbox stretch">
 			<!-- navbar -->
-				<jsp:include page="/WEB-INF/jsp/storeManager/include/sidemenu.jsp"></jsp:include>
+				<jsp:include page="/WEB-INF/jsp/infoManager/include/sidemenu.jsp"></jsp:include>
 			<!-- end navbar -->
 
 			<section id="content">
@@ -118,10 +128,8 @@ ul {
 							
 							<select id="selectCategory3" class="form-control " style="width: 150px; display: table-cell;" name="selectCategory3" >
 								<option value="all">전체</option>
-								<option>고객편의시설</option>
-								<option>기본시설</option>
+								<option>수령문의</option>
 								<option>영업시간</option>
-								<option>서비스</option>
 								<option>기타</option>
 							</select>
 									
