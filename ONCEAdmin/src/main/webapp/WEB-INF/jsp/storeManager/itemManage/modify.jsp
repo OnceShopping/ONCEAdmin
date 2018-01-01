@@ -42,16 +42,14 @@
 	src="${pageContext.request.contextPath }/resources/js/app.plugin.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <style type="text/css">
-.ModifyItem {
+/* .ModifyItem {
 	width: 500px;
 	background: #F2F2F2;
 	border: none;
-	margin-left: auto;
 	margin-bottom: 50px;
-	margin-right: auto;
 	border-radius: 20px;
 	padding: 40px;
-}
+} */
 
 td {
 	text-align: left;
@@ -63,10 +61,6 @@ th{
 	font-size: 12px;
 }
 
-input[type=text]{
-	width: 200%;
-	border: none;
-}
 .impossible{
 	background: #DADADA;
 }
@@ -76,7 +70,7 @@ input[type=text]{
 		
 		sidemenu();
 		document.getElementById('item').setAttribute('class','active');
-		document.getElementById('managerList').setAttribute('class','active');
+		document.getElementById('itemManage').setAttribute('class','active');
 		
 		$('#goList').click(function(){
 			location.href="${pageContext.request.contextPath}/item/list";
@@ -151,49 +145,49 @@ input[type=text]{
 					<jsp:include page="/WEB-INF/jsp/storeManager/include/sidemenu.jsp" flush="false"></jsp:include>
 				<!-- 사이드 메뉴 끝 -->
 				<section id="content">
-					<section class="vbox">
-						<section class="scrollable wrapper" style="padding-left: 50px">
-							<br />
-							<h3 class="font-bold m-b-none m-t-none">${item.itemName} 상품 수량 수정</h3>
-							<br /> <br />
+					<section class="scrollable wrapper" style="padding-left: 50px; margin-top:40px; margin-left:300px;">
+							 <div class="row">
+							<div class="col-sm-6"> 
 							<form action="${pageContext.request.contextPath}/item/update/${item.detailNo}"
-								method="post" id="ModifyList">
-								<div class="ModifyItem">
-								<table>
-									<tr>
-										<th width="25%">상품 이름</th>
-										<td width="10%"/>
-										<td width="65%"><input type="text" value="${item.itemName}" readonly="readonly" class="impossible" id="itemName"></td>
-									</tr>
-									<tr>
-										<th>상품 코드</th>
-										<td/>
-										<td><input type="text" value="${item.itemNo}" readonly="readonly" class="impossible"></td>
-									</tr>
-									<tr>
-										<th>색상</th>
-										<td/>
-										<td><input type="text" value="${item.color}" readonly="readonly" class="impossible"></td>
-									</tr>
-									<tr>
-										<th>SIZE</th>
-										<td/>
-										<td><input type="text" value="${item.size}" name="size" class="impossible" readonly="readonly"></td>
-									</tr>
-									<tr>
-										<th>수량</th>
-										<td/>
-										<td><input type="number" value="${item.count}" name="count" id="count"> 개</td>
-									</tr>
-								</table>
-								</div>
-								<div align="right">
-									<input type="hidden" name="_method" value="PUT" /> <input
-										type="submit" value="수정 완료" class="btn btn-s-md btn-primary" id="complete"/>
-									<input type="button" value="취소"  class="btn btn-s-md btn-primary" id="goList">		
-								</div>
-							</form>
-						</section>
+								method="post" data-validate="parsley">
+							<section class="panel panel-default">
+								 <header class="panel-heading">
+                       			 	<span class="h4">${item.itemName} 상품 수량 수정</span>
+                       			 	</header>
+                       			 	<div class="panel-body">
+				                        <p class="text-muted">Modify the item's amount.</p>
+				                        <div class="form-group">
+				                          <label>상품 이름</label>
+				                          <input type="text" class="form-control parsley-validated" data-required="true" value="${item.itemName}"  class="impossible"  readonly="readonly" id="itemName">                        
+				                        </div>
+				                        <div class="form-group">
+				                          <label>상품 코드</label>
+				                          <input type="text" class="form-control" data-type="email" data-required="true"  value="${item.itemNo}" readonly="readonly" class="impossible">                        
+				                        </div>
+				                        <div class="form-group">
+				                            <label>Color</label>
+				                            <input type="text" class="form-control" data-required="true" value="${item.color}" readonly="readonly" class="impossible">   
+				                        </div>
+				                        <div class="form-group">
+				                          <label>SIZE</label>
+				                          <input type="text"  class="form-control" value="${item.size}" name="size" class="impossible" readonly="readonly">
+				                        </div>
+				                       <div class="form-group pull-in clearfix">
+                          					<div class="col-sm-6">
+				                          	<label>수량</label>
+				                         	<input type="number" class="form-control" value="${item.count}" name="count" id="count">
+				                         	</div>
+				                        </div>
+				                      </div>
+				                      <footer class="panel-footer text-right bg-light lter">
+				                        <input type="hidden" name="_method" value="PUT" />
+										<input type="button" value="취소"  class="btn btn-success btn-s-xs" id="goList">
+										 <input type="submit" value="수정 완료" class="btn btn-success btn-s-xs"/>
+				                      </footer>
+				                    </section>
+				                  </form>
+				                </div>
+                 			</div>
 					</section>
 				</section>
 			</section>
