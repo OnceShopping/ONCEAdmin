@@ -223,25 +223,12 @@ function printResult(data) {
 	}
 </script>
 <style type="text/css">
-		.itemList {
-			border-collapse: collapse;
-			width: 100%;
-			border: 1 solid;
-			border-color: #bcbcbc;
-		}
-		
-		.itemList th, .selector span{
+		td,th{
 			text-align: center;
-			font-size: 13pt;
-			font-weight: bold;
-			color: #788288;
 		}
-		
-		.itemList td {
-			text-align: center;
-			padding: 5px;
-		}
-		
+		a{
+			color:#788288;
+		}		
 		tr:hover {
 			background-color: #FBFCFD;
 		}
@@ -386,6 +373,7 @@ function printResult(data) {
 				                    </div>
 				                  </div>
 				                </footer>
+				              </section>
 				              </section>
 				            </section>
 				          </section>
