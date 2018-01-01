@@ -1,6 +1,7 @@
 package once.order.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,6 +86,12 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public void updateStatusDelivery(List<OrderVO> deliveryOrderList) {
 		dao.updateStatusDelivery(deliveryOrderList);		
+	}
+
+	@Override
+	public void updateStaffNo(Map<String, Object> map) {
+		dao.updateStaffNo(map);
+		
 	}
 
 }

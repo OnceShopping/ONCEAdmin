@@ -1,6 +1,7 @@
 package once.order.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +90,12 @@ public class OrderDAOImpl implements OrderDAO {
 		for(int i=0; i<deliveryOrderList.size(); i++) {
 			sqlSession.update("once.order.dao.OrderDAO.updateStatusDelivery", deliveryOrderList.get(i).getOrderNo());
 		}
+		
+	}
+
+	@Override
+	public void updateStaffNo(Map<String, Object> map) {
+		sqlSession.update("once.order.dao.OrderDAO.updateStaffNo", map);
 		
 	}
 
