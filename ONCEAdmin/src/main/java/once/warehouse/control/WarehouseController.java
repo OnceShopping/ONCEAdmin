@@ -63,7 +63,7 @@ public class WarehouseController {
 
 		for(int i=0; i< orderList.size(); i++) {
 			String status = orderList.get(i).getStatus();
-			if(status != "수령완료") {
+			if( !status.equals("수령완료") ) {
 				totalCount++;
 			}
 		}

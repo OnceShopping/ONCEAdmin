@@ -26,7 +26,7 @@
 	
 	<!-- 물품 다 안왔을때 변경 -->
 	<update id="subtractWarehouse" parameterType="hashMap">
-		update warehouse set count = #{count} where memNo = #{memNo}
+		update warehouse set count = count - #{count} where memNo = #{memNo}
 	</update>
 	
 	<!-- 물품 다 왔을때 삭제 -->
