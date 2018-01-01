@@ -232,7 +232,7 @@ $(document).ready(function() {
 					}
 					$('#brCount').html('태그번호  '+brCount);
 					$('#wareNo').html(Notext);
-					$('#wareCount').text(tagmodal.tagList.length+'/'+tagmodal.count); 
+					$('#wareCount').text(tagmodal.warehouseVO.count+'/'+tagmodal.count); 
 				}
 			}); 
 			
