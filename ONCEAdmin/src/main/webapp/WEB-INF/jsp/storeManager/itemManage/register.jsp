@@ -53,6 +53,10 @@ var rgx2 = /(\d+)(\d{3})/;
 		document.getElementById('item').setAttribute('class','active');
 		document.getElementById('itemRegister').setAttribute('class','active');
 		
+		$('#big').val('');
+		$('#middle').val('');
+		$('#small').val('');
+		
 		//상품 코드가 기존에 존재하는지 여부 확인
 		$("#itemNo").change(function() {
 								
@@ -79,12 +83,9 @@ var rgx2 = /(\d+)(\d{3})/;
 			});
 		
 		$('#big').change(function(){
-			if($('#big').val().length!=1){
-				infoAlert2('<p>해당 카테고리 중 한 항목만 선택해주세요.</p>');
-				for(var i=0; i<$(".cate1").length; i++){
-					$(".cate1")[i].selected=false;
-				}
-			}else{
+			
+				$('#middle').val('');
+				$('#small').val('');
 				for(var i=0; i<$(".cate2").length; i++){
 					$(".cate2")[i].selected=false;
 				}
@@ -93,38 +94,33 @@ var rgx2 = /(\d+)(\d{3})/;
 					$('.cloths').show();
 					$('.stuff').show();
 				}
-			}			
+				if ( $('#big').val() =="남성" || $('#big').val() == "남아" ) {
+					$("#dress").hide();
+				}
 		});
 		
 		//중분류 선택에 따른 소분류 표시 변경
 		$("#middle").change(function(){
-			if($('#middle').val().length!=1){
-				infoAlert2('<p>해당 카테고리 중 한 항목만 선택해주세요.</p>');
-				for(var i=0; i<$(".cate2").length; i++){
-					$(".cate2")[i].selected=false;
-				}
-			}else{
 				var middleType = $(this).val();
 				
 				if(middleType=="의류"){
 					$('.cloths').show();
+					if ( $('#big').val() =="남성" || $('#big').val() == "남아" ) {
+						$("#small").val('');
+						$("#dress").hide();
+					}
+					$("#small").val('');
 					$('.stuff').hide();
 				}
 				else{
+					$("#small").val('');
 					$('.cloths').hide();
 					$('.stuff').show();
 				}				
-			}
 		});
 		
 		//소분류 선택에 따른 중분류 자동 선택
 		$("#small").change(function(){
-			if($('#small').val().length!=1){
-				infoAlert2('<p>해당 카테고리 중 한 항목만 선택해주세요.</p>');
-				for(var i=0; i<$(".cate3").length; i++){
-					$(".cate3")[i].selected=false;
-				}
-			}else{
 				var middleType = $("#middle").val();
 				var smallType = $(this).val();
 				
@@ -132,7 +128,6 @@ var rgx2 = /(\d+)(\d{3})/;
 					$("#middle").val('잡화').prop("selected", true);
 				else
 					$("#middle").val('의류').prop("selected", true);				
-			}
 		});	
 		
 		//다이얼로그 format 정의 - alert창
@@ -286,117 +281,117 @@ var rgx2 = /(\d+)(\d{3})/;
 				<section id="content">
 					<section class="vbox">
 						<section class="scrollable wrapper" style="padding-left: 50px">
-							<br />
-							<h3 class="font-bold m-b-none m-t-none">[${ storeName}] 상품 등록</h3>
-							<br /> <br />
-							<form action="${ pageContext.request.contextPath }/item/register"
+						<br />
+						<h3 class="font-bold m-b-none m-t-none">[${ storeName}] 상품 등록</h3>
+						 <form action="${ pageContext.request.contextPath }/item/register"
 								method="post" enctype="multipart/form-data">
-								<div style="background-color: #E0DFDF; height: 30px; padding: 5px; margin-top: 40px;" id="category">
-									<i class="fa fa-angle-double-right" aria-hidden="true" style="margin-right:5px;"></i>
-									<span style="font-size: 11pt; font-weight: bold; display:inline-block; vertical-align:middle;">상품 등록</span>
-								</div>
-								<br /> <br />
-								<table style="margin-left: 100px;">
-									<tr style="height: 60px;">
-										<td style="width: 150px; text-align: left;">상품 이름</td>
-										<td style="width: 30px;"></td>
-										<td style="width: 300px;"><input type="text" name="itemName" required="required" pattern="[^0-9]+$" title="숫자 또는 특수문자를 제외한 한글 또는 알파벳으로 작성해주세요." onkeypress="return charCheck(event)"></td>
-										<td style="width: 100px;"/>	
-										<td rowspan="5" style="width: 300px;"><div class="storeLogoImg" id="storeLogoImg"></div></td>	
-									</tr>
-									<tr style="height: 60px;">
-										<td style="text-align: left;">상품 코드</td>
-										<td style="width: 30px;"></td>
-										<td colspan="2"><input type="text" name="itemNo" id="itemNo" required="required" pattern="[A-Z0-9]+$" title="알파벳(대문자)와 숫자로 표시된 상품 코드를 확인해주시고 작성해주세요."  onkeypress="return charCheck(event)"><span style="padding-left: 20px;" id="checkItemNo"></span>
-										</td>
-									</tr>
-									<tr style="height: 60px;">
-										<td style="text-align: left;">색상</td>
-										<td style="width: 30px;"></td>
-										<td><input type="text" name="color" required="required"></td>
-										<td rowspan="3" style="width: 200px;"/>
-									</tr>
-									<tr style="height: 60px;">
-										<td style="text-align: left;">가격</td>
-										<td style="width: 30px;"></td>
-										<td><input type="text" style="text-align: right;"
-											name="price" required="required" onchange="getNumber(this);" onkeyup="getNumber(this);"></td>
-									</tr>
-									<tr style="height: 70px;">
-										<td style="text-align: left: ;">상품 대표 이미지</td>
-										<td style="width: 30px;"></td>
-										<td style="text-align: center;"><input type="file" value="파일 찾기" name="attachFile" required="required"onchange="javascript:document.getElementById('file_route').value=this.value; fileInfo(this);" accept="image/*"><input type="hidden" readonly="readonly" title="File Route" id="file_route"></td>
-									</tr>
-								</table>
-								<br />
-								<div style="background-color: #E0DFDF; height: 30px; padding: 5px; margin-top:50px;"
-										id="category">
-										<i class="fa fa-angle-double-right" aria-hidden="true" style="margin-right:5px;"></i>
-										<span style="font-size: 11pt; font-weight: bold; display:inline-block; vertical-align:middle;">카테고리
-											선택</span>
-									</div>
-									<table id="categoryTable"
-										style="margin-left: 100px;">
-										<tr style="height: 50px;"></tr>
-										<tr>
-											<td><div style="font-weight: bold; font-size: 10pt;">[
-													대분류 ]</div></td>
-											<td style="width: 10px;"></td>
-											<td><div style="font-weight: bold; font-size: 10pt;">[
-													중분류 ]</div></td>
-											<td style="width: 10px;"></td>
-											<td><div style="font-weight: bold; font-size: 10pt;">[
-													소분류 ]</div></td>
-										</tr>
-										<tr style="height: 10px;"></tr>
-										<tr>
-											<td>
-												<div class="col-lg-4 m-l-n" style="width: 220px;">
-													<select multiple class="form-control" id="big"
-														name="itemCategory1" required="required">
-														<option value="남성" class="cate1">남성</option>
-														<option value="여성" class="cate1">여성</option>
-														<option value="공용" class="cate1">공용</option>
-														<option value="남아" class="cate1">남아</option>
-														<option value="여아" class="cate1">여아</option>
-													</select>
-												</div>
-											</td>
-											<td style="width: 10px;"></td>
-											<td>
-												<div class="col-lg-4 m-l-n" style="width: 220px;">
-													<select multiple class="form-control" id="middle"
-														name="itemCategory2" required="required">
-														<option id="cloths" class="cate2">의류</option>
-														<option id="stuff" class="cate2">잡화</option>
-													</select>
-												</div>
-											</td>
-											<td style="width: 10px;"></td>
-											<td>
-												<div class="col-lg-4 m-l-n" style="width: 220px;">
-													<select multiple class="form-control" id="small"
-														name="itemCategory3" required="required">
-														<option id="top" class="cloths cate3">상의</option>
-														<option id="pants" class="cloths cate3">하의</option>
-														<option id="dress" class="cloths cate3">원피스</option>
-														<option id="outer" class="cloths cate3">아우터</option>
-														<option id="bag" class="stuff cate3">가방</option>
-														<option id="accessory" class="stuff cate3">악세서리</option>
-													</select>
-												</div>
-											</td>
-										</tr>
-										<tr style="height: 50px;"></tr>
-									</table>
-								<br />
-								<div align="right">
-									<input type="hidden" name="_method" value="post"> <input
-										type="submit" value="Next" class="btn btn-s-md btn-primary"
-										id="add"> <input type="hidden"
-										value="${loginVO.managerId }" name="id">
-								</div>
-							</form>
+						 <div class="col-sm-6" style="margin-top: 30px;">
+			                    <section class="panel panel-default">
+			                      <header class="panel-heading">
+			                        <strong>기본 정보 등록</strong>
+			                      </header>
+			                      <div class="panel-body">
+			                        <p class="text-muted">Please fill the information to continue</p>
+			                        <div class="form-group">
+			                          <label>상품 이름</label>
+			                          <input type="text" class="form-control" data-required="true" name="itemName" required="required" pattern="[^0-9]+$" title="숫자 또는 특수문자를 제외한 한글 또는 알파벳으로 작성해주세요." onkeypress="return charCheck(event)">                     
+			                        </div>
+			                        <div class="form-group">
+			                          <label>상품 코드</label>
+			                          <input type="text" class="form-control" data-type="email" data-required="true" name="itemNo" id="itemNo" required="required" pattern="[A-Z0-9]+$" title="알파벳(대문자)와 숫자로 표시된 상품 코드를 확인해주시고 작성해주세요."  onkeypress="return charCheck(event)"><span style="padding-left: 20px;" id="checkItemNo"></span>                        
+			                        </div>
+			                        <div class="form-group pull-in clearfix">
+			                          <div class="col-sm-6">
+			                            <label>Color</label>
+			                            <input type="text" name="color" class="form-control" data-required="true" required="required">   
+			                          </div>
+			                          <div class="col-sm-6">
+			                            <label>가격</label>
+			                            <input type="text" class="form-control" required="required" onchange="getNumber(this);" onkeyup="getNumber(this);" style="text-align: right;" name="price">     
+			                          </div>   
+			                        </div>
+			                      </div>
+			                    </section>
+			                   </div>
+			                    <div class="col-sm-6"  style="margin-top: 30px; margin-bottom: 220px;">
+				                    <section class="panel panel-default">
+				                      <header class="panel-heading">
+				                        <strong>Item 대표 Image 등록</strong>
+				                      </header>
+				                      <div class="panel-body">
+				                          <div class="form-group pull-in clearfix">
+				                            <div class="col-sm-6">
+				                              <label>상품 image</label>
+				                              <input type="file" value="파일 찾기" name="attachFile" required="required"onchange="javascript:document.getElementById('file_route').value=this.value; fileInfo(this);" accept="image/*"><input type="hidden" readonly="readonly" title="File Route" id="file_route">
+				                            </div>
+				                        </div>
+				                        </div>
+				                    </section>
+				                </div>
+				                <div class="col-sm-6">
+				                    <section class="panel panel-default">
+				                      <header class="panel-heading">
+				                        <strong>카테고리 설정</strong>
+				                      </header>
+				                      <div class="panel-body">                    
+				                        <div class="form-group">
+				                          <label class="col-sm-3 control-label">[대분류]</label>
+				                          <div class="col-sm-9"  style="margin-bottom: 10px;">
+				                            <select data-required="true" class="form-control" id="big" name="itemCategory1" required="required">
+				                                <option disabled="disabled">Please choose</option>
+				                                <option value="남성" class="cate1">남성</option>
+												<option value="여성" class="cate1">여성</option>
+												<option value="남아" class="cate1">남아</option>
+												<option value="여아" class="cate1">여아</option>
+				                            </select>
+				                          </div>
+				                          </div>
+				                          <div class="form-group">
+				                          <label class="col-sm-3 control-label">[중분류]</label>
+				                          <div class="col-sm-9"  style="margin-bottom: 10px;">
+				                            <select data-required="true" class="form-control" id="middle" name="itemCategory2" required="required">
+				                                <option disabled="disabled">Please choose</option>
+				                                <option id="cloths" class="cate2">의류</option>
+												<option id="stuff" class="cate2">잡화</option>
+				                            </select>
+				                          </div>
+				                        </div>
+				                        <div class="form-group">
+				                          <label class="col-sm-3 control-label">[소분류]</label>
+				                          <div class="col-sm-9"  style="margin-bottom: 10px;">
+				                            <select data-required="true" class="form-control" id="small" name="itemCategory3" required="required">
+				                                <option disabled="disabled">Please choose</option>
+				                                <option id="top" class="cloths cate3">상의</option>
+												<option id="pants" class="cloths cate3">하의</option>
+												<option id="dress" class="cloths cate3">원피스</option>
+												<option id="outer" class="cloths cate3">아우터</option>
+												<option id="bag" class="stuff cate3">가방</option>
+												<option id="accessory" class="stuff cate3">악세서리</option>
+				                            </select>
+				                          </div>
+				                        </div>
+				                      </div>
+				                    </section>
+				                </div>
+				               	<div class="col-sm-6">
+					               <section class="panel panel-default">
+					                  <header class="panel-heading">
+					                     <strong>Item Image</strong>
+					                     </header>
+					                     <div class="panel-body">                    
+					                     <div class="form-group">
+					                         <div class="storeLogoImg" id="storeLogoImg" style="text-align: center;"></div>
+				                        </div>
+				                      </div>  
+				                    </section>
+					         	  </div>
+					         	   <div style="float: right;">
+	                       				 <input type="hidden" name="_method" value="post"> <input
+											type="submit" value="Next" class="btn btn-s-md btn-primary"
+											id="add"> <input type="hidden"
+											value="${loginVO.managerId }" name="id">
+								</div>	
+			                  </form>
 						</section>
 					</section>
 				</section>

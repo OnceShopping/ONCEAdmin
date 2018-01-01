@@ -56,6 +56,25 @@ $(document).ready(function() {
 	document.getElementById('items').setAttribute('class', 'active');
 	document.getElementById('addItem').setAttribute('class','active');
 	
+	$( "#dialog" ).dialog({
+		 autoOpen: false,
+	      modal: true,
+	      width: '300',
+	      height: '200',
+	      padding : '10px',
+	      buttons : {
+	    	 OK : function(){	  
+	    	  	$(this).dialog("close");
+	    	 }
+	      }
+	 });
+	
+	//알림 모달 다이얼로그 태그 설정
+	function infoAlert(str){
+		$('#dialog').html("<div style='text-align:center;'><p>"+str+"</p></div>");
+		$("#dialog").dialog("open");
+	}
+	
 	var vo;
 	//태그 검색 클릭 전
 	$('#searchTagbar').toggle();
@@ -102,9 +121,9 @@ $(document).ready(function() {
 					$('#customerTag').text("TagNo : "+vo.tagStickerVO.tagNo);
 					$('#insertTag').show();
 				} else {
-					alert(vo.msg);
-					$('#customerID').text("ID");
-					$('#customerTag').text("TagNo");
+					infoAlert(vo.msg);
+					$('#customerID').text("ID :");
+					$('#customerTag').text("TagNo :");
 					$('#insertTag').hide();
 					$('#searchTagbar').val("");
 					$('#searchTagbar').focus();
@@ -193,8 +212,7 @@ $(document).ready(function() {
 			$('#wareOrderNo').text($(this).attr('id').substring(11));
 			$('#wareId').text($('#id-'+$(this).attr('id').substring(11)).text().substring(5));
 			var id = $('#id-'+$(this).attr('id').substring(11)).text().substring(5);
-			alert(id);
-			
+
 			 $.ajax({
 				url : '${pageContext.request.contextPath}/tag/oneTotalTag',
 				type : "get",
@@ -214,7 +232,7 @@ $(document).ready(function() {
 					}
 					$('#brCount').html('태그번호  '+brCount);
 					$('#wareNo').html(Notext);
-					$('#wareCount').text(tagmodal.warehouseVO.count+'/'+tagmodal.tagList.length); 
+					$('#wareCount').text(tagmodal.warehouseVO.count+'/'+tagmodal.count); 
 				}
 			}); 
 			
@@ -223,7 +241,8 @@ $(document).ready(function() {
 //			wareCount
 			$('#modal-warehouse').modal();
 		} else {
-			alert('없음');
+			
+			infoAlert("이 구역은 비어있습니다");
 		}
 	});
 	
@@ -245,6 +264,8 @@ $(document).ready(function() {
 		
 
 	<section class="vbox">
+		<!-- Modal -->
+		<div id="dialog" title="ALERT DIALOG"></div>
 		<!-- 상단바 -->
 			<jsp:include page="/WEB-INF/jsp/infoManager/include/topmenu.jsp" flush="false"></jsp:include>
 		<!-- 상단바 끝 -->
@@ -269,17 +290,17 @@ $(document).ready(function() {
 							<input type="button" value="확인" class="btn btn-success" id="searchTagButton">
 							</div>
 							<div class="col-sm-8">
-							<section class="panel panel-default col-sm-2">
+							<section class="panel panel-default col-sm-2" style="width: 200px;">
                     		<div class="panel-body" id="customerID">ID</div>
                   			</section>
 							<br><br><br><br>
-							<section class="panel panel-default col-sm-2">
+							<section class="panel panel-default col-sm-2" style="width: 200px;">
                     		<div class="panel-body" id="customerTag">TagNo</div>
                   			</section>
-                  			<section class=" col-sm-6" style="padding-left: 100px">
+                  			<section class=" col-sm-6" style="padding-left: 100px;  padding-right: 30px">
                   			<br>
-                  			<input type="button" value="태그 등록" class="btn btn-success" id="insertTag">
-                  			</section>
+                  			<input type="button" value="태그 등록" class="btn btn-success" id="insertTag" style="float: right;">
+                  			</section> 
                   			<br><br><br><br>
 							</div>
 							

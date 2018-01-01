@@ -321,23 +321,18 @@ td{
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
 							<h3 class="font-bold m-b-none m-t-none">[${ itemOne.storeName}] 상품 추가 등록</h3>
-							<br /><br />
 							<form action="${ pageContext.request.contextPath }/item/extraAdd" method="post" id="registerItem">
-								<div
-									style="background-color: #E0DFDF; height: 30px; padding: 5px; margin-top: 40px;"
-									id="registerDetail">
-									<i class="fa fa-angle-double-right" aria-hidden="true" style="margin-right:5px;"></i>
-									<span style="font-size: 11pt; font-weight: bold; display:inline-block; vertical-align:middle;">SIZE 및 COUNT 추가 등록 </span>
-								</div>
-								<div>
-								<p style="padding-top: 50px; font-size: 11pt; font-weight: bold; margin-left: 26px; margin-bottom: 10px;">[SIZE 및 COUNT]</p>
-								<table id="itemDetail" style="margin-left: 90px; margin-top: 20px; margin-bottom: 50px;">
-									<tr>
-										<td style="width: 50px;" align="right">SIZE</td>
-										<td style="width: 10px;"></td>
-										<td style="width: 50px;">
-											<select id="size" style="width: 150px; height: 25px;">
-												<option value="Free">Free</option>
+								<div class="col-sm-6" style="margin-top: 30px;">
+								<section class="panel panel-default">
+			                      <header class="panel-heading">
+			                        <strong>SIZE 및 COUNT 추가 등록</strong>
+			                      </header>
+			                      <div class="panel-body">
+			                        <div class="form-group">
+				                          <label class="col-sm-3 control-label">SIZE</label>
+				                          <div class="col-sm-9">
+				                            <select class="form-control" id="size">
+				                                <option value="Free">Free</option>
 												<c:if test="${ itemOne.itemCategory2 eq '의류' }">
 													<option value="S">S</option>
 													<option value="M">M</option>
@@ -352,29 +347,38 @@ td{
 													<option value="88">88</option>
 												</c:if>
 											</select>
-										</td>
-										<td style="width: 20px;"></td>
-										<td style="width: 50px;" align="right">COUNT</td>
-										<td style="width: 10px;"></td>
-										<td style="width: 50px;"><input type="number" id="count" min="0" onkeypress="return numberCheck(event)" style="text-align: right;"></td>
-										<td style="width: 20px;"></td>
-										<td style="width: 50px;"><input type="button"
-											name="addItem" id="addItem" value="추가"></td>
-									</tr>
-								</table>
-								</div>
-								<br/>
-								<div>
-									<p style="font-size: 11pt; font-weight: bold; margin-left: 25px;">[추가 상품 현황]</p>
-									<table style="width: 900px; margin-left: 51px;  margin-top: 20px; margin-bottom: 50px;" id="AddList">
-										<tr>
-											<th style="width: 20%;">상품 이름</th>
-											<th style="width: 20%;">상품 코드</th>
-											<th style="width: 20%;">SIZE</th>
-											<th style="width: 20%;">COUNT</th>
-											<th style="width: 20%;">삭제</th>
-										</tr>
-										<c:forEach var="item" items="${itemList}" varStatus="status">
+				                          </div>
+				                    </div>
+				                    <div class="form-group">
+				                          <label class="col-sm-3 control-label">COUNT</label>
+				                          <div class="col-sm-9">
+				                            <input type="number" id="count" min="0" onkeypress="return numberCheck(event)" style="text-align: right;" class="form-control">
+				                          </div>
+				                    </div>
+			                        <div class="col-sm-6" style="padding-top: 25px;float: right;">
+			                            <input type="button" name="addItem" id="addItem" value="추가" class="btn btn-s-md btn-default" >     
+			                          </div>
+			                      </div>
+			                    </section>
+			                    </div>
+			                    <div class="col-sm-6" style="margin-top: 30px;">
+								<section class="panel panel-default">
+					                 <header class="panel-heading">
+			                        <strong>추가 상품 현황</strong>
+			                      </header>
+					                <div class="table-responsive">
+					                  <table class="table table-striped b-t b-light"  id="AddList">
+					                    <thead>
+					                      <tr>
+					                        <th>상품 이름</th>
+					                        <th>상품 코드</th>
+					                        <th>SIZE</th>
+					                        <th>COUNT</th>
+					                        <th>삭제</th>
+					                      </tr>
+					                    </thead>
+					                    <tbody>
+					                    <c:forEach var="item" items="${itemList}" varStatus="status">
 										<tr>
 											<td style='text-align:center;'><c:out value="${item.itemName}"></c:out></td>
 											<td style='text-align:center;'><c:out value="${item.itemNo}"></c:out></td>
@@ -383,16 +387,18 @@ td{
 											<td style='text-align:center;'><a class='delete' onclick="impossible()" style="color:gray;" id="${item.size}"><i class="fa fa-minus" aria-hidden="true"></i></a></td>
 										</tr>
 										</c:forEach>
-									</table>
-								</div>
-								<br/><br/>
-								<div align="right">
-									<input type="hidden" name="_method" value="post"> 
-									<input type="submit" value="등록" class="btn btn-s-md btn-primary" id="finish">
-									<input type="hidden" value="${ itemOne.storeName }" name="storeName">
-									<input type="hidden" value="${ itemOne.itemName }" name="itemName" id="itemName">
-									<input type="hidden" value="${ itemOne.itemNo }" name="itemNo" id="itemNo">
-									<input type="hidden" value="${fn:length(itemList)}" id="index">
+					                    </tbody>
+					                  </table>
+					                </div>
+					                <footer style="float: right; margin-top: 10px;">
+					                	<input type="hidden" name="_method" value="post"> 
+											<input type="submit" value="등록" class="btn btn-s-md btn-primary" id="finish">
+											<input type="hidden" value="${ itemOne.storeName }" name="storeName">
+											<input type="hidden" value="${ itemOne.itemName }" name="itemName" id="itemName">
+											<input type="hidden" value="${ itemOne.itemNo }" name="itemNo" id="itemNo">
+											<input type="hidden" value="${fn:length(itemList)}" id="index">
+										</footer>
+									</section>
 								</div>
 							</form>
 						</section>

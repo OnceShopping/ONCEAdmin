@@ -11,7 +11,7 @@
 	
 	<!-- 주문 전체 검색 -->
 	<select id="selectAllOrder" resultType="OrderVO" parameterType="String">
-		select * from orderlist where floor = #{floor}
+		select * from orderlist where floor = #{floor} and status not in ('수령완료');
 	</select>
 	
 	<!-- 주문 유저 한명만 검색 -->
@@ -89,6 +89,10 @@
 	<update id="updateStatusDelivery" parameterType="int">
 		update orderList set status = '상품전달완료' where orderNo = #{orderNo}
 	</update>
-
+	
+	<!-- 승인한 staffNo 넣기 -->
+	<update id="updateStaffNo" parameterType="HashMap">
+		update orderList set staffNo = #{staffNo} where orderNo = #{orderNo}
+	</update>
 </mapper>
 

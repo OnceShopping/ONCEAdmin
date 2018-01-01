@@ -59,10 +59,16 @@ public class WarehouseController {
 		
 		List<OrderVO> orderList = oService.memNoOrderList(memNo);
 		
-		
-		
-		int totalCount = orderList.size();
+		int totalCount = 0;
 
+		for(int i=0; i< orderList.size(); i++) {
+			String status = orderList.get(i).getStatus();
+			if( !status.equals("수령완료") ) {
+				totalCount++;
+			}
+		}
+		
+		
 				if(warehouseVO != null) {
 
 					service.updateWarehouse(memNo);
