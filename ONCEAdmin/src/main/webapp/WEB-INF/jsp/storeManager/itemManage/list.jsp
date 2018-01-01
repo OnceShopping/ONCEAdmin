@@ -374,12 +374,11 @@ function printResult(data) {
 				                  </div>
 				                </footer>
 				              </section>
-				              </section>
 				            </section>
-				          </section>
-						</section>
-					</section>
+				     </section>
 				</section>
 			</section>
+		</section>
+	</section>	
 </body>
 </html>

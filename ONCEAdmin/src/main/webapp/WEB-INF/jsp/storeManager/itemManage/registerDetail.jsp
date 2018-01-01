@@ -320,63 +320,48 @@ var third = 0;
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
 							<h3 class="font-bold m-b-none m-t-none">[${item.storeName}] 상품 등록</h3>
-							<br /><br /><br /><br />
 							<form action="${ pageContext.request.contextPath }/item/registerDetail"
 								method="post" enctype="multipart/form-data" id="registerItem">
-								<div style="background-color: #E0DFDF; height: 30px; padding: 5px;"
-									id="registerImg">
-									<i class="fa fa-angle-double-right" aria-hidden="true" style="margin-right: 10px;"></i> <span
-										style="font-size: 11pt; font-weight: bold; display:inline-block; vertical-align:middle;">상품 이미지 등록 </span>
-								</div>
-								<table style="margin-left: 100px;" id="images">
-									<tr style="height: 30px;"/>
-									<tr style="height: 100px;">
-										<td style="width: 200px;">상세 이미지 등록</td>										
-										<td><input type="file" value="파일 찾기" id="uploadLogo1" name="attachFile0"  accept="image/*" onchange="fileInfo(this, '0')"></td>
-										<!-- 이미지 -->
-										<td rowspan="3" style="width: 50px;">
-										<td rowspan="3" style="width: 300px;">
-											<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-												<!-- Wrapper for slides -->
-												
-											  <!-- Controls -->
-											  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-											    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-											    <span class="sr-only">Previous</span>
-											  </a>
-											  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-											    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-											    <span class="sr-only">Next</span>
-											  </a>
-											</div>
-										</td>
-									</tr>
-									<tr style="height: 100px;">
-										<td>상세 이미지 등록</td>
-										<td><input type="file" value="파일 찾기" id="uploadLogo2" name="attachFile1" accept="image/*" onchange="fileInfo(this, '1')"></td>
-									</tr>
-									<tr style="height: 100px;">
-										<td>상세 이미지 등록</td>
-										<td><input type="file" value="파일 찾기" id="uploadLogo3" name="attachFile2" accept="image/*" onchange="fileInfo(this, '2')"></td>
-									</tr>
-								</table>
-								<br /> <br />
-								<div
-									style="background-color: #E0DFDF; height: 30px; padding: 5px;"
-									id="registerDetail">
-									<i class="fa fa-angle-double-right" aria-hidden="true" style="margin-right:5px;"></i>
-									<span style="font-size: 11pt; font-weight: bold; display:inline-block; vertical-align:middle;">상세
-										정보 등록 </span>
-								</div>
-								<div>
-								<p style="padding-top: 50px; font-weight: bold; font-size: 11pt; margin-left: 26px; margin-bottom: 10px;">[SIZE 및 COUNT 등록]</p>
-								<table id="itemDetail" style="margin-left: 90px; margin-top: 20px;">
-									<tr>
-										<td style="width: 50px;" align="right">SIZE</td>
-										<td style="width: 10px;"></td>
-										<td style="width: 50px;">
-											<select id="size" style="width: 150px; height: 25px;">
-												<option value="Free">Free</option>
+							<div class="col-sm-6" style="margin-top: 30px;">
+			                    <section class="panel panel-default">
+			                      <header class="panel-heading">
+			                        <strong>상품 상세 등록</strong>
+			                      </header>
+			                      <div class="panel-body">
+			                        <div class="form-group">
+			                          <label>상세 이미지 1</label>
+			                          <input type="file" value="파일 찾기" id="uploadLogo1" name="attachFile0"  accept="image/*" onchange="fileInfo(this, '0')">                     
+			                        </div>
+			                        <div class="form-group">
+			                          <label>상세 이미지 2</label>
+			                          <input type="file" value="파일 찾기" id="uploadLogo2" name="attachFile1" accept="image/*" onchange="fileInfo(this, '1')" >                        
+			                        </div>
+			                        <div class="form-group pull-in clearfix">
+			                          <div class="col-sm-6">
+			                            <label>상세 이미지 2</label>
+			                            <input type="file" value="파일 찾기" id="uploadLogo3" name="attachFile2" accept="image/*" onchange="fileInfo(this, '2')">
+			                          </div>
+			                        </div>
+			                        <div class="form-group pull-in clearfix">
+			                          <div class="col-sm-6">
+			                            <label>상품 상세 정보</label>
+			                           	 <textarea rows="3" cols="70" name="detail" style="resize: none;"></textarea>
+			                          </div>
+			                        </div>
+			                      </div>
+			                    </section>
+			                   </div>
+			                   <div class="col-sm-6"style="margin-top: 30px; margin-bottom: 200px;">
+			                    <section class="panel panel-default">
+			                      <header class="panel-heading">
+			                        <strong>상세 정보 등록</strong>
+			                      </header>
+			                      <div class="panel-body">
+			                        <div class="form-group">
+				                          <label class="col-sm-3 control-label">SIZE</label>
+				                          <div class="col-sm-9"  style="margin-bottom: 10px;">
+				                            <select data-required="true" class="form-control" id="size" name="itemCategory1" required="required">
+				                                <option value="Free">Free</option>
 												<c:if test="${ item.itemCategory2 eq '의류' }">
 													<option value="S">S</option>
 													<option value="M">M</option>
@@ -391,44 +376,74 @@ var third = 0;
 													<option value="88">88</option>
 												</c:if>
 											</select>
-										</td>
-										<td style="width: 20px;"></td>
-										<td style="width: 50px;" align="right">COUNT</td>
-										<td style="width: 10px;"></td>
-										<td style="width: 50px;"><input type="number" id="count" min="0" onkeypress="return numberCheck(event)" style="text-align: right;"></td>
-										<td style="width: 20px;"></td>
-										<td style="width: 50px;"><input type="button"
-											name="addItem" id="addItem" value="추가"></td>
-									</tr>
-								</table>
-								<br/><br/>
-								</div>
-								<br/>
-								<div>
-									<p style="font-size: 11pt; font-weight: bold; margin-left: 25px;">[추가 상품 현황]</p>
-									<table style="width: 900px; margin-left: 51px;  margin-top: 20px;" id="AddList">
-										<tr>
-											<th style="width: 20%; text-align: center;">상품 이름</th>
-											<th style="width: 20%; text-align: center;">상품 코드</th>
-											<th style="width: 20%; text-align: center;">SIZE</th>
-											<th style="width: 20%; text-align: center;">COUNT</th>
-											<th style="width: 20%; text-align: center;">삭제</th>
-										</tr>
-									</table>
-								</div><br/><br/><br/><br/>
-								<div>
-									<p style="font-size: 11pt; font-weight: bold; margin-left: 25px;">[상품 상세 정보]</p>
-									<div style="margin-left: 114px;  margin-top: 20px;">
-										<textarea rows="3" cols="110" name="detail" style="resize: none;"></textarea>
-									</div>
-								</div>
-								<br/><br/>
-								<div align="right">
-									<input type="hidden" name="_method" value="post"> 
-									<input type="submit" value="등록" class="btn btn-s-md btn-primary" id="finish">
-									<input type="hidden" value="${ item.itemNo }" name="itemNo" id="itemNo">
-									<input type="hidden" value="${ item.itemName }" name="itemName" id="itemName">
-									<input type="hidden" value="${ item.managerId }" name="id">
+				                          </div>
+				                    </div>
+				                    <div class="form-group">
+				                          <label class="col-sm-3 control-label">COUNT</label>
+				                          <div class="col-sm-9">
+				                            <input type="number" id="count" name="count" min="0" onkeypress="return numberCheck(event)" style="text-align: right;" class="form-control" data-required="true" required="required">
+				                          </div>
+				                    </div>
+			                        <div class="col-sm-6" style="padding-top: 25px;float: right;">
+			                            <input type="button" name="addItem" id="addItem" value="추가" class="btn btn-s-md btn-default" >     
+			                          </div>
+			                      </div>
+			                    </section>
+			                   </div>
+			                    <div class="col-sm-6">
+				                    <section class="panel panel-default">
+				                      <header class="panel-heading">
+				                        <strong>Item Image</strong>
+				                      </header>
+				                      <div class="panel-body">
+				                          <div class="form-group pull-in clearfix">
+				                            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+				                            	<!-- Wrapper for slides -->
+											
+												<div align="center">	
+													<!-- Controls -->
+												  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+												    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+												    <span class="sr-only">Previous</span>
+												  </a>
+												  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+												    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+												    <span class="sr-only">Next</span>
+												  </a>
+				                            </div>
+				                            </div>
+				                        </div>
+				                        </div>
+				                    </section>
+				                </div>
+			                    <div class="col-sm-6">
+								<section class="panel panel-default">
+					                 <header class="panel-heading">
+			                        <strong>추가 상품 현황</strong>
+			                      </header>
+					                <div class="table-responsive">
+					                  <table class="table table-striped b-t b-light"  id="AddList">
+					                    <thead>
+					                      <tr>
+					                        <th>상품 이름</th>
+					                        <th>상품 코드</th>
+					                        <th>SIZE</th>
+					                        <th>COUNT</th>
+					                        <th>삭제</th>
+					                      </tr>
+					                    </thead>
+					                    <tbody>
+					                    </tbody>
+					                  </table>
+					                </div>
+					                <footer style="float: right; margin-top: 10px;">
+					                	<input type="hidden" name="_method" value="post"> 
+											<input type="submit" value="등록" class="btn btn-s-md btn-primary" id="finish">
+											<input type="hidden" value="${ item.itemNo }" name="itemNo" id="itemNo">
+											<input type="hidden" value="${ item.itemName }" name="itemName" id="itemName">
+											<input type="hidden" value="${ item.managerId }" name="id">
+										</footer>
+									</section>
 								</div>
 							</form>
 						</section>
