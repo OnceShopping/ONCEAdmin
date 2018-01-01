@@ -1,6 +1,7 @@
 package once.order.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import once.order.vo.OrderDetailVO;
 
@@ -32,5 +33,7 @@ public interface OrderDAO {
 	void updateStatusAccpet(int orderNo);
 
 	void updateStatusDelivery(List<OrderVO> deliveryOrderList);
+
+	void updateStaffNo(Map<String, Object> map);
 
 }

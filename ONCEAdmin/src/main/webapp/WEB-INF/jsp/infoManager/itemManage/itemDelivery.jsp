@@ -57,6 +57,25 @@ $(document).ready(function() {
 	document.getElementById('items').setAttribute('class', 'active');
 	document.getElementById('itemDelivery').setAttribute('class','active');
 	
+	$( "#dialog" ).dialog({
+		 autoOpen: false,
+	      modal: true,
+	      width: '300',
+	      height: '200',
+	      padding : '10px',
+	      buttons : {
+	    	 OK : function(){	  
+	    	  	$(this).dialog("close");
+	    	 }
+	      }
+	 });
+	
+	//알림 모달 다이얼로그 태그 설정
+	function infoAlert(str){
+		$('#dialog').html("<div style='text-align:center;'><p>"+str+"</p></div>");
+		$("#dialog").dialog("open");
+	}
+	
 	$('#customSearchResult').toggle();
 	$('#customDelivery').toggle();
 	$('#orderMsgName').hide();
@@ -95,19 +114,22 @@ $(document).ready(function() {
 					
 					for(var i=0; i<customer.orderList.length; i++) {
 						var table;
+						if(customer.orderList[i].status == "수령완료")
+							continue;
+						
 						table += '<tr>';
 						table += '<td>'+customer.orderList[i].orderNo+'</td>';
 						table += '<td>'+customer.orderList[i].storeName+'</td>';
 						table += '<td>'+customer.orderList[i].count+'</td>';
 						
 						switch(customer.orderList[i].status) {
-						case "결재완료" : table += '<td><span class="label bg-info">결재완료</span></td>';
+						case "결제완료" : table += '<td><span class="label bg-info" name="status'+customer.orderList[i].orderNo+'">결제완료</span></td>';
 							break;
-						case "상품승인완료" : table += '<td><span class="label bg-primary">상품승인완료</span></td>';
+						case "상품승인완료" : table += '<td><span class="label bg-primary" name="status'+customer.orderList[i].orderNo+'">상품승인완료</span></td>';
 							break;
-						case "상품전달완료" : table += '<td><span class="label bg-success">상품전달완료</span></td>';
+						case "상품전달완료" : table += '<td><span class="label bg-success" name="status'+customer.orderList[i].orderNo+'">상품전달완료</span></td>';
 							break;
-						case "상품준비완료" : table += '<td><span class="label bg-danger">상품준비완료</span></td>';
+						case "상품준비완료" : table += '<td><span class="label bg-danger" name="status'+customer.orderList[i].orderNo+'">상품준비완료</span></td>';
 							break;
 						}
 						
@@ -120,7 +142,7 @@ $(document).ready(function() {
 							+'value="'+customer.orderList[i].orderNo+'"><i></i></label></td>';
 						}
 						table += '</tr>';
-						table += '<input type="hidden"'
+						
 						$('#tableOrderList').html(table);
 						$('#tableTotalCount').text(customer.wareCount+'/'+customer.totalCount);
 						$('#Counts').val($('#tableTotalCount').text());
@@ -158,6 +180,33 @@ $(document).ready(function() {
 		$('#cancelClick').hide();
 	});
 	
+	
+	$('#submitForm').submit(function() {
+		//체크낸 것을 먼저 골라냄 -> 그 다음 반복문으로 다 돌려서 이상 없으면 보내고 아니면 모달창 띠우기
+		var checkOrder = new Array(); 
+		$('input[type="checkbox"]:checked')
+		var length = $('input[name="post"]').length;
+		
+		for(var i=0; i<length; i++) {
+			if($('input[name="post"]:eq('+i+')').prop("checked") ) {
+				var value = $('input[name="post"]:eq('+i+')').val();
+				checkOrder.push(value);
+			}
+		}
+		
+		 for(var i=0; i<checkOrder.length; i++) {
+			var status = $('span[name=status'+checkOrder[i]+']').text();
+			if(status != '상품준비완료') {
+				infoAlert("준비완료가 아닌 물품이 체크되어있습니다");
+				return false;
+				break;
+			} else if( i == checkOrder.length -1 ){
+				return true;
+			}
+		} 
+		
+		
+	});
 });
 </script>
 <style type="text/css">
@@ -184,6 +233,8 @@ $(document).ready(function() {
 </head>
 <body class="">
 	<section class="vbox">
+		<!-- Modal -->
+		<div id="dialog" title="ALERT DIALOG"></div>
 		<!-- 상단바 -->
 			<jsp:include page="/WEB-INF/jsp/infoManager/include/topmenu.jsp" flush="false"></jsp:include>
 		<!-- 상단바 끝 -->
@@ -217,7 +268,7 @@ $(document).ready(function() {
 							</section>
 							
 							<!-- 검색결과 테이블창 -->
-							<form action="${ pageContext.request.contextPath }/info/handOver">
+							<form action="${ pageContext.request.contextPath }/info/handOver" id="submitForm">
 							<section class="panel panel-default" id="customSearchResult">
 								<header class="panel-heading font-bold"> 검색결과 </header>
 								<div class="table-responsive">

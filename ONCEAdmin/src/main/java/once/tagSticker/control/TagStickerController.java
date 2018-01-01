@@ -91,20 +91,25 @@ public class TagStickerController {
 		List<TagStickerVO> tagList = service.selectTagByMemNo(customerVO.getMemNo());
 		
 		WarehouseVO warehouseVO = wService.selectOneWarehouse(customerVO.getMemNo());
-		
+		int count = 0;
 		for (int i = 0; i < orderList.size(); i++) {
 			int orderNo = orderList.get(i).getOrderNo();
 			String orderStatus = orderList.get(i).getStatus();
+			
+			if(!orderStatus.equals("수령완료"))
+				count++;
+			
 			for (int j = 0; j < tagList.size(); j++) {
 				int tagOrderNo = tagList.get(j).getOrderNo();
-				if(orderNo == tagOrderNo && orderStatus.equals("상품준비완료")) {
+				if(orderNo == tagOrderNo && !orderStatus.equals("수령완료")  ) {
+					
 					continue;
-				} else if (orderNo == tagOrderNo && !orderStatus.equals("상품준비완료")) {
+				} else if (orderNo == tagOrderNo && orderStatus.equals("수령완료") ) {
 					tagList.remove(j);
 				}
 			}
 		}
-		
+		map.put("count", count);
 		map.put("orderList", orderList);
 		map.put("customerVO", customerVO);
 		map.put("warehouseVO", warehouseVO);

@@ -1,6 +1,7 @@
 package once.order.service;
 
 import java.util.List;
+import java.util.Map;
 
 import once.order.vo.OrderDetailVO;
 
@@ -32,5 +33,7 @@ public interface OrderService {
 	void updateStatusDelivery(List<OrderVO> deliveryOrderList);
 
 	void updateStatusDelivery(int memNo);
+
+	void updateStaffNo(Map<String, Object> map);
 
 }

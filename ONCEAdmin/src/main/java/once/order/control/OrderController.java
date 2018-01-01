@@ -300,6 +300,11 @@ public class OrderController {
 		TagStickerVO tagStickerVO = new TagStickerVO(tagNo, Integer.parseInt(words[1]), orderNo, loginVO.getStaffNo());
 		tService.insertTag(tagStickerVO);
 		
+		Map<String, Object> map = new HashMap<>();
+		map.put("staffNo", loginVO.getStaffNo());
+		map.put("orderNo", orderNo);
+		
+		service.updateStaffNo(map);
 		mav.setViewName("redirect:/orderList/orderList");
 		mav.addObject("orderList", resultOrderList);
 		mav.addObject("orderCount", orderCount);

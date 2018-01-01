@@ -385,7 +385,7 @@
 							<div style="text-align: right;">
 								<p style="float: left;">전체 주문 내역:&nbsp;&nbsp;<u>${orderCount}</u> 개</p>
 								<div style="margin-left: 30px;">
-									<select id="choice" onchange="showOption()" style="width: 85px;">
+									<select id="choice" onchange="showOption()" style="width: 85px;" class="m-b">
 										<option value="all">전체</option>
 										<option value="status">처리사항</option>
 										<option value="orderNo">주문번호</option>

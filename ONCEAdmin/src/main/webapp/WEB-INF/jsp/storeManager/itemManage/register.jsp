@@ -79,12 +79,16 @@ var rgx2 = /(\d+)(\d{3})/;
 			});
 		
 		$('#big').change(function(){
+			
+			
+			
 			if($('#big').val().length!=1){
 				infoAlert2('<p>해당 카테고리 중 한 항목만 선택해주세요.</p>');
 				for(var i=0; i<$(".cate1").length; i++){
 					$(".cate1")[i].selected=false;
 				}
 			}else{
+				
 				for(var i=0; i<$(".cate2").length; i++){
 					$(".cate2")[i].selected=false;
 				}
@@ -92,6 +96,9 @@ var rgx2 = /(\d+)(\d{3})/;
 					$(".cate3")[j].selected=false;
 					$('.cloths').show();
 					$('.stuff').show();
+				}
+				if ( $('#big').val() =="남성" || $('#big').val() == "남아" ) {
+					$("#dress").hide();
 				}
 			}			
 		});
@@ -108,6 +115,9 @@ var rgx2 = /(\d+)(\d{3})/;
 				
 				if(middleType=="의류"){
 					$('.cloths').show();
+					if ( $('#big').val() =="남성" || $('#big').val() == "남아" ) {
+						$("#dress").hide();
+					}
 					$('.stuff').hide();
 				}
 				else{
@@ -356,7 +366,6 @@ var rgx2 = /(\d+)(\d{3})/;
 														name="itemCategory1" required="required">
 														<option value="남성" class="cate1">남성</option>
 														<option value="여성" class="cate1">여성</option>
-														<option value="공용" class="cate1">공용</option>
 														<option value="남아" class="cate1">남아</option>
 														<option value="여아" class="cate1">여아</option>
 													</select>
