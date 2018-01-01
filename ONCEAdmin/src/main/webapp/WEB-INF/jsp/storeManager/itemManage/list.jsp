@@ -284,37 +284,55 @@ function printResult(data) {
 				<!-- 사이드 메뉴 끝 -->
 				<section id="content">
 					<section class="vbox">
-						<section class="scrollable wrapper" style="padding-left: 50px">
+						<section class="scrollable wrapper" style="padding-left: 50px;">
 							<br />
-							<h3 class="font-bold m-b-none m-t-none">[${storeName}] 상품 리스트</h3>
-							<form id = "searchForm">
-							<div align="right" style="margin-top:20px; margin-bottom:30px;">
-								<select  id="searchType" name="searchType" style="height: 27px">
-									<option value="itemName" id="itemName">상품이름</option>
-									<option value="itemNo" id="itemNo">상품코드</option>
-								</select>
-								<input type="text" id="searchText" name="searchText">
-								<input type="hidden" id="storeName" name="storeName" value="${storeName}">
-								<input type="submit" value="검색" data-toggle="modal" data-target="#exampleModal"/>
-							</div>
-							</form>
-							<form action="${ pageContext.request.contextPath }/item/list" method="post" id="sortTable">
-							<table class="itemList" style="width: 100%; margin-bottom: 100px;">
-								<tr style="text-align: center; background-color: #E7E7E7; height: 30px; padding: 5px;" >
-									<th style="width: 5%;">No.</th>
-									<th style="width: 10%;">상품 이름</th>
-									<th style="width: 10%;">상품 코드</th>
-									<th style="width: 7%;">색상</th>
-									<th style="width: 12%;"><a onclick="javascript:document.getElementById('category').value='itemCategory1'; sort();" class="selector"><span style="margin-right: 10px;">남성/여성</span><i class="fa fa-caret-down" aria-hidden="true"></i></a></th>
-									<th style="width: 13%;"><a onclick="javascript:document.getElementById('category').value='itemCategory2'; sort();" class="selector"><span style="margin-right: 10px;">의류/잡화</span><i class="fa fa-caret-down" aria-hidden="true"></i></a></th>
-									<th style="width: 13%;"><a onclick="javascript:document.getElementById('category').value='itemCategory3'; sort();" class="selector"><span style="margin-right: 10px;">Category</span><i class="fa fa-caret-down" aria-hidden="true"></i></a></th>
-									<th style="width: 5%;">SIZE</th>
-									<th style="width: 10%;">수량 (개)</th>
-									<th style="width: 10%;">가격 (원)</th>
-								</tr>
-								<c:forEach var="item" items="${itemList}" varStatus="index">
-									<tr>
-										<td><c:out value="${ index.count + startPage }"/></td>
+							<h3 class="font-bold m-b-none m-t-none">상품 리스트</h3>
+							  <section class="panel panel-default" style=" margin-top: 30px;">
+				                <header class="panel-heading">
+				                  <b>${storeName}</b>
+				                </header>
+				                <div class="row wrapper">
+				                <div class="col-sm-5 m-b-xs"></div>
+                  				<div class="col-sm-2 m-b-xs"></div>
+                  				<form id="searchForm">
+				                <div class="col-sm-2 m-b-xs" style="padding-right: 0px;" align="right">
+				                    <select class="input-sm form-control input-s-sm inline v-middle" id="searchType" name="searchType" >
+					                    <option value="itemName" id="itemName">상품 이름</option>
+										<option value="itemNo" id="itemNo">상품 코드</option>
+				                    </select>
+				               	</div>
+				                  <div class="col-sm-3" >
+				                    <div class="input-group">
+				                      	<input type="text" class="input-sm form-control" placeholder="Search" id="searchText" name="searchText">
+										<input type="hidden" id="storeName" name="storeName" value="${storeName}">
+				                      <span class="input-group-btn">
+				                        <input type="submit" value="검색" class="btn btn-sm btn-default" data-toggle="modal" data-target="#exampleModal"/>
+				                      </span>
+				                    </div>
+				                  </div>
+				                  </form> 
+				                </div>
+				                <div class="table-responsive">
+				                <form action="${ pageContext.request.contextPath }/item/list" method="post" id="sortTable">
+				                  <table class="table table-striped b-t b-light">
+				                    <thead>
+				                      <tr>
+				                        <th width="20">No.</th>
+				                        <th>상품 이름 </th>
+				                        <th style="width: 10%;">상품 코드</th>
+										<th style="width: 7%;">색상</th>
+										<th style="width: 12%;"><a onclick="javascript:document.getElementById('category').value='itemCategory1'; sort();" class="selector"><span style="margin-right: 10px;font-size: 13px;">남성/여성</span><i class="fa fa-caret-down" aria-hidden="true"></i></a></th>
+										<th style="width: 13%;"><a onclick="javascript:document.getElementById('category').value='itemCategory2'; sort();" class="selector"><span style="margin-right: 10px;font-size: 13px;">의류/잡화</span><i class="fa fa-caret-down" aria-hidden="true"></i></a></th>
+										<th style="width: 13%;"><a onclick="javascript:document.getElementById('category').value='itemCategory3'; sort();" class="selector"><span style="margin-right: 10px;font-size: 13px;">Category</span><i class="fa fa-caret-down" aria-hidden="true"></i></a></th>
+										<th style="width: 5%;">SIZE</th>
+										<th style="width: 10%;">수량 (개)</th>
+										<th style="width: 10%;">가격 (원)</th>
+				                      </tr>
+				                    </thead>
+				                    <tbody>
+				                    <c:forEach var="item" items="${itemList}" varStatus="index">
+				                      <tr>
+				                        <td><c:out value="${ index.count + startPage }"/></td>
 										<td><c:out value="${ item.itemName }"/></td>
 										<td><c:out value="${ item.itemNo }"/></td>
 										<td><c:out value="${ item.color }"/></td>
@@ -325,11 +343,20 @@ function printResult(data) {
 										<td style="text-align: right" id="itemCount_${ index.count }"><c:out value="${ item.count }"/></td>
 										<td style="text-align: right" id="itemIndex_${ index.count }"><c:out value="${ item.price }"/></td>
 									</tr>
-								</c:forEach>
-							</table>
-							<div class="col-sm-4 text-right text-center-xs" style="margin-left: 340px;">                
-			                      <ul class="pagination pagination-sm m-t-none m-b-none">
-			         					<!-- 처음페이지 -->
+				                    </c:forEach>  
+				                    </tbody>
+				                  </table>
+				                 </form> 
+				                </div>
+				                <footer class="panel-footer">
+				                <div class="row">
+				                    <div class="col-sm-4 hidden-xs">
+				                    </div>
+				                    <div class="col-sm-3 text-center">
+				                    </div>
+				                    <div class="col-sm-5 text-right text-center-xs">                
+				                      <ul class="pagination pagination-sm m-t-none m-b-none">
+				                        <!-- 처음페이지 -->
 			         					<li><a href="${ pageContext.request.contextPath }/item/list?pageNo=1"><i class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i></a></li>
 			                      		<!-- 이전페이지 -->
 			                      		<c:choose>
@@ -356,15 +383,15 @@ function printResult(data) {
 			                      		<!-- 마지막페이지 -->
 			                      		<li><a href="${ pageContext.request.contextPath }/item/list?pageNo=${ lastPage }"><i class="fa fa-chevron-right"></i><i class="fa fa-chevron-right"></i></a></li>	
 			                      </ul>
-			                    </div>
-                    		<br /> <br />
-                    			<input type="hidden" value="default" name="category" id="category">
-                    		</form>
+				                    </div>
+				                  </div>
+				                </footer>
+				              </section>
+				            </section>
+				          </section>
 						</section>
 					</section>
 				</section>
 			</section>
-		</section>
-	</section>
 </body>
 </html>
