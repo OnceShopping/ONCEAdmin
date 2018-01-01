@@ -218,16 +218,12 @@
 		document.getElementById('boardQAList').setAttribute('class','');
 	}
 </script>
-<style type="text/css">
-	.list {
-		text-align: center;
-	}
-	
+<style type="text/css">	
 	th {
 		text-align: center;
-		font-size: 13pt;
 		font-weight: bold;
 		color: #788288;
+		font-size: 13px;
 	}
 	td {
 		text-align: center;
@@ -264,25 +260,30 @@
 					<section class="vbox">
 						<section class="scrollable wrapper" style="padding-left: 50px">
 							<br />
-							<h3 class="font-bold m-b-none m-t-none">[${storeName}] 상품 재고
-								관리</h3>
-							<form action="${pageContext.request.contextPath}/item/manage"
-								method="post" id="listForm" name="listForm">
-								<table class="itemList" style="width: 100%; margin-top: 80px;">
-									<tr style="text-align: center; background-color: #E7E7E7;">
-										<th style="width: 5%;"><input type="checkbox"
-											id="checkAll"></th>
-										<th style="width: 5%;">No.</th>
+							<h3 class="font-bold m-b-none m-t-none">상품 재고 관리</h3>
+							  <section class="panel panel-default" style=" margin-top: 30px;">
+				                <header class="panel-heading">
+				                  <b>${storeName}</b>
+				                </header>
+				                <div class="table-responsive">
+				                <form action="${pageContext.request.contextPath}/item/manage" method="post" id="listForm">
+				                  <table class="table table-striped b-t b-light">
+				                    <thead>
+				                      <tr>
+				                      	<th width="5%"><label class="checkbox m-l m-t-none m-b-none i-checks"><input type="checkbox" id="checkAll"><i></i></label></th>
+				                        <th style="width: 5%;">No.</th>
 										<th style="width: 10%;">상품 이름</th>
 										<th style="width: 10%;">상품 코드</th>
 										<th style="width: 10%;">색상</th>
 										<th style="width: 5%;">SIZE</th>
 										<th style="width: 10%;">수량 (개)</th>
-									</tr>
-									<c:forEach var="item" items="${itemList}" varStatus="index">
-										<tr>
-											<td class="list"><input type="checkbox" class="check"
-												name="detailNo" value="${item.detailNo}"></td>
+				                      </tr>
+				                    </thead>
+				                    <tbody>
+				                    <c:forEach var="item" items="${itemList}" varStatus="index">
+				                      	<tr>
+				                      		<td class="list">
+				                      		<label class="checkbox m-l m-t-none m-b-none i-checks"><input type="checkbox" class="check" id="checkAll" name="detailNo" value="${item.detailNo}"><i></i></label>
 											<td class="list"><c:out value="${ index.count + startPage }"/></td>
 											<td class="list"><c:out value="${ item.itemName }" /></td>
 											<td class="list"><c:out value="${ item.itemNo }" /></td>
@@ -290,14 +291,19 @@
 											<td class="list"><c:out value="${ item.size }" /></td>
 											<td class="list" id="itemIndex_${ index.count }"><c:out value="${ item.count }" /></td>
 										</tr>
-									</c:forEach>
-								</table>
-								<br /> <br /> <br />
-								<div class="col-sm-4 text-right text-center-xs"
-									style="margin-left: 340px;">
-									<ul class="pagination pagination-sm m-t-none m-b-none">
-										<!-- 처음페이지 -->
-										<li><a
+				                    </c:forEach>  
+				                    </tbody>
+				                  </table>
+				                 </form> 
+				                </div>
+				                <footer class="panel-footer">
+				                <div class="row">
+				                 <div class="col-sm-3 hidden-xs">
+				                    </div>
+				                    <div class="col-sm-4 text-right text-center-xs">                
+				                      <ul class="pagination pagination-sm m-t-none m-b-none">
+				                        <!-- 처음페이지 -->
+			         					<li><a
 											href="${ pageContext.request.contextPath }/item/list?pageNo=1"><i
 												class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i></a></li>
 										<!-- 이전페이지 -->
@@ -337,17 +343,20 @@
 												class="fa fa-chevron-right"></i><i
 												class="fa fa-chevron-right"></i></a></li>
 									</ul>
-								</div>
-								<br /> <br />
-								<div align="right">
-									<c:if test="${ !empty itemList }">
+				                    </div>
+				                     <!-- <div class="col-sm-3 hidden-xs">
+				                    </div> -->
+				                    <div class="col-sm-5 text-right text-center-xs">
+										 <c:if test="${ !empty itemList }">
 										<input type="button" value="수정" id="modify" class="btn btn-s-md btn-primary">
 										<input type="hidden" name="_method" value="delete">
 										<input type="submit" value="삭제"
 											class="btn btn-s-md btn-primary">
 									</c:if>
-								</div>
-							</form>
+				                    </div>
+				                  </div>
+				                </footer>
+				              </section>
 						</section>
 					</section>
 				</section>
