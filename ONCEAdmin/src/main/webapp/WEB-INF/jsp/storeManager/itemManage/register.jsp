@@ -281,6 +281,7 @@ var rgx2 = /(\d+)(\d{3})/;
 				<section id="content">
 					<section class="vbox">
 						<section class="scrollable wrapper" style="padding-left: 50px">
+						<br />
 						<h3 class="font-bold m-b-none m-t-none">[${ storeName}] 상품 등록</h3>
 						 <form action="${ pageContext.request.contextPath }/item/register"
 								method="post" enctype="multipart/form-data">

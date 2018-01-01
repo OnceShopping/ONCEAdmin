@@ -360,7 +360,7 @@ var third = 0;
 			                        <div class="form-group">
 				                          <label class="col-sm-3 control-label">SIZE</label>
 				                          <div class="col-sm-9"  style="margin-bottom: 10px;">
-				                            <select data-required="true" class="form-control" id="size" name="itemCategory1" required="required">
+				                            <select class="form-control" id="size">
 				                                <option value="Free">Free</option>
 												<c:if test="${ item.itemCategory2 eq '의류' }">
 													<option value="S">S</option>
@@ -381,7 +381,7 @@ var third = 0;
 				                    <div class="form-group">
 				                          <label class="col-sm-3 control-label">COUNT</label>
 				                          <div class="col-sm-9">
-				                            <input type="number" id="count" name="count" min="0" onkeypress="return numberCheck(event)" style="text-align: right;" class="form-control" data-required="true" required="required">
+				                            <input type="number" id="count" min="0" onkeypress="return numberCheck(event)" style="text-align: right;" class="form-control">
 				                          </div>
 				                    </div>
 			                        <div class="col-sm-6" style="padding-top: 25px;float: right;">
