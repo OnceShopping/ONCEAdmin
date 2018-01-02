@@ -39,7 +39,7 @@
 	
 </style>
 <body>
-  <section id="content" class="m-t-lg wrapper-md animated fadeInUp" >
+  <section id="content" class="m-t-lg wrapper-md animated fadeInUp" style="margin-top: 15%">
     <div class="container aside-xl"  style="text-align: center;">
       <section class="m-b-lg">
       <img src="/image/login.png" style="width: 65px; height: 65px; margin-top: 30px;"/>    

@@ -299,9 +299,9 @@ tr:hover {
 							<br/>
 							현재 총 회원 수 ${fn:length(customerAll)}명
 							<br/><br/>
-							  <section class="panel panel-default" style=" margin-top: 30px;">
+							  <section class="panel panel-default" style=" margin: 0 auto; width: 90%">
 				                <header class="panel-heading">
-				                  <b>${storeName}</b>
+				                  <strong>고객 목록</strong>
 				                </header>
 				                <div class="row wrapper">
 				                <div class="col-sm-5 m-b-xs"></div>
@@ -329,19 +329,22 @@ tr:hover {
 				                  <table class="table table-striped b-t b-light">
 				                    <thead>
 				                      <tr>
-				                        <td width="5%"><input type="checkbox" id="checkAll"></td>
-											<th width="15%" class="tbTile">고객 번호</th>
-											<th width="15%" class="tbTile">아이디</th>
-											<th width="15%" class="tbTile">이름</th>
-											<th width="20%" class="tbTile">연락처</th>
-											<th width="20%" class="tbTile">가입일</th>
+				                        <td width="5%"><label
+														class="checkbox m-l m-t-none m-b-none i-checks"><input
+															type="checkbox"><i></i></label></td>
+											<th width="15%" class="tbTile" style="font-size: 13px">고객 번호</th>
+											<th width="15%" class="tbTile" style="font-size: 13px">아이디</th>
+											<th width="15%" class="tbTile" style="font-size: 13px">이름</th>
+											<th width="20%" class="tbTile" style="font-size: 13px">연락처</th>
+											<th width="20%" class="tbTile" style="font-size: 13px">가입일</th>
 				                      </tr>
 				                    </thead>
 				                    <tbody>
 				                    <c:forEach items="${ customerList }" var="customer">
 				                      <tr>
-				                        <td><input type="checkbox" class="check"
-													value=${ customer.memNo } name="memNo"></td>
+				                        <td><label class="checkbox m-l m-t-none m-b-none i-checks">
+				                        		<input type="checkbox" class="check"
+													value=${ customer.memNo } name="memNo"><i></i></label></td>
 												<td>${ customer.memNo }</td>
 												<td>${ customer.id }</td>
 												<td>${ customer.name }</td>

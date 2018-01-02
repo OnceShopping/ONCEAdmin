@@ -692,19 +692,19 @@
                   </form>						
 							<form action="${pageContext.request.contextPath}/manager/list"
 								method="post" id="listForm" name="listForm">
-								<div class="table-responsive">
+								<div class="table-responsive" style="text-align: center;">
 										<table class="table table-striped b-t b-light">
 											<thead>
 												<tr>
-													<th width="20"><label
+													<th width="20" style="text-align: center;"><label
 														class="checkbox m-l m-t-none m-b-none i-checks"><input
 															type="checkbox"><i></i></label></th>
-													<th width="15%">사원 번호</th>
-													<th width="10%">해당 매장</th>
-													<th width="15%">아이디</th>
-													<th width="15%">이름</th>
-													<th width="20%">연락처</th>
-													<th width="20%">가입일</th>
+													<th width="15%" style="text-align: center;">사원 번호</th>
+													<th width="10%" style="text-align: center;">해당 매장</th>
+													<th width="15%" style="text-align: center;">아이디</th>
+													<th width="15%" style="text-align: center;">이름</th>
+													<th width="20%" style="text-align: center;">연락처</th>
+													<th width="20%" style="text-align: center;">가입일</th>
 												</tr>
 												 <tbody>
 												<c:forEach items="${managerList}" var="manager"

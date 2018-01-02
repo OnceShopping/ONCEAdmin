@@ -488,7 +488,7 @@
                   </form>
                 <form action="${pageContext.request.contextPath}/info/staffList"
 						method="post" id="listForm" name="listForm">  
-                <div class="table-responsive">
+                <div class="table-responsive" style="text-align: center;">
                   <table class="table table-striped b-t b-light">
                     <thead>
                       <tr>
