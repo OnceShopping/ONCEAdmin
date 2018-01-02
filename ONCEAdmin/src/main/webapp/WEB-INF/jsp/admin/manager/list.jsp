@@ -706,7 +706,7 @@
 													<th width="20%" style="text-align: center;">연락처</th>
 													<th width="20%" style="text-align: center;">가입일</th>
 												</tr>
-												 <tbody>
+												 <tbody id="addList">
 												<c:forEach items="${managerList}" var="manager"
 													varStatus="managerStatus">
 													<tr>
