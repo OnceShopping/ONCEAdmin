@@ -374,9 +374,9 @@
 	
 		//매니저 추가 후 표에 데이터를 뿌려주기
 		function printList(result) {
-	
+		
 			var row = "<tr>";
-			row += "<td><input type='checkbox' value= " + result.managerId + " name='managerId' class='check'></td>";
+			row += "<td><label class='checkbox m-l m-t-none m-b-none i-checks'><input type='checkbox' value= " + result.managerId + " name='managerId' class='check'><i></i></label></td>";
 			row += "<td>" + result.staffNo + "</td>";
 			row += "<td>" + result.storeName + "</td>";
 			row += "<td>" + result.managerId + "</td>";
@@ -498,8 +498,7 @@
 </script>
 <style type="text/css">
 	.addDiv {
-		width: 700px;
-		background: #E0DFDF;
+		width: 805px;
 		border: none;
 		margin-left: auto;
 		margin-bottom: 50px;
@@ -584,93 +583,162 @@
 							<br />
 							<br />
 							<form action="" name="addManager" id="addManager">
-								<div class="addDiv" align="center">
-									<table style="width: 100%;">
-										<tr>
-											<th width="10%" style="text-align: right;">ID</th>
-											<td width="5%" />
-											<td width="40%">
-												<input type="text" id="managerId" name="managerId" width="60%" pattern="[A-Za-z0-9]+$" title="알파벳 또는 숫자를 입력하세요.">&nbsp;&nbsp;&nbsp;<input type="button" id="IdCheck" value="중복 체크" name="IdCheck" width="40%"></td>
-											<th width="20%" style="text-align: right;">비밀 번호</th>
-											<td width="5%" />
-											<td width="25%"><input type="password" id="password"
-												name="password"></td>
-										</tr>
-										<tr height="10px" />
-										<tr>
-											<th width="10%" style="text-align: right;">이름</th>
-											<td width="5%" />
-											<td width="40%"><input type="text" id="name" name="name" pattern="[^0-9]+$" title="숫자 또는 특수문자를 제외한 한글 또는 알파벳으로 작성해주세요." onkeypress="return charCheck(event)"></td>
-											<th width="20%" style="text-align: right;">연락처</th>
-											<td width="5%" />
-											<td width="25%"><input type="tel" id="telephone"
-												name="telephone" pattern="(011|010|017|018|019)-\d{3,4}-\d{4}" title="xxx-xxx-xxxx 형식으로   작성해주세요." ></td>
-										</tr>
-										<tr height="20px" />
-										<tr>
-											<th colspan="2" style="text-align: left;">매장 이름 &nbsp;</th>
-											<td colspan="5" style="text-align: left;"><select
-												style="height: 25px" id="typeSelect">
-													<option id="center" class="bigType">통합관리자</option>
-													<option id="infoDesk" class="bigType">Information Desk</option>
-													<option id="F01" class="bigType">1F</option>
-													<option id="F02" class="bigType">2F</option>
-													<option id="F03" class="bigType">3F</option>
-											</select> 
-											<select style="height: 25px; width: 100px;" id="storeSelect"
-												name="storeSelect">
-											</select>
-										</tr>
-										<tr height="5px" />
-									</table>
-									<div align="right" style="padding-right: 2px;">
-										<input type="submit" value="추가" id="Add" class="btn btn-default">
+								<div class="addDiv">
+
+									<div class="row">
+										<div class="col-sm-12" style="width: 100%">
+											<section class="panel panel-default">
+												<header class="panel-heading">
+													<strong>직원 추가</strong>
+												</header>
+												<div class="form-horizontal" data-validate="parsley">
+													<div class="panel-body">
+														<div class="form-group">
+															<label class="col-sm-2 control-label" style="width: 12%;">ID</label>
+															<div class="col-sm-3">
+																<input type="text" id="managerId"
+																	class="form-control parsley-validated" name="managerId"
+																	width="60%" pattern="[A-Za-z0-9]+$" title="알파벳 또는 숫자를 입력하세요.">
+															</div>
+															<div class="col-sm-2">
+																<input type="button" id="IdCheck"
+																	class="btn btn-default" value="중복 체크" name="IdCheck">
+															</div>
+															<label class="col-sm-2 control-label">비밀번호</label>
+															<div class="col-sm-3">
+																<input type="password" id="password"
+																	class="form-control parsley-validated" name="password">
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-sm-2 control-label" style="width: 12%;">이름</label>
+															<div class="col-sm-3">
+																<input type="text" id="name" name="name" pattern="[^0-9]+$" title="숫자 또는 특수문자를 제외한 한글 또는 알파벳으로 작성해주세요." onkeypress="return charCheck(event)"
+																	class="form-control parsley-validated">
+															</div>
+															<div class="col-sm-2"></div>
+															<label class="col-sm-2 control-label">연락처</label>
+															<div class="col-sm-3">
+																<input type="tel" id="telephone" name="telephone"
+																	class="form-control parsley-validated"
+																	pattern="(011|010|017|018|019)-\d{3,4}-\d{4}" title="xxx-xxx-xxxx 형식으로   작성해주세요." >
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="col-sm-2 control-label" style="width: 12%">매장이름</label>
+															<div class="col-sm-3">
+																<select data-required="true"
+																	class="form-control m-t parsley-validated"
+																	style="margin-top: 0px; padding-right: 0px;" id="typeSelect">
+																	<option id="center" class="bigType">통합관리자</option>
+																	<option id="infoDesk" class="bigType">Information Desk</option>
+																	<option id="F01" class="bigType">1F</option>
+																	<option id="F02" class="bigType">2F</option>
+																	<option id="F03" class="bigType">3F</option>
+																</select>
+															</div>
+															<div class="col-sm-3">
+																<select data-required="true"
+																	class="form-control m-t parsley-validated"
+																	style="margin-top: 0px" id="storeSelect" name="storeSelect">
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<footer class="panel-footer text-right bg-light lter">
+													<input type="submit" class="btn btn-default" value="추가"
+														id="Add">
+												</footer>
+											</section>
+										</div>
 									</div>
+
 								</div>
 							</form>
-							<form id="searchForm">
-								<div align="right" >
-									<select id="searchType" class="form-control" style="width:150px; margin-right: 5px;" name="searchType" style="height: 27px">
-										<option value="name">이름</option>
-										<option value="storeName">해당 매장</option>
-										<option value="managerId">아이디</option>
-									</select><input type="text" name="searchText" id="searchText" style="margin-right: 5px;">
-									<input type="submit" value="검색" class="btn btn-default" data-toggle="modal" data-target="#exampleModal"/>
-								</div>
-							</form>							
-							<br />
+							
+							<section class="panel panel-default" style="width: 90%; margin: auto">
+                	<form id="searchForm">
+                <header class="panel-heading">
+                  	<strong>직원 목록</strong>
+                </header>
+                <div class="row wrapper">
+                  <div class="col-sm-5 m-b-xs">
+                    
+                  </div>
+                  <div class="col-sm-2 m-b-xs">
+
+                    </div>
+                  <div class="col-sm-2 m-b-xs" style="padding-right: 0px" align="right">
+                    <select id="searchType" name="searchType" class="input-sm form-control input-s-sm inline v-middle">
+                     	<option value="name">이름</option>
+						<option value="storeName">해당 매장</option>
+						<option value="managerId">아이디</option>
+                    </select>
+                    </div>
+                 
+                  <div class="col-sm-3">
+                  	 
+                    <div class="input-group">
+                   		
+                      <input type="text" class="input-sm form-control" placeholder="Search"  name="searchText" id="searchText">
+                      <span class="input-group-btn">
+                      <input type="submit" value="검색" class="btn btn-sm btn-default"
+								data-toggle="modal" data-target="#exampleModal" />
+                      </span>
+                    </div>
+                  </div>
+                  </div>
+                  </form>						
 							<form action="${pageContext.request.contextPath}/manager/list"
 								method="post" id="listForm" name="listForm">
-								<table class="managerList" style="margin-bottom: 100px;" class="table table-striped m-b-none dataTable no-footer">
-									<tr style="text-align: center; background-color: #E7E7E7; height: 30px; padding: 5px;"   id="addList" >
-										<th width="5%"><input type="checkbox" id="checkAll"></th>
-										<th width="15%" class="tbTile">사원 번호</th>
-										<th width="10%" class="tbTile">해당 매장</th>
-										<th width="15%" class="tbTile">아이디</th>
-										<th width="15%" class="tbTile">이름</th>
-										<th width="20%" class="tbTile">연락처</th>
-										<th width="20%" class="tbTile">가입일</th>
-									</tr>
-									<c:forEach items="${managerList}" var="manager"	varStatus="managerStatus">									
-										<tr>
-											<td><input type="checkbox" value=${ manager.managerId }
-												name="managerId" class="check"></td>
-											<td>${ manager.staffNo }</td>
-											<c:forEach items="${storeList}" var="store"
-												varStatus="storeStatus">
-												<c:if test="${manager.storeNo eq store.storeNo}">
-													<td>${ store.storeName }</td>
-												</c:if>
-											</c:forEach>
-											<td>${ manager.managerId }</td>
-											<td>${ manager.name }</td>
-											<td>${ manager.telephone }</td>
-											<td>${ manager.date }</td>
-										</tr>
-									</c:forEach>
-								</table>
-								<div class="col-sm-4 text-right text-center-xs" style="margin-left: 340px;">                
-			                      <ul class="pagination pagination-sm m-t-none m-b-none">
+								<div class="table-responsive">
+										<table class="table table-striped b-t b-light">
+											<thead>
+												<tr>
+													<th width="20"><label
+														class="checkbox m-l m-t-none m-b-none i-checks"><input
+															type="checkbox"><i></i></label></th>
+													<th width="15%">사원 번호</th>
+													<th width="10%">해당 매장</th>
+													<th width="15%">아이디</th>
+													<th width="15%">이름</th>
+													<th width="20%">연락처</th>
+													<th width="20%">가입일</th>
+												</tr>
+												 <tbody>
+												<c:forEach items="${managerList}" var="manager"
+													varStatus="managerStatus">
+													<tr>
+														<td>
+															<label class="checkbox m-l m-t-none m-b-none i-checks">
+															<input type="checkbox"
+															value=${ manager.managerId } name="managerId"
+															class="check"><i></i></label></td></td>
+														<td>${ manager.staffNo }</td>
+														<c:forEach items="${storeList}" var="store"
+															varStatus="storeStatus">
+															<c:if test="${manager.storeNo eq store.storeNo}">
+																<td>${ store.storeName }</td>
+															</c:if>
+														</c:forEach>
+														<td>${ manager.managerId }</td>
+														<td>${ manager.name }</td>
+														<td>${ manager.telephone }</td>
+														<td>${ manager.date }</td>
+													</tr>
+												</c:forEach>
+												</tbody>
+										</table>
+										</div>
+										
+										<footer class="panel-footer">
+                  						<div class="row">
+                  						<div class="col-sm-4 hidden-xs">
+                                       
+                    					</div>
+                   						 <div class="col-sm-4 text-center">
+                      						 <ul class="pagination pagination-sm m-t-none m-b-none">
 			         					<!-- 처음페이지 -->
 			         					<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=1"><i class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i></a></li>
 			                      		<!-- 이전페이지 -->
@@ -698,23 +766,25 @@
 			                      		<!-- 마지막페이지 -->
 			                      		<li><a href="${ pageContext.request.contextPath }/manager/list?pageNo=${ lastPage }"><i class="fa fa-chevron-right"></i><i class="fa fa-chevron-right"></i></a></li>	
 			                      </ul>
-			                    </div>
-                    		<br /> <br />
-								<div align="right">
-									<c:if test="${ !empty managerList }">
+                   						 </div>
+										<div class="col-sm-4 text-right text-center-xs" style="">                
+			                     		<c:if test="${ !empty managerList }">
 										<input type="button" value="수정" id="modify"
 											class="btn btn-s-md btn-primary">
 										<input type="hidden" name="_method" value="delete">
 										<input type="submit" value="삭제"
 											class="btn btn-s-md btn-primary">
 									</c:if>
-								</div>
+			                    </div>
+			                    </div>
+			                    </footer>
 							</form>
 						</section>
 					</section>
 				</section>
 			</section>
 		</section>
+	</section>
 	</section>
 </body>
 </html>
