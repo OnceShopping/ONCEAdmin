@@ -245,7 +245,7 @@ $(document).ready(function() {
             	<!-- 사이드메뉴 끝 -->
 				<section id="content">
 					<section class="vbox">
-						<section class="scrollable wrapper" style="padding-left: 50px">
+						<section class="scrollable wrapper" style="padding-left: 50px; width: 80%">
 							<br />
 							<h3 class="font-bold m-b-none m-t-none">물품 전달</h3>
 							<br /> <br />
