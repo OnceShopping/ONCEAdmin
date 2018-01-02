@@ -291,54 +291,76 @@ tr:hover {
 				<!-- 사이드 메뉴 -->
 					<jsp:include page="/WEB-INF/jsp/admin/include/sidemenu.jsp" flush="false"></jsp:include>
 				<!-- 사이드 메뉴 끝 -->
-				
 				<section id="content">
 					<section class="vbox">
-						<section class="scrollable wrapper" style="padding-left: 50px">
+						<section class="scrollable wrapper" style="padding-left: 50px;">
 							<br />
 							<h3 class="font-bold m-b-none m-t-none">고객 관리</h3>
 							<br/>
 							현재 총 회원 수 ${fn:length(customerAll)}명
 							<br/><br/>
-							<div align="right">
-								<form id="searchForm">
-									<select id="searchType" name="searchType" style="height: 27px; width: 80px;">
-										<option value="name">이름</option>
+							  <section class="panel panel-default" style=" margin-top: 30px;">
+				                <header class="panel-heading">
+				                  <b>${storeName}</b>
+				                </header>
+				                <div class="row wrapper">
+				                <div class="col-sm-5 m-b-xs"></div>
+                  				<div class="col-sm-2 m-b-xs"></div>
+                  				<form id="searchForm">
+				                <div class="col-sm-2 m-b-xs" style="padding-right: 0px;" align="right">
+				                    <select class="input-sm form-control input-s-sm inline v-middle" id="searchType" name="searchType">
+					                    <option value="name">이름</option>
 										<option value="id">아이디</option>
-									</select>&nbsp; 
-									<input type="text" name="searchText" id="searchText">
-									&nbsp; <input type="submit" value="검색" id="modalBtn"  data-toggle="modal" data-target="#exampleModal">
-								</form>
-							</div>
-							<div>
-								<br />
-								<form action="${pageContext.request.contextPath}/customer/list" 
+				                    </select>
+				               	</div>
+				                  <div class="col-sm-3" >
+				                    <div class="input-group">
+				                      	<input type="text" class="input-sm form-control" placeholder="Search" id="searchText" name="searchText">
+				                      <span class="input-group-btn">
+				                        <input type="submit" value="검색" class="btn btn-sm btn-default" id="modalBtn" data-toggle="modal" data-target="#exampleModal"/>
+				                      </span>
+				                    </div>
+				                  </div>
+				                  </form> 
+				                </div>
+				                <div class="table-responsive">
+				                <form action="${pageContext.request.contextPath}/customer/list" 
 									method="post" id="listForm" name="listForm">
-									<table
-										class="table table-striped m-b-none dataTable no-footer">
-										<tr style="text-align: center; background-color: #E7E7E7">
-											<td width="5%"><input type="checkbox" id="checkAll"></td>
+				                  <table class="table table-striped b-t b-light">
+				                    <thead>
+				                      <tr>
+				                        <td width="5%"><input type="checkbox" id="checkAll"></td>
 											<th width="15%" class="tbTile">고객 번호</th>
 											<th width="15%" class="tbTile">아이디</th>
 											<th width="15%" class="tbTile">이름</th>
 											<th width="20%" class="tbTile">연락처</th>
 											<th width="20%" class="tbTile">가입일</th>
-										</tr>
-										<c:forEach items="${ customerList }" var="customer">
-											<tr>
-												<td><input type="checkbox" class="check"
+				                      </tr>
+				                    </thead>
+				                    <tbody>
+				                    <c:forEach items="${ customerList }" var="customer">
+				                      <tr>
+				                        <td><input type="checkbox" class="check"
 													value=${ customer.memNo } name="memNo"></td>
 												<td>${ customer.memNo }</td>
 												<td>${ customer.id }</td>
 												<td>${ customer.name }</td>
 												<td>${ customer.telephone }</td>
 												<td>${ customer.date }</td>
-											</tr>
-										</c:forEach>
-									</table>
-									<br /><br /> <br /> <br />
-								<div class="col-sm-4 text-right text-center-xs" style="margin-left: 340px;">                
-			                      <ul class="pagination pagination-sm m-t-none m-b-none">
+									</tr>
+				                    </c:forEach>  
+				                    </tbody>
+				                  </table>
+				                 </form> 
+				                </div>
+				                <footer class="panel-footer">
+				                <div class="row">
+				                    <div class="col-sm-4 hidden-xs">
+				                    </div>
+				                    <div class="col-sm-3 text-center">
+				                    </div>
+				                    <div class="col-sm-5 text-right text-center-xs">                
+				                      <ul class="pagination pagination-sm m-t-none m-b-none">
 			         					<!-- 처음페이지 -->
 			         					<li><a href="${ pageContext.request.contextPath }/customer/list?pageNo=1"><i class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i></a></li>
 			                      		<!-- 이전페이지 -->
@@ -366,20 +388,14 @@ tr:hover {
 			                      		<!-- 마지막페이지 -->
 			                      		<li><a href="${ pageContext.request.contextPath }/customer/list?pageNo=${ lastPage }"><i class="fa fa-chevron-right"></i><i class="fa fa-chevron-right"></i></a></li>	
 			                      </ul>
-			                    </div>
-                    		<br /> <br />
-									<div style="text-align: right;">
-										<c:if test="${ !empty customerList }">			
-											<input type="hidden" name="_method" value="delete">
-											<input type="submit" value="삭제"
-												class="btn btn-s-md btn-primary">
-										</c:if>
-									</div>
-								</form>
-							</div>
-						</section>
-					</section>
+				                    </div>
+				                  </div>
+				                </footer>
+				              </section>
+				            </section>
+				     </section>
 				</section>
+				
 			</section>
 		</section>
 	</section>
