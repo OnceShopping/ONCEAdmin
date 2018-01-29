@@ -385,7 +385,7 @@
 			row += "<td>" + result.date + "</td>";
 			row += "</tr>";
 	
-			$('#addList').after(row);
+			$('#addList').prepend(row);
 	
 		}
 	
