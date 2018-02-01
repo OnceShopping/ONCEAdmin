@@ -96,7 +96,7 @@ public class ItemController {
 		
 		itemImg = new ItemImgVO(); //이미지 등록을 위한 객체
 		
-	    String uploadDir = "C:\\Once\\image\\";
+	    String uploadDir = "/usr/local/image/";
 		    
 	    Iterator<String> iter = mRequest.getFileNames();
 	    
@@ -183,7 +183,7 @@ public class ItemController {
 		service.addImage(itemImg);
 		
 		// 실행되는 웹어플리케이션의 실제 경로 가져오기
-	    String uploadDir = "C:\\Once\\image\\";
+	    String uploadDir = "/usr/local/image/";
     
 	    Iterator<String> iter = mRequest.getFileNames();
 	    
