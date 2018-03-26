@@ -304,8 +304,9 @@
 				                      <ul class="pagination pagination-sm m-t-none m-b-none">
 				                        <!-- 처음페이지 -->
 			         					<li><a
-											href="${ pageContext.request.contextPath }/item/list?pageNo=1"><i
-												class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i></a></li>
+											href="${ pageContext.request.contextPath }/item/manage?pageNo=1"><i
+												class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i></a>
+										</li>
 										<!-- 이전페이지 -->
 										<c:choose>
 											<c:when test="${ pageNo == 1 }">
